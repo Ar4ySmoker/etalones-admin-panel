@@ -1,0 +1,110 @@
+.container{
+  background-color: var(--bgSoft);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addButton{
+  padding: 10px;
+  background-color: #5d57c9;
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.table{
+  width: 100%;
+}
+.table thead{
+  position: sticky;
+  top: 0;
+  background-color: #5d57c9;
+}
+.table td{
+  padding: 10px;
+  
+}
+
+
+.user{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userImage{
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.buttons{
+
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.button{
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--text);
+  border: none;
+  cursor: pointer;
+width: 100%;
+}
+
+.view{
+  background-color: teal;
+}
+
+.delete{
+  background-color: crimson;
+}
+.wrapperDescr{
+  position: relative;
+  width: 100%;
+}
+.wrapperDescr *{
+  width: 100%;
+}
+.acordeon{
+ 
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  background-color: #5d57c9;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #2e374a;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.input {
+  background-color: transparent;
+  border: none;
+  color: var(--text);
+}
+.icons{
+  display: flex;
+  gap: 20px;
+}
+.deleteCandidate{
+  width: max-content;
+  background-color: red;
+  color: black;
+  padding: 5px;
+  border-radius: 10px;
+}

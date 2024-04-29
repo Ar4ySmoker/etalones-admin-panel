@@ -1,0 +1,17 @@
+.form{
+    display: flex;
+    flex-direction: column;
+}
+.form button{
+    width: 50%;
+    margin: 1em auto;
+    padding: 0.5em;
+    border: 1px solid black;
+}
+.form textarea{
+    width: 100%;
+    background: transparent;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    padding: 1em;
+}
