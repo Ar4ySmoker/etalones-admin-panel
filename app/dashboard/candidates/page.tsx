@@ -11,6 +11,7 @@ async function deleteCandidate(candidateId: string): Promise<Response> {
   return response;
 }
 function CandidatesPage() {
+  
   const [candidates, setCandidates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -133,7 +134,7 @@ function CandidatesPage() {
               <td>{candidate.documentName}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/dashboard/candidates/${candidate._id}`}>
+                  <Link href={`/dashboard/candidates/edit/${candidate._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>Редактировать</button>
                   </Link>
                   <div className={styles.buttons}>
@@ -183,6 +184,7 @@ function CandidatesPage() {
         </dialog>
       )}
     </div>
+    
   );
 }
 

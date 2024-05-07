@@ -4,6 +4,7 @@ import { connectToDB } from "./utils";
 
 
 
+
 export const fetchLocation = async (): Promise<LocationField[]> => {
     try {
         await connectToDB();
