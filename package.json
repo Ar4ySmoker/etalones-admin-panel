@@ -21,6 +21,7 @@
     "mongoose": "8.0.0",
     "next": "14.0.1",
     "next-auth": "^5.0.0-beta.3",
+    "npx": "^10.2.2",
     "react": "18",
     "react-daisyui": "^5.0.0",
     "react-dom": "18",
