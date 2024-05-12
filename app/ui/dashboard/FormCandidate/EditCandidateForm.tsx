@@ -63,15 +63,18 @@ export default function EditCandidateForm({ id, candidate, professions, langues,
                 className="input input-bordered input-accent w-full max-w-xs"
                 type="text"
             />
-            <select
-    onChange={(e) => setNewProfession(e.target.value)}
-    value={candidate.profession._id}
-    className="input input-bordered input-accent w-full max-w-xs"
->
-    {professions.map(profession => (
+            <label className="form-control w-full max-w-xs">
+  <div className="label">
+    <span className="label-text">Выберите профессию</span>
+  </div>
+  <select  onChange={(e) => setNewProfession(e.target.value)}
+    value={newProfession} className="select select-bordered">
+  {professions.map(profession => (
         <option key={profession._id} value={profession._id}>{profession.name}</option>
     ))}
-</select>
+  </select>
+</label>
+
 
         <select
           onChange={(e) => setNewLocations(e.target.value)}
