@@ -8,6 +8,7 @@ export default function EditCandidateForm({ id, candidate, professions, langues,
     const [newAge, setNewAge] = useState(candidate.age);
     const [newPhone, setNewPhone] = useState(candidate.phone);
     const [newProfession, setNewProfession] = useState(candidate.profession._id);
+    const [newExperience, setNewExperience] = useState(candidate.experience)
     const [newLocations, setNewLocations] = useState(candidate.locations._id);
     const [newLangue, setNewLangue] = useState(candidate.langue._id);
     const [newStatus, setNewStatus] = useState(candidate.status._id);
@@ -24,7 +25,7 @@ export default function EditCandidateForm({ id, candidate, professions, langues,
                 headers: {
                     "Content-type": "application/json",
                 },
-                body: JSON.stringify({ newName, newAge, newPhone, newProfession, newLocations, newLangue, newStatus, newManager }),
+                body: JSON.stringify({ newName, newAge, newPhone, newProfession, newLocations, newLangue, newStatus, newManager, newExperience }),
             });
  
             if (!res.ok) {
@@ -77,6 +78,7 @@ export default function EditCandidateForm({ id, candidate, professions, langues,
                 type="text"
             />
             </label>
+            <div className="grid grid-cols-4 gap-4">
             <label className="form-control w-full max-w-xs">
   <div className="label">
     <span className="label-text">Профессия</span>
@@ -88,6 +90,20 @@ export default function EditCandidateForm({ id, candidate, professions, langues,
     ))}
   </select>
 </label>
+<label className="form-control w-full max-w-xs">
+  <div className="label">
+    <span className="label-text">Опыт работы</span>
+  </div>
+  <select  onChange={(e) => setNewExperience(e.target.value)}
+    value={newExperience} className="select select-bordered">
+  <option>Делал дома</option>
+  <option>от 6 месяцев</option>
+  <option>от 1 года</option>
+  <option>от 2 лет</option>
+  </select>
+</label>
+            </div>
+
 
 <label className="form-control w-full max-w-xs">
   <div className="label">
