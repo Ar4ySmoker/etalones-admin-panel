@@ -27,6 +27,7 @@
     "react-dom": "18",
     "react-icons": "4.11.0",
     "react-select": "^5.8.0",
+    "react-select-country-list": "^2.2.3",
     "recharts": "2.9.0",
     "use-debounce": "9.0.4",
     "ws": "^8.16.0",

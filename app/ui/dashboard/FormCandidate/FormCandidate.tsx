@@ -1,8 +1,10 @@
 'use client'
 import React, { useState } from 'react';
-import styles from "@/app/ui/dashboard/users/addUser/addUser.module.css";
+import { useRouter } from "next/navigation";
 
 export default function Form({ professions, locations, langue, status, manager }) {
+  const router = useRouter();
+
   const [documentEntries, setDocumentEntries] = useState([]);
 
   const addDocumentEntry = () => {
@@ -20,18 +22,36 @@ export default function Form({ professions, locations, langue, status, manager }
     setDocumentEntries(newEntries);
   };
 
+  const [professionEntries, setProfessionEntries] = useState([{ name: '', experience: '' }]);
+
+  const addProfessionEntry = () => {
+    setProfessionEntries([...professionEntries, { name: '', experience: '' }]);
+  };
+
+  const handleProfessionChange = (index, field, value) => {
+    const newEntries = [...professionEntries];
+    newEntries[index] = { ...newEntries[index], [field]: value };
+    setProfessionEntries(newEntries);
+  };
+
+  const removeProfessionEntry = (index) => {
+    const newEntries = professionEntries.filter((_, i) => i !== index);
+    setProfessionEntries(newEntries);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log('Submitting with documents:', documentEntries);
+    console.log('Submitting with PROFESSIONS:', professionEntries);
+
     const formData = new FormData(event.target);
+    
     const body = {
       name: formData.get('name'),
       age: formData.get('age'),
       phone: formData.get('phone'),
-      profession: formData.get('profession'),
+      professions: professionEntries,
       locations: formData.get('locations'),
       documents: documentEntries,
-      experience: formData.get('experience'),
       drivePermis: formData.get('drivePermis'),
       leaving: formData.get('leaving'),
       cardNumber: formData.get('cardNumber'),
@@ -41,6 +61,7 @@ export default function Form({ professions, locations, langue, status, manager }
       manager: formData.get('manager'),
       comment: formData.get('comment')
     };
+    console.log('Submitting with professions:', professionEntries); // Проверка отправляемых данных
 
     try {
       const response = await fetch('/api/addCandidate', { 
@@ -50,9 +71,11 @@ export default function Form({ professions, locations, langue, status, manager }
       });
       const result = await response.json();
       if (response.ok) {
-        console.log('User created:', result);
+        console.log('Candidate created:', result);
+        router.refresh();
+        router.push("/dashboard/candidates");
       } else {
-        console.error('Failed to create user:', result);
+        console.error('Failed to create candidate:', result);
       }
     } catch (error) {
       console.error('Network error:', error);
@@ -79,17 +102,13 @@ export default function Form({ professions, locations, langue, status, manager }
 <input className="input input-bordered input-accent w-full max-w-xs"
          id="phone" name="phone" type="text" placeholder="+373696855446" required />
         </label>
-        <label htmlFor="profession" className='flex flex-col '>
-  Профессия
-<select className="select w-full max-w-xs " id="profession" name="profession">
-          {professions.map(profession => (
-            <option  key={profession._id} value={profession._id}>{profession.name}</option>
-          ))}
-        </select>
-        </label>        
+        
+        
+      
         <label htmlFor="locations">
   <div>Город</div>
         <select id="locations" name="locations" className="select w-full max-w-xs">
+         <option value="Город" disabled selected>Выберите Город</option>
           {locations.map(location => (
             <option key={location._id} value={location._id}>{location.name}</option>
           ))}
@@ -128,6 +147,34 @@ export default function Form({ professions, locations, langue, status, manager }
        
         </div>
         <div className='grid justify-center items-stretch content-space-evenly '>
+        <label htmlFor="professions">
+        {professionEntries.map((prof, index) => (
+  <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
+    <label htmlFor="profession">
+      <div>Профессии</div>
+      <select className="select w-full max-w-xs" value={prof.name} onChange={e => handleProfessionChange(index, 'name', e.target.value)}>
+      <option value="Профессия" disabled selected>Выберите профессию</option>
+        {professions.map(profession => (
+          <option key={profession._id} value={profession.name}>{profession.name}</option>
+        ))}
+      </select>
+    </label>
+    <label htmlFor="experience">
+      <div>Опыт работы</div>
+      <select className="select select-accent w-full max-w-xs" value={prof.experience} onChange={e => handleProfessionChange(index, 'experience', e.target.value)}>
+        <option disabled selected value={"Опыт работы"}>Опыт работы</option>
+        <option >Меньше года</option>
+        <option >От 2-х лет</option>
+        <option >Более 10-ти лет</option>
+      </select>
+    </label>
+    <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeProfessionEntry(index)}>Удалить профессию</button>
+  </div>
+))}
+<button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
+        </label>
+        </div>
+        <div className='grid justify-center items-stretch content-space-evenly '>
         <label htmlFor="documents" className='flex flex-col '>
         <div>Документы</div>
         {documentEntries.map((doc, index) => (
@@ -150,12 +197,13 @@ export default function Form({ professions, locations, langue, status, manager }
               <div>Номер документа</div>
             <input className="input input-bordered input-accent w-full max-w-xs" type="text" value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
             </label>
-            <button className="btn btn-outline btn-error" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
+            <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
           </div>
         ))}
-        <button className="btn btn-outline btn-success mt-3" type="button" onClick={addDocumentEntry}>Добавить документ</button>
+        <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
         </label>
         </div>
+        
         </div>
         <label htmlFor="comment">
           <div>Комментарий</div>

@@ -133,9 +133,7 @@ type: String,
   citizenship:{
 type: String,
   },
-  experience:{
-type: String,
-  },
+
   leaving:{
     type: Date,
   },
@@ -153,11 +151,11 @@ type: String,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Location'
   },
-  profession: {
-    name: {type: String},
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Profession'
-  },
+  professions: [{
+    name:  String,
+    experience: String,
+    
+  }],
   documents: [{ 
     docType: String,
     dateExp: String,
@@ -208,7 +206,7 @@ const professionSchema = new mongoose.Schema({
 type: String,
 unique: true,
   },
-  description:{
+  experience: {
     type: String
   }
 }

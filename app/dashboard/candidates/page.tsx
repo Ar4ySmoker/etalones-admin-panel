@@ -11,13 +11,56 @@ async function deleteCandidate(candidateId: string): Promise<Response> {
   return response;
 }
 function CandidatesPage() {
-  
+
+
   const [candidates, setCandidates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const candidatesPerPage = 5;
+  
+  const filteredCandidates = candidates.filter(candidate =>
+    candidate.name?.toLowerCase().includes(searchTerm) ||
+    candidate.phone?.includes(searchTerm) ||
+    candidate.locationName?.toLowerCase().includes(searchTerm) ||
+    candidate.professionName?.toLowerCase().includes(searchTerm)
+  );
+  const indexOfLastCandidate = currentPage * candidatesPerPage;
+  const indexOfFirstCandidate = indexOfLastCandidate - candidatesPerPage;
+  const currentCandidates = filteredCandidates.slice(indexOfFirstCandidate, indexOfLastCandidate);
 
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(filteredCandidates.length / candidatesPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+ 
+  const renderDocuments = (documents) => {
+    if (!documents || documents.length === 0) {
+      return "нет документов";
+    }
+    return documents.map((doc, index) => (
+      <p key={index}>
+        <strong>{doc.docType}</strong>
+      </p>
+    ));
+  };
+  const renderProfessions = (professions) => {
+    if (!professions || professions.length === 0) {
+      return "нет профессий";
+    }
+    return professions.map((prof, index) => (
+      <p key={index}>
+        <strong>{prof.name}</strong><br/><small>опыт {prof.experience}</small>
+
+      </p>
+    ));
+  };
+  
 
   useEffect(() => {
     async function fetchDataFromApi() {
@@ -36,7 +79,7 @@ function CandidatesPage() {
         const managerMap = Object.fromEntries(manager.map(mng => [mng._id, mng.name]));
         const statusMap = Object.fromEntries(status.map(st => [st._id, st.name]));
         const langueMap = Object.fromEntries(langue.map(lng => [lng._id, lng.name]));
-        const commentMngMap = Object.fromEntries(commentMng.map(cmt => [cmt._id, cmt.commentText]));
+        const commentMngMap = Object.fromEntries(commentMng.map(cmt => [cmt._id, { text: cmt.commentText, createdAt: cmt.createdAt }]));
         
         setCandidates(candidates.map(candidate => ({
           ...candidate,
@@ -84,13 +127,7 @@ function CandidatesPage() {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
-  const filteredCandidates = candidates.filter(candidate =>
-    candidate.name.toLowerCase().includes(searchTerm) ||
-    candidate.phone.includes(searchTerm) ||
-    candidate.locationName.toLowerCase().includes(searchTerm) ||
-    candidate.professionName.toLowerCase().includes(searchTerm)
-  );
-
+  
   return (
     <div className="overflow-x-auto">
       <div className={styles.top}>
@@ -111,7 +148,7 @@ function CandidatesPage() {
           </tr>
         </thead>
         <tbody>
-          {filteredCandidates.map(candidate => (
+          {currentCandidates.map(candidate => (
             <tr key={candidate._id}>
               <td>
                 <div className="flex items-center gap-3">
@@ -125,13 +162,12 @@ function CandidatesPage() {
               <td>
                 <div className="flex items-center gap-3">
                   <div>
-                    <div className="font-bold">{candidate.professionName}</div>
-                    <div className="text-sm opacity-50">Опыт {candidate.experience}</div>
+                    <div className="font-bold">{renderProfessions(candidate.professions)} </div>
                   </div>
                 </div>
               </td>
               <td>{candidate.createdAt?.substring(0, 10)}</td>
-              <td>{candidate.documentName}</td>
+<td>{renderDocuments(candidate.documents)}</td>
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/dashboard/candidates/edit/${candidate._id}`}>
@@ -146,6 +182,20 @@ function CandidatesPage() {
           ))}
         </tbody>
       </table>
+      <div className="pagination join mt-4">
+        {pageNumbers.map(number => (
+          <input
+            key={number}
+            type="radio"
+            name="options"
+            aria-label={`${number}`}
+            className={`join-item btn btn-square ${currentPage === number ? 'btn-primary' : ''}`}
+            onClick={() => paginate(number)}
+            checked={currentPage === number}
+            readOnly
+          />
+        ))}
+      </div>
       {modalOpen && selectedCandidate && (
         <dialog className="modal" open>
           <div className="modal-box bg-white">
@@ -170,13 +220,15 @@ function CandidatesPage() {
               <p><strong>Язык:</strong> {selectedCandidate.langueName}</p>
               <p><strong>Водительское Удостоверение:</strong> {selectedCandidate.drivePermis}</p>
               <p><strong>Готов выехать:</strong> {typeof selectedCandidate.leaving === 'string' ? selectedCandidate.leaving.substring(0, 10) : 'Неизвестно'}</p>
-              <p><strong>Комментарий:</strong> {selectedCandidate.commentCand}</p>
+              <p><strong>Комментарий:</strong> {selectedCandidate.comment}</p>
               <p><strong>Комментарии менеджера:</strong></p>
               <ul>
-                {selectedCandidate.commentMngNames.map((commentName, index) => (
-                  <li key={index}>{commentName} - <small>{new Date(commentName.createdAt).toLocaleDateString("ru-RU")}</small></li>
-                ))}
-              </ul>
+  {selectedCandidate.commentMngNames.map((comment, index) => (
+    <li key={index}>
+      {comment.text} - <small>{new Date(comment.createdAt).toLocaleDateString("ru-RU")}</small>
+    </li>
+  ))}
+</ul>
               <AddCommentForm candidateId={selectedCandidate._id} />
               
             </div>
