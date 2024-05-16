@@ -72,13 +72,12 @@ function CandidatesPage() {
           throw new Error('Failed to fetch some endpoints');
         }
         const data = await Promise.all(responses.map(response => response.json()));
-        const [candidates, profession, locations,  manager, status, langue, commentMng] = data;
+        const [candidates, profession, locations,  manager, status, commentMng] = data;
 
         const locationMap = Object.fromEntries(locations.map(loc => [loc._id, loc.name]));
         const professionMap = Object.fromEntries(profession.map(prof => [prof._id, { name: prof.name, description: prof.description }]));
         const managerMap = Object.fromEntries(manager.map(mng => [mng._id, mng.name]));
         const statusMap = Object.fromEntries(status.map(st => [st._id, st.name]));
-        const langueMap = Object.fromEntries(langue.map(lng => [lng._id, lng.name]));
         const commentMngMap = Object.fromEntries(commentMng.map(cmt => [cmt._id, { text: cmt.commentText, createdAt: cmt.createdAt }]));
         
         setCandidates(candidates.map(candidate => ({

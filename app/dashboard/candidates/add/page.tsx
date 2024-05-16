@@ -1,9 +1,8 @@
-import {  fetchLangue, fetchLocation, fetchManager, fetchProfession, fetchStatus} from "@/app/lib/myData";
+import {  fetchManager, fetchProfession} from "@/app/lib/myData";
 import Form from "@/app/ui/dashboard/FormCandidate/FormCandidate";
 
 export default async function Page() {
   const professions = await fetchProfession();
-  const status = await fetchStatus();
   const manager = await fetchManager();
   
 
@@ -12,7 +11,6 @@ export default async function Page() {
       <main>
           <Form 
         professions={professions}
-        status={status} 
         manager={manager} />
       </main>
   );

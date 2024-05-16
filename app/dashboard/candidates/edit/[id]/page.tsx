@@ -23,7 +23,7 @@ export default async function EditCandidate({ params }) {
     const { id } = params;
     const { candidate } = await getCandidateById(id);
     
-    const { name, age, phone, profession, location, langue, status, manager, experience } = candidate;
+    // const { name, age, phone, profession, location, langue, status, manager, experience } = candidate;
  
 
     const allProfessions = await fetch(`http://localhost:3000/api/profession`);

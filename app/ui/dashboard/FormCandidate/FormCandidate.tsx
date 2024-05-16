@@ -11,7 +11,7 @@ const drivePermis = [
   { label: "E", value: "E"},
   { label: "Код 95", value: "Код 95"},
 ];
-export default function Form({ professions,  status, manager }) {
+export default function Form({ professions,  manager }) {
   let [countries, setCountries] = useState([]);
   let [singleCountry, setSingleCountry] = useState("");
   let [Cities, setCities] = useState([]);

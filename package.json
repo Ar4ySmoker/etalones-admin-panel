@@ -10,7 +10,6 @@
     "ws": "node websocketServer.js"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.0.0",
     "@next/eslint-plugin-next": "14.0.1",
     "axios": "^1.6.8",
     "bcrypt": "5.1.1",
@@ -20,7 +19,6 @@
     "isomorphic-ws": "^5.0.0",
     "mongoose": "8.0.0",
     "next": "14.0.1",
-    "next-auth": "^5.0.0-beta.3",
     "npx": "^10.2.2",
     "react": "18",
     "react-country-state-city": "^1.1.0",
