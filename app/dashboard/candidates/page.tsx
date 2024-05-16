@@ -66,7 +66,7 @@ function CandidatesPage() {
     async function fetchDataFromApi() {
       try {
         const endpoints = ["candidates", "profession", "locations",  "manager", "status", "langue", "commentMng"];
-        const baseUrl = "candidat.store/api/";
+        const baseUrl = "https://candidat.store/api/";
         const responses = await Promise.all(endpoints.map(endpoint => fetch(baseUrl + endpoint)));
         if (responses.some(response => !response.ok)) {
           throw new Error('Failed to fetch some endpoints');
