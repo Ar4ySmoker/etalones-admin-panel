@@ -5,7 +5,7 @@ import {Candidate} from '@/app/lib/models'; // Предполагаемый пу
 export const GET  = async()=>{
   try{
     await connectToDB();
-    const candidates = await Candidate.find();
+    const candidates = await Candidate.find().sort({ createdAt: -1 });
     console.log(candidates)
     return new NextResponse(JSON.stringify(candidates), {status:200})
   }

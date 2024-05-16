@@ -1,6 +1,7 @@
 // Компонент для добавления комментариев к кандидату
 import React from 'react';
 import cls from "./AddCommentForm.module.css"
+
 export function AddCommentForm({ candidateId }) {
   const handleSubmit = async (event) => {
     event.preventDefault();

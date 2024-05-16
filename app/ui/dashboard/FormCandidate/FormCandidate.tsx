@@ -1,14 +1,65 @@
 'use client'
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
+import { MultiSelect } from "react-multi-select-component";
+import Axios from "axios";
 
-export default function Form({ professions, locations, langue, status, manager }) {
+const drivePermis = [
+  { label: "В", value: "B" },
+  { label: "C", value: "C" },
+  { label: "D", value: "D"},
+  { label: "E", value: "E"},
+  { label: "Код 95", value: "Код 95"},
+];
+export default function Form({ professions,  status, manager }) {
+  let [countries, setCountries] = useState([]);
+  let [singleCountry, setSingleCountry] = useState("");
+  let [Cities, setCities] = useState([]);
+  let [singleCity, setSingleCity] = useState("");
+  let [combinedLocation, setCombinedLocation] = useState("");
+  let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
+  const [selectedDrive, setSelectedDrive] = useState([]);
+
+  const handleLangueChange = (field, value) => {
+    setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
+  };
+
+  const fetchCountries = async () => {
+    let country = await Axios.get(
+      "https://countriesnow.space/api/v0.1/countries"
+    );
+    console.log(country);
+    setCountries(country.data.data);
+  };
+
+  const fetchCities = (country) => {
+    const Cities = countries.find((c) => c.country === country);
+    setCities(Cities.cities);
+    setSingleCountry(country); 
+    setSingleCity(""); // Сбрасываем выбранный город при изменении страны
+  };
+
+  const handleCityChange = (e) => {
+    const city = e.target.value;
+    setSingleCity(city);
+  };
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    if (singleCountry && singleCity) {
+      setCombinedLocation(`${singleCountry}, ${singleCity}`);
+    }
+  }, [singleCountry, singleCity]);
+  
   const router = useRouter();
 
   const [documentEntries, setDocumentEntries] = useState([]);
 
   const addDocumentEntry = () => {
-    setDocumentEntries([...documentEntries, { docType: '', dateExp: '', numberDoc: '' }]);
+    setDocumentEntries([...documentEntries, { docType: 'Нет документов', dateExp: '', numberDoc: '' }]);
   };
 
   const handleDocumentChange = (index, field, value) => {
@@ -25,7 +76,7 @@ export default function Form({ professions, locations, langue, status, manager }
   const [professionEntries, setProfessionEntries] = useState([{ name: '', experience: '' }]);
 
   const addProfessionEntry = () => {
-    setProfessionEntries([...professionEntries, { name: '', experience: '' }]);
+    setProfessionEntries([...professionEntries, { name: 'Нет профессии', experience: '' }]);
   };
 
   const handleProfessionChange = (index, field, value) => {
@@ -44,24 +95,29 @@ export default function Form({ professions, locations, langue, status, manager }
     console.log('Submitting with PROFESSIONS:', professionEntries);
 
     const formData = new FormData(event.target);
-    
     const body = {
-      name: formData.get('name'),
-      age: formData.get('age'),
-      phone: formData.get('phone'),
-      professions: professionEntries,
-      locations: formData.get('locations'),
-      documents: documentEntries,
-      drivePermis: formData.get('drivePermis'),
-      leaving: formData.get('leaving'),
-      cardNumber: formData.get('cardNumber'),
-      workHours: formData.get('workHours'),
-      langue: formData.get('langue'),
-      status: formData.get('status'),
-      manager: formData.get('manager'),
-      comment: formData.get('comment')
+      name: formData.get('name') || '', // Добавляем проверку на пустое значение
+      age: formData.get('age') || '',
+      phone: formData.get('phone') || '',
+      // Добавляем проверку на пустое значение для professions и исключаем пустые записи
+      professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
+      locations: combinedLocation,
+      // Добавляем проверку на пустое значение для documents и исключаем пустые записи
+      documents: documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.numberDoc.trim() !== ''),
+      drivePermis: selectedDrive.map(d => d.value).join(', '),
+      leaving: formData.get('leaving') || '',
+      cardNumber: formData.get('cardNumber') || '',
+      workHours: formData.get('workHours') || '',
+      langue: {
+        name: formData.get('langue') || '',
+        level: formData.get('langueLvl') || ''
+      },
+      status: formData.get('status') || null,
+      manager: formData.get('manager') || null,
+      comment: formData.get('comment') || ''
     };
-    console.log('Submitting with professions:', professionEntries); // Проверка отправляемых данных
+    
+
 
     try {
       const response = await fetch('/api/addCandidate', { 
@@ -102,37 +158,100 @@ export default function Form({ professions, locations, langue, status, manager }
 <input className="input input-bordered input-accent w-full max-w-xs"
          id="phone" name="phone" type="text" placeholder="+373696855446" required />
         </label>
-        
-        
-      
         <label htmlFor="locations">
-  <div>Город</div>
-        <select id="locations" name="locations" className="select w-full max-w-xs">
+  <div>Местоположение - {combinedLocation}</div>
+        {/* <select id="locations" name="locations" className="select w-full max-w-xs">
          <option value="Город" disabled selected>Выберите Город</option>
           {locations.map(location => (
             <option key={location._id} value={location._id}>{location.name}</option>
           ))}
-        </select>
-        </label>
-        <label htmlFor="langue">
-          <div>Знание языка</div>
-          <select className="select w-full max-w-xs" id="langue" name="langue">
-          {langue.map(l => (
-            <option key={l._id} value={l._id}>{l.name}</option>
+        </select> */}
+         <div>
+          <div className='flex gap-1'>
+          {countries && (
+        <select className="select w-full max-w-xs" onChange={(e) => fetchCities(e.target.value)} >
+          <option selected hidden disabled>
+            Выберите страну
+          </option>
+          {countries.map((country) => (
+            <option key={country.country} value={country.country}>
+              {country.country}
+            </option>
           ))}
         </select>
+      )}
+
+      {Cities.length > 0 && (
+        <select className="select w-full max-w-xs" onChange={handleCityChange} value={singleCity}>
+          <option selected hidden disabled>
+            Выберите город
+          </option>
+          {Cities.map((city) => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
+        </select>
+      )}
+          </div>
+    </div>
+    <input type="hidden" name="locations" id='locations' value={combinedLocation} />
+
+        </label>
+        <label className='flex gap-1 items-end' htmlFor="langue">
+          <div className='flex flex-col justify-between h-full'>
+          <div>Знание языка</div>
+          <select className="select w-full max-w-xs" id="langue" name="langue" >
+          <option disabled selected value={null}>Знание языка</option>
+        <option>Не знает языков</option>
+        <option >Английский</option>
+        <option >Немецкий</option>
+        </select>
+          </div>
+          <div className='flex flex-col justify-between  h-full'>
+          <div>Уровень</div>
+          <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+          <option disabled selected value={null}>Уровень знание языка</option>
+        <option >Уровень А1</option>
+        <option >Уровень А2</option>
+        </select>
+          </div>
         </label>
         <label htmlFor="status">
             <div>Статус</div>
-          <select className="select w-full max-w-xs" id="status" name="status">
-          {status.map(s => (
-            <option key={s._id} value={s._id}>{s.name}</option>
-          ))}
+          <select className="select w-full max-w-xs" id="status" name="status" >
+          <option disabled selected value={null}>Выберите Статус</option>
+          <option>Не обработан</option>
+          <option>Документы не готовы</option>
+          <option>Ждёт работу</option>
+          <option>Работает</option>
+          <option>В отпуске</option>
+          <option>В ЧС</option>
         </select>
         </label>
+        <label htmlFor="drivePermis">
+        <div>
+      <h3>Категории В/У</h3>
+      <MultiSelect
+        options={drivePermis}
+        value={selectedDrive}
+        onChange={setSelectedDrive}
+        labelledBy="drivePermis"
+      />
+    </div>
+        </label>
+        <label htmlFor="leaving">
+              <div>Готов выехать</div>
+            <input className="accent w-full max-w-xs" type="date"  id='leaving' name='leaving' />
+            </label>
+            <label htmlFor="workHours">
+              <div>Желаемые часы отработки</div>
+            <input className="accent w-full max-w-xs" type="number"  id='workHours' name='workHours' />
+            </label>    
         <label htmlFor="manager">
           <div>Менеджер</div>
         <select className="select w-full max-w-xs" id="manager" name="manager">
+         <option disabled selected value={null}>Выберите менеджера</option>
           {manager.map(m => (
             <option key={m._id} value={m._id}>{m.name}</option>
           ))}
@@ -143,17 +262,20 @@ export default function Form({ professions, locations, langue, status, manager }
         <input className="input input-bordered input-accent w-full max-w-xs"
          id="cardNumber" name="cardNumber" type="text" placeholder="Номер счёта" />
         </label>
-        
-       
         </div>
         <div className='grid justify-center items-stretch content-space-evenly '>
         <label htmlFor="professions">
+        <div>
+        <h3>Профессии</h3>
+      <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
+
+      </div>
         {professionEntries.map((prof, index) => (
   <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
     <label htmlFor="profession">
-      <div>Профессии</div>
-      <select className="select w-full max-w-xs" value={prof.name} onChange={e => handleProfessionChange(index, 'name', e.target.value)}>
-      <option value="Профессия" disabled selected>Выберите профессию</option>
+      <select className="select w-full max-w-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
+      <option value={null} disabled selected>Выберите профессию</option>
+      <option>Нет профессии</option>
         {professions.map(profession => (
           <option key={profession._id} value={profession.name}>{profession.name}</option>
         ))}
@@ -161,8 +283,8 @@ export default function Form({ professions, locations, langue, status, manager }
     </label>
     <label htmlFor="experience">
       <div>Опыт работы</div>
-      <select className="select select-accent w-full max-w-xs" value={prof.experience} onChange={e => handleProfessionChange(index, 'experience', e.target.value)}>
-        <option disabled selected value={"Опыт работы"}>Опыт работы</option>
+      <select className="select select-accent w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
+        <option disabled selected value={null}>Опыт работы</option>
         <option >Меньше года</option>
         <option >От 2-х лет</option>
         <option >Более 10-ти лет</option>
@@ -171,17 +293,21 @@ export default function Form({ professions, locations, langue, status, manager }
     <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeProfessionEntry(index)}>Удалить профессию</button>
   </div>
 ))}
-<button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
         </label>
         </div>
         <div className='grid justify-center items-stretch content-space-evenly '>
         <label htmlFor="documents" className='flex flex-col '>
-        <div>Документы</div>
+        <div>
+          <h3>Документы</h3>
+        <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
+
+        </div>
         {documentEntries.map((doc, index) => (
           <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
             <label htmlFor="nameDocument">
               <div>Название документа</div>
-            <select className="select w-full max-w-xs" value={doc.docType} onChange={e => handleDocumentChange(index, 'docType', e.target.value)}>
+            <select  className="select w-full max-w-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
+             <option  value={null}>Выберите документ</option>
               <option value="Виза">Виза</option>
               <option value="Песель">Песель</option>
               <option value="Паспорт">Паспорт</option>
@@ -200,7 +326,6 @@ export default function Form({ professions, locations, langue, status, manager }
             <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
           </div>
         ))}
-        <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
         </label>
         </div>
         

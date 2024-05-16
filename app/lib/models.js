@@ -147,9 +147,8 @@ type: String,
     type: String,
   },
   locations: {
-    name: {type: String},
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Location'
+    type: String,
+    
   },
   professions: [{
     name:  String,
@@ -162,20 +161,20 @@ type: String,
     numberDoc: String
   }],
   langue:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Langue'
+   name: String,
+   level: String,
   },
   manager:{
 type: mongoose.Schema.Types.ObjectId,
-ref: 'Manager'
+ref: 'Manager',
+required: false
   },
   status:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Status'
+   type: String
   },
-  comment:{
+  comment:[{
     type: String
-  },
+  }],
   commentMng: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CommentMng'

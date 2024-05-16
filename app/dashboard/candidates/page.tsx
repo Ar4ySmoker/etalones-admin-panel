@@ -54,9 +54,9 @@ function CandidatesPage() {
       return "нет профессий";
     }
     return professions.map((prof, index) => (
-      <p key={index}>
-        <strong>{prof.name}</strong><br/><small>опыт {prof.experience}</small>
-
+      <p key={index} className='flex flex-col'>
+        <p>{prof.name}</p>
+        <small className='badge badge-sm'>{prof.experience}</small>
       </p>
     ));
   };
@@ -88,7 +88,6 @@ function CandidatesPage() {
           professionDescription: professionMap[candidate.profession]?.description || "Нет описания",
           managerName: managerMap[candidate.manager] || "Без менеджера",
           statusName: statusMap[candidate.status] || "Не обработан",
-          langueName: langueMap[candidate.langue] || "Не знает",
           commentMngNames: candidate.commentMng.map(id => commentMngMap[id] || "Неизвестный комментарий")
         })));
       } catch (error) {
@@ -154,7 +153,7 @@ function CandidatesPage() {
                 <div className="flex items-center gap-3">
                   <div>
                     <div className="font-bold">{candidate.name}</div>
-                    <div className="text-sm opacity-50">В городе {candidate.locationName}</div>
+                    <div className="text-sm opacity-50">В городе {candidate.locations}</div>
                   </div>
                 </div>
               </td>
@@ -198,26 +197,22 @@ function CandidatesPage() {
       </div>
       {modalOpen && selectedCandidate && (
         <dialog className="modal" open>
-          <div className="modal-box bg-white">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={handleCloseModal}>✕</button>
-            <button onClick={() => handleDeleteCandidate(selectedCandidate._id)} className={styles.deleteCandidate}>Удалить</button>
-            <h3 className="font-bold text-lg">Информация о кандидате</h3>
-            <div className="py-4">
-              <p><strong>Менеджер:</strong> {selectedCandidate.managerName}</p>
+          <div className="modal-box bg-white ">
+            <h3 className="card-title">Информация о кандидате</h3>
+                      <button className="btn btn-sm btn-circle btn-ghost absolute right-0 top-2 " onClick={handleCloseModal}>✕</button>
+          <div className='flex justify-between '>
+          <p>Менеджер: {selectedCandidate.managerName}</p>
+          <div className='badge-ghost badge-sm '>Добавлен: {typeof selectedCandidate.createdAt === 'string' ? selectedCandidate.createdAt.substring(0, 10) : 'Неизвестно'}</div>
+            </div>
+            <div className='flex content-between '>
+                <div className="py-4 flex flex-col">
               <p><strong>Имя:</strong> {selectedCandidate.name}</p>
               <p><strong>Возраст:</strong> {selectedCandidate.age}</p>
-              <p><strong>Телефон:</strong> {selectedCandidate.phone}</p>
-              <p><strong>Профессия:</strong> {selectedCandidate.professionName}</p>
-              <p><strong>Описание:</strong> {selectedCandidate.professionDescription}</p>
-              <p><strong>Город:</strong> {selectedCandidate.locationName}</p>
-              <p><strong>Добавлен:</strong> {typeof selectedCandidate.createdAt === 'string' ? selectedCandidate.createdAt.substring(0, 10) : 'Неизвестно'}</p>
-              {selectedCandidate.documents && selectedCandidate.documents.map((doc, index) => (
-                <p key={index}>
-                  <strong>{doc.docType}:</strong> № {doc.numberDoc}, действует до {doc.dateExp}
-                </p>
-              ))}
-              <p><strong>Статус:</strong> {selectedCandidate.statusName}</p>
-              <p><strong>Язык:</strong> {selectedCandidate.langueName}</p>
+              <p ><strong>Профессия:</strong> {renderProfessions(selectedCandidate.professions)}</p>
+              <p><strong>Город:</strong> {selectedCandidate.locations}</p>
+              
+              <p><strong>Статус:</strong> {selectedCandidate.status}</p>
+              <p><strong>Язык:</strong> {selectedCandidate.langue.name} {selectedCandidate.langue.level}</p>
               <p><strong>Водительское Удостоверение:</strong> {selectedCandidate.drivePermis}</p>
               <p><strong>Готов выехать:</strong> {typeof selectedCandidate.leaving === 'string' ? selectedCandidate.leaving.substring(0, 10) : 'Неизвестно'}</p>
               <p><strong>Комментарий:</strong> {selectedCandidate.comment}</p>
@@ -229,10 +224,23 @@ function CandidatesPage() {
     </li>
   ))}
 </ul>
-              <AddCommentForm candidateId={selectedCandidate._id} />
-              
+                </div> 
+                 <div className="py-4 flex flex-col">
+            <p className='badge badge-md'><strong>Телефон:</strong> {selectedCandidate.phone}</p>
+            <p className='text-sm'>Документы:</p>
+            {selectedCandidate.documents && selectedCandidate.documents.map((doc, index) => (
+                <p key={index} className='text-sm '>
+                  --{doc.docType} {doc.numberDoc} <br/> <span className='badge badge-sm'>действует до {doc.dateExp}</span>
+                </p>
+              ))}
+                 </div>
             </div>
-          </div>
+              <AddCommentForm candidateId={selectedCandidate._id} />
+              <button onClick={() => handleDeleteCandidate(selectedCandidate._id)} className={styles.deleteCandidate}>Удалить</button>
+
+            </div>
+            
+          
         </dialog>
       )}
     </div>
