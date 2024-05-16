@@ -1,62 +1,9 @@
 import mongoose from "mongoose";
-const { Schema } = mongoose;
 
 
-const userSchema = new Schema(
-  {
-      name: {
-          type: String,
-          required: true,
-      },
-      email: {
-          type: String,
-          unique: true,
-          required: true,
-      },
-      password: {
-          type: String,
-          required: false,
-      },
-  },
-  { timestamps: true }
-);
-
-export default mongoose.models.User || mongoose.model("User", userSchema);
 
 
-const productSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    desc: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    stock: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    img: {
-      type: String,
-    },
-    color: {
-      type: String,
-    },
-    size: {
-      type: String,
-    },
-  },
-  { timestamps: true }
-);
+
 const managerShema = new mongoose.Schema({
   name:{
     type: String,
@@ -230,8 +177,6 @@ const statusShema = new mongoose.Schema({
     type: String
   }
 })
-// export const User = mongoose.models.User || mongoose.model("User", userSchema);
-export const Product = mongoose.models.Product || mongoose.model("Product", productSchema);
 export const Location = mongoose.models.Location || mongoose.model("Location", locationSchema);
 export const Profession = mongoose.models.Profession || mongoose.model("Profession", professionSchema);
 export const Document = mongoose.models.Document || mongoose.model("Document", dodumentShema);
