@@ -26,9 +26,9 @@ export default async function EditCandidate({ params }) {
     // const { name, age, phone, profession, location, langue, status, manager, experience } = candidate;
  
 
-    const allProfessions = await fetch(`http://localhost:3000/api/profession`);
+    const allProfessions = await fetch(`http://www.candidat.store/api/profession`);
     const professions = await allProfessions.json();
-    const allManagers = await fetch("http://localhost:3000/api/manager");
+    const allManagers = await fetch("http://www.candidat.store/api/manager");
     const managers = await allManagers.json();
     return <EditCandidateForm id={id} candidate={candidate} professions={professions}  managers={managers} />;
 }
