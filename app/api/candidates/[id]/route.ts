@@ -15,7 +15,7 @@ export async function GET(request, { params }) {
   const { id } = params;
   await connectToDB();
   // Здесь мы добавляем .populate('manager'), чтобы загрузить данные менеджера
-  const candidate = await Candidate.findOne({ _id: id }).populate(['manager', 'professions']);
+  const candidate = await Candidate.findOne({ _id: id }).populate(['manager', 'professions', 'langue']);
  console.log(candidate)
   return  NextResponse.json({ candidate }, { status: 200 });
 }
