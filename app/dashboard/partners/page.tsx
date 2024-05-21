@@ -67,26 +67,19 @@ function PartnersPage() {
     setCurrentPage(pageNumber);
   };
 
-  const renderDocuments = (documents) => {
-    if (!documents || documents.length === 0) {
-      return "нет документов";
-    }
-    return documents.map((doc, index) => (
-      <p key={index}>
-        <strong>{doc.docType}</strong>
-      </p>
-    ));
-  };
 
-  const renderProfessions = (professions) => {
-    if (!professions || professions.length === 0) {
-      return "нет профессий";
+
+  const renderVacancies = (location) => {
+    if (!location || location.length === 0) {
+      return "нет Вакансий";
     }
-    return professions.map((prof, index) => (
-      <p key={index} className="flex flex-col">
-        <p>{prof.name}</p>
-        <small className="badge badge-sm">{prof.experience}</small>
-      </p>
+    return location.map((loc, index) => (
+      <div key={index} className='w-max'>
+        <p>{loc.profession} - {loc.numberPeople} чел.</p>
+        <small className="badge badge-sm w-full">Город {loc.name}</small>
+        <small className="badge badge-sm">Сумма контракта {loc.price}</small>
+
+      </div>
     ));
   };
 
@@ -95,7 +88,7 @@ function PartnersPage() {
       <div className={styles.top}>
         <input
           type="text"
-          placeholder="Search for a Candidate..."
+          placeholder="Search for a Partner..."
           value={searchTerm}
           onChange={handleSearchChange}
           className={styles.searchInput}
@@ -114,34 +107,35 @@ function PartnersPage() {
                 <th>Менеджер</th>
                 <th>Имя</th>
                 <th>Телефон</th>
-                <th>Название фирмы</th>
-                <th>Сумма контракта</th>
-                <th>Профессии</th>
+                <th>Вакансии</th>
+                {/* <th>В городах</th>
+                <th>Сумма контракта</th> */}
                 <th>Действия</th>
               </tr>
             </thead>
             <tbody>
               {partners.map((partner) => (
                 <tr key={partner._id}>
-                  <td className='flex flex-col gap-2'>
-                  <div className='badge-md w-max badge-outline font-bold'>{partner.manager.name}</div>
-                  <div className='flex flex-col gap-1'>Статус<span className='badge badge-ghost badge-sm w-max'>{partner.status}</span> </div></td>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div>
+                  <td className='flex flex-col gap-2 items-start'>
+                  <div className='badge-md w-max badge-outline font-bold'>Менеджер {partner.manager?.name}</div>
+                  <div className='flex flex-col gap-1'>Статус Заказчика<span className='badge badge-ghost badge-sm w-max'>{partner.status}</span> </div></td>
+                  <td className='w-max'>
+                    <div className="flex items-start gap-3">
+                      <div >
                         <div className="font-bold">{partner.name}</div>
-                        <div className="text-sm opacity-50">
-                          В городе {partner.locations}
+                        <div className="text-sm opacity-50 w-full">
+                          {partner.companyName}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>{partner.phone}</td>
+                 
                   <td>
                     <div className="flex items-center gap-3">
                       <div>
                         <div className="font-bold">
-                          {renderProfessions(partner.professions)}{" "}
+                          {renderVacancies(partner.location)}
                         </div>
                       </div>
                     </div>

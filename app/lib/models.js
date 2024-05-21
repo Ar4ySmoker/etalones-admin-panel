@@ -58,17 +58,15 @@ price: String
   },
   candidates:[{
     type: mongoose.Schema.Types.ObjectId,
-    ref:'Candidate'
+    ref:'Candidate',
+    required: false
   }],
   contract:{
-sum: Number,
+sum: String,
 type: String,
 subscribe: Boolean,
+required: false
   },
-  documents:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Document'
-  }],
   status:{
     type: String
    },
@@ -78,6 +76,13 @@ subscribe: Boolean,
   leaving:{
     type: Date,
   },
+  workHours:{
+    type: String,
+  },
+  langue:{
+    name: String,
+    level: String,
+   },
   comment:{
 type: String,
   }

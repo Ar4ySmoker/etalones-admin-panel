@@ -140,7 +140,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     return (
         <>
         <div className="">
-            <h1 className="font-bold py-10 text-2xl">Update Candidate</h1>
+            <h1 className="font-bold py-10 text-2xl">Обновить кандидата</h1>
         </div>
         <form onSubmit={handleSubmit} >
         <div className='grid grid-cols-3'>

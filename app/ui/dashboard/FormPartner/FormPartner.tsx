@@ -20,7 +20,7 @@ export default function FormPartner({ professions, manager }) {
   const [combinedLocation, setCombinedLocation] = useState([""]);
   const [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0 }]);
+  const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -66,7 +66,7 @@ export default function FormPartner({ professions, manager }) {
   }, [singleCountry, singleCity]);
 
   const addLocationEntry = () => {
-    setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0 }]);
+    setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0, price:'' }]);
     setCombinedLocation([...combinedLocation, ""]);
     setSingleCountry([...singleCountry, ""]);
     setSingleCity([...singleCity, ""]);
@@ -111,17 +111,22 @@ export default function FormPartner({ professions, manager }) {
       location: locationEntries.map((entry, index) => ({
         name: combinedLocation[index], // Используем combinedLocation в качестве name
         profession: entry.profession,
-        numberPeople: entry.numberPeople
+        numberPeople: entry.numberPeople,
+        price: entry.price,
       })),
       manager: formData.get('manager') || null,
-      contract: {
-        sum: formData.get('contractSum') || 0,
-        type: formData.get('contractType') || '',
-        subscribe: formData.get('contractSubscribe') === 'on',
-      },
+      contract: JSON.stringify({
+        sum: formData.get('contractSum'),
+        type: formData.get('contractType'),
+        subscribe: formData.get('contractSubscribe'),
+      }),
       status: formData.get('status') || '',
       drivePermis: selectedDrive.map(d => d.value).join(', '),
       leaving: formData.get('leaving') || '',
+      langue: {
+        name: formData.get('langue') || '',
+        level: formData.get('langueLvl') || ''
+      },
       comment: formData.get('comment') || ''
     };
 
@@ -151,6 +156,15 @@ export default function FormPartner({ professions, manager }) {
       <form onSubmit={handleSubmit}>
         <div className='grid grid-cols-2'>
           <div className='grid justify-start items-stretch content-space-evenly '>
+          <label htmlFor="manager">
+              <div>Менеджер</div>
+              <select className="select w-full max-w-xs" id="manager" name="manager">
+                <option disabled selected value={null}>Выберите менеджера</option>
+                {manager.map(m => (
+                  <option key={m._id} value={m._id}>{m.name}</option>
+                ))}
+              </select>
+            </label>
             <label htmlFor="name">
               <div>Имя</div>
               <input className="input input-bordered input-accent w-full max-w-xs"
@@ -169,7 +183,7 @@ export default function FormPartner({ professions, manager }) {
             <label htmlFor="numberDE">
               <div>Номер DE</div>
               <input className="input input-bordered input-accent w-full max-w-xs"
-                id="numberDE" name="numberDE" type="text" placeholder="154544641313" />
+                id="numberDE" name="numberDE" type="text" placeholder="154544641" />
             </label>
             <label htmlFor="email">
               <div>Почта</div>
@@ -181,7 +195,60 @@ export default function FormPartner({ professions, manager }) {
               <input className="input input-bordered input-accent w-full max-w-xs"
                 id="site" name="site" type="text" placeholder="www.partner.com" />
             </label>
-          
+            <label htmlFor="contract" className='bg-slate-200 my-3'>
+              <div>Контракт</div>
+              <div >
+                <div>Тип контракта</div>
+                <select className="select w-full max-w-xs" id="contractType" name="contractType">
+                  <option disabled selected value={null}>Выберите тип контракта</option>
+                  <option>Не можем договорится</option>
+                  <option>Почасовый</option>
+                  <option>От объёма</option>
+                  <option>Налог</option>
+                </select>
+              </div>
+              <div>
+                <div>Стоимость контарка</div>
+                <input className="input input-bordered input-accent w-full max-w-xs"
+                id="contractSum" name="contractSum" type="text" placeholder="20 euro" /> </div>
+                <div className="form-control">
+  <label className="label cursor-pointer">
+    <span className="label-text">Контракт подписан</span> 
+    <input type="checkbox" defaultChecked className="checkbox" id='contractSubscribe' name='contractSubscribe' />
+  </label>
+</div>
+            </label>
+            <label htmlFor="status">
+              <div>Статус</div>
+              <select className="select w-full max-w-xs" id="status" name="status">
+                <option disabled selected value={null}>Выберите Статус</option>
+                <option>Не смогли поговорить</option>
+                <option>Думает над предложением</option>
+                <option>Контракт на подписи</option>
+                <option>Ждёт людей</option>
+                <option>Люди на объекте</option>
+                <option>В ЧС</option>
+              </select>
+            </label>
+            <label htmlFor="drivePermis">
+              <div>
+                <h3>Требуется В/У кат.</h3>
+                <MultiSelect
+                  options={drivePermis}
+                  value={selectedDrive}
+                  onChange={setSelectedDrive}
+                  labelledBy="drivePermis"
+                />
+              </div>
+            </label>
+            <label htmlFor="leaving">
+              <div>Готов принимать людей с:</div>
+              <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' />
+            </label>
+            <label htmlFor="workHours">
+              <div>Даёт часы отработки</div>
+              <input className="accent w-full max-w-xs" type="number" id='workHours' name='workHours' />
+            </label>
             <label className='flex gap-1 items-end' htmlFor="langue">
               <div className='flex flex-col justify-between h-full'>
                 <div>Знание языка</div>
@@ -203,51 +270,6 @@ export default function FormPartner({ professions, manager }) {
                   <option>Уровень B2</option>
                 </select>
               </div>
-            </label>
-            <label htmlFor="status">
-              <div>Статус</div>
-              <select className="select w-full max-w-xs" id="status" name="status">
-                <option disabled selected value={null}>Выберите Статус</option>
-                <option>Не обработан</option>
-                <option>Документы не готовы</option>
-                <option>Ждёт работу</option>
-                <option>На собеседовании</option>
-                <option>На объекте</option>
-                <option>В ЧС</option>
-              </select>
-            </label>
-            <label htmlFor="drivePermis">
-              <div>
-                <h3>Категории В/У</h3>
-                <MultiSelect
-                  options={drivePermis}
-                  value={selectedDrive}
-                  onChange={setSelectedDrive}
-                  labelledBy="drivePermis"
-                />
-              </div>
-            </label>
-            <label htmlFor="leaving">
-              <div>Готов выехать</div>
-              <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' />
-            </label>
-            <label htmlFor="workHours">
-              <div>Желаемые часы отработки</div>
-              <input className="accent w-full max-w-xs" type="number" id='workHours' name='workHours' />
-            </label>
-            <label htmlFor="manager">
-              <div>Менеджер</div>
-              <select className="select w-full max-w-xs" id="manager" name="manager">
-                <option disabled selected value={null}>Выберите менеджера</option>
-                {manager.map(m => (
-                  <option key={m._id} value={m._id}>{m.name}</option>
-                ))}
-              </select>
-            </label>
-            <label htmlFor="cardNumber" className=" w-full max-w-xs">
-              <div>Номер счёта</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="cardNumber" name="cardNumber" type="text" placeholder="Номер счёта" />
             </label>
           </div>
           <div className='grid justify-center items-stretch content-space-evenly'>
@@ -301,6 +323,10 @@ export default function FormPartner({ professions, manager }) {
                   <label htmlFor="numberPeople">
                     <div>Количество человек</div>
                     <input className="input input-bordered input-accent w-full max-w-xs" type="number" value={loc.numberPeople} onChange={e => handleLocationChange(index, 'numberPeople', e.target.value)} />
+                  </label>
+                  <label htmlFor="price">
+                    <div>Цена контракта</div>
+                    <input className="input input-bordered input-accent w-full max-w-xs" type="text" value={loc.price} onChange={e => handleLocationChange(index, 'price', e.target.value)} />
                   </label>
                   <button className="btn btn-outline btn-error mt-3 btn-xs w-full" type="button" onClick={() => removeLocationEntry(index)}>Удалить локацию</button>
                 </div>

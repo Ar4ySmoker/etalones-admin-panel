@@ -1,16 +1,17 @@
 //app\editProduct\[id]\page.js
 
-import EditCandidateForm from "@/app/ui/dashboard/FormCandidate/EditCandidateForm";
+import EditPartnerForm from "@/app/ui/dashboard/FormPartner/EditParttnerForm";
 
  
-const getCandidateById = async (id) => {
+const getPartnerById = async (id) => {
     try {
-        const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+        const res = await fetch(`http://localhost:3000/api/partners/${id}`, {
             cache: "no-store",
         });
  
         if (!res.ok) {
-            throw new Error("Failed to fetch candidate");
+            console.log("NOFETCHPARTNER")
+            throw new Error("Failed to fetch partners");
         }
  
         return res.json();
@@ -19,9 +20,9 @@ const getCandidateById = async (id) => {
     }
 };
  
-export default async function EditCandidate({ params }) {
+export default async function EditPartner({ params }) {
     const { id } = params;
-    const { candidate } = await getCandidateById(id);
+    const  partner  = await getPartnerById(id);
     
     // const { name, age, phone, profession, location, langue, status, manager, experience } = candidate;
  
@@ -29,6 +30,6 @@ export default async function EditCandidate({ params }) {
     const allProfessions = await fetch(`http://www.candidat.store/api/profession`);
     const professions = await allProfessions.json();
     const allManagers = await fetch("http://www.candidat.store/api/manager");
-    const managers = await allManagers.json();
-    return <EditCandidateForm id={id} candidate={candidate} professions={professions}  managers={managers} />;
+    const manager = await allManagers.json();
+    return <EditPartnerForm id={id} partner={partner} professions={professions}  manager={manager} />;
 }
