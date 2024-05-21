@@ -1,4 +1,7 @@
+import { subscribe } from "diagnostics_channel";
 import mongoose from "mongoose";
+import { type } from "os";
+import { boolean } from "zod";
 
 
 
@@ -31,33 +34,50 @@ unique:true
 type: String,
 unique: true
   },
+  site:{
+type: String,
+  },
   companyName:{
 type: String,
 unique: true
   },
   numberDE:{
-type: String,
+type: Number,
 unique: true
   },
-  location:{
-type: mongoose.Schema.Types.ObjectId,
-ref: 'Location'
-  },
+  location:[{
+name: String,
+profession: String,
+numberPeople: Number,
+price: String
+  }],
   manager:{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Manager'
+    ref: 'Manager',
+    required: false
   },
   candidates:[{
     type: mongoose.Schema.Types.ObjectId,
     ref:'Candidate'
   }],
-  contractSum:{
-type: Number
+  contract:{
+sum: Number,
+type: String,
+subscribe: Boolean,
   },
   documents:[{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Document'
   }],
+  status:{
+    type: String
+   },
+   drivePermis:{
+    type: String,
+      },
+  leaving:{
+    type: Date,
+  },
   comment:{
 type: String,
   }

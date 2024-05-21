@@ -11,6 +11,7 @@ const drivePermis = [
   { label: "E", value: "E"},
   { label: "Код 95", value: "Код 95"},
 ];
+
 export default function Form({ professions,  manager }) {
   let [countries, setCountries] = useState([]);
   let [singleCountry, setSingleCountry] = useState("");
@@ -19,6 +20,7 @@ export default function Form({ professions,  manager }) {
   let [combinedLocation, setCombinedLocation] = useState("");
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
+  const [selectedLangue, setSelectedLangue] = useState("");
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -201,11 +203,14 @@ export default function Form({ professions,  manager }) {
         <label className='flex gap-1 items-end' htmlFor="langue">
           <div className='flex flex-col justify-between h-full'>
           <div>Знание языка</div>
+          
           <select className="select w-full max-w-xs" id="langue" name="langue" >
           <option disabled selected value={null}>Знание языка</option>
         <option>Не знает языков</option>
         <option >Английский</option>
         <option >Немецкий</option>
+        <option >Польский</option>
+
         </select>
           </div>
           <div className='flex flex-col justify-between  h-full'>
@@ -214,6 +219,8 @@ export default function Form({ professions,  manager }) {
           <option disabled selected value={null}>Уровень знание языка</option>
         <option >Уровень А1</option>
         <option >Уровень А2</option>
+        <option >Уровень B1</option>
+        <option >Уровень B2</option>
         </select>
           </div>
         </label>
@@ -224,8 +231,8 @@ export default function Form({ professions,  manager }) {
           <option>Не обработан</option>
           <option>Документы не готовы</option>
           <option>Ждёт работу</option>
-          <option>Работает</option>
-          <option>В отпуске</option>
+          <option>На собеседовании</option>
+          <option>На объекте</option>
           <option>В ЧС</option>
         </select>
         </label>
@@ -284,7 +291,8 @@ export default function Form({ professions,  manager }) {
     <label htmlFor="experience">
       <div>Опыт работы</div>
       <select className="select select-accent w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
-        <option disabled selected value={null}>Опыт работы</option>
+        <option value={null} disabled selected >Опыт работы</option>
+        <option >Без опыта</option>
         <option >Меньше года</option>
         <option >От 2-х лет</option>
         <option >Более 10-ти лет</option>
