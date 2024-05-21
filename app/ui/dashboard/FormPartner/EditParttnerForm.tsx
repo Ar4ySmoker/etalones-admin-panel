@@ -106,31 +106,31 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
 
             const body = {
                 name: formData.get('name') || partner.name,
-                phone: formData.get('phone') || '',
-                email: formData.get('email') || '',
-                site: formData.get('site') || '',
-                companyName: formData.get('companyName') || '',
-                numberDE: formData.get('numberDE') || 0,
+                phone: formData.get('phone') || partner.phone,
+                email: formData.get('email') || partner.email,
+                site: formData.get('site') || partner.site,
+                companyName: formData.get('companyName') || partner.companyName,
+                numberDE: formData.get('numberDE') || partner.numberDE,
                 location: locationEntries.map((entry, index) => ({
                   name: combinedLocation[index], // Используем combinedLocation в качестве name
                   profession: entry.profession,
                   numberPeople: entry.numberPeople,
                   price: entry.price,
                 })),
-                manager: formData.get('manager') || null,
+                manager: formData.get('manager') || partner.manager,
                 contract: JSON.stringify({
                   sum: formData.get('contractSum'),
                   type: formData.get('contractType'),
                   subscribe: formData.get('contractSubscribe'),
                 }),
-                status: formData.get('status') || '',
+                status: formData.get('status') || partner.status,
                 drivePermis: selectedDrive.map(d => d.value).join(', '),
-                leaving: formData.get('leaving') || '',
+                leaving: formData.get('leaving') || partner.leaving,
                 langue: {
-                  name: formData.get('langue') || '',
-                  level: formData.get('langueLvl') || ''
+                  name: formData.get('langue') || partner.langue.name,
+                  level: formData.get('langueLvl') || partner.langue.level
                 },
-                comment: formData.get('comment') || ''
+                comment: formData.get('comment') || partner.comment
               };
         try {
             const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
@@ -159,7 +159,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
               <div className='grid justify-start items-stretch content-space-evenly '>
               <label htmlFor="manager">
                   <div>Менеджер</div>
-                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager._id}>
+                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager}>
                     <option disabled selected value={null}>Выберите менеджера</option>
                     {managers.map(m => (
                       <option key={m._id} value={m._id}>{m.name}</option>
@@ -174,33 +174,33 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 <label htmlFor="phone">
                   <div>Телефон</div>
                   <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="phone" name="phone" type="text" placeholder="+373696855446" required />
+                    id="phone" name="phone" type="text" defaultValue={partner.phone} required />
                 </label>
                 <label htmlFor="companyName">
                   <div>Название фирмы</div>
                   <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="companyName" name="companyName" type="text" placeholder="Название фирмы" />
+                    id="companyName" name="companyName" type="text" defaultValue={partner.companyName} placeholder="Название фирмы" />
                 </label>
                 <label htmlFor="numberDE">
                   <div>Номер DE</div>
                   <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="numberDE" name="numberDE" type="text" placeholder="154544641" />
+                    id="numberDE" name="numberDE" type="text" defaultValue={partner.numberDE} placeholder="154544641" />
                 </label>
                 <label htmlFor="email">
                   <div>Почта</div>
                   <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="email" name="email" type="text" placeholder="example@mail.ru" />
+                    id="email" name="email" type="text" defaultValue={partner.email} placeholder="example@mail.ru" />
                 </label>
                 <label htmlFor="site">
                   <div>Сайт</div>
                   <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="site" name="site" type="text" placeholder="www.partner.com" />
+                    id="site" name="site" type="text" defaultValue={partner.site} placeholder="www.partner.com" />
                 </label>
                 <label htmlFor="contract" className='bg-slate-200 my-3'>
                   <div>Контракт</div>
                   <div >
                     <div>Тип контракта</div>
-                    <select className="select w-full max-w-xs" id="contractType" name="contractType">
+                    <select className="select w-full max-w-xs" id="contractType" name="contractType" defaultValue={partner.contract}>
                       <option disabled selected value={null}>Выберите тип контракта</option>
                       <option>Не можем договорится</option>
                       <option>Почасовый</option>
@@ -211,7 +211,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                   <div>
                     <div>Стоимость контарка</div>
                     <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="contractSum" name="contractSum" type="text" placeholder="20 euro" /> </div>
+                    id="contractSum" name="contractSum" type="text" defaultValue={partner.contract} placeholder={partner.contract} /> </div>
                     <div className="form-control">
       <label className="label cursor-pointer">
         <span className="label-text">Контракт подписан</span> 
@@ -221,7 +221,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 </label>
                 <label htmlFor="status">
                   <div>Статус</div>
-                  <select className="select w-full max-w-xs" id="status" name="status">
+                  <select className="select w-full max-w-xs" id="status" name="status" defaultValue={partner.status}>
                     <option disabled selected value={null}>Выберите Статус</option>
                     <option>Не смогли поговорить</option>
                     <option>Думает над предложением</option>
@@ -244,16 +244,16 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 </label>
                 <label htmlFor="leaving">
                   <div>Готов принимать людей с:</div>
-                  <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' />
+                  <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' defaultValue={partner.leaving} />
                 </label>
                 <label htmlFor="workHours">
                   <div>Даёт часы отработки</div>
-                  <input className="accent w-full max-w-xs" type="number" id='workHours' name='workHours' />
+                  <input className="accent w-full max-w-xs" type="number" id='workHours' name='workHours' defaultValue={partner.workHours} />
                 </label>
                 <label className='flex gap-1 items-end' htmlFor="langue">
                   <div className='flex flex-col justify-between h-full'>
                     <div>Знание языка</div>
-                    <select className="select w-full max-w-xs" id="langue" name="langue">
+                    <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={partner.langue}>
                       <option disabled selected value={null}>Знание языка</option>
                       <option>Не знает языков</option>
                       <option>Английский</option>
@@ -277,7 +277,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 <label htmlFor="locations">
                   <div>
                     <h3>Нужны люди</h3>
-                    <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addLocationEntry}>Добавить локацию</button>
+                    <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addLocationEntry}>Добавить вакансию</button>
                   </div>
                   {locationEntries.map((loc, index) => (
                     <div key={index} className='flex flex-col w-full max-w-xs gap-1'>

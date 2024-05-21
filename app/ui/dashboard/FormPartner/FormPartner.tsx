@@ -21,10 +21,15 @@ export default function FormPartner({ professions, manager }) {
   const [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
   const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
+  const [contract, setContract] = useState({ type: "", sum: ""});
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
   };
+  const handleContractChange = (field, value) => {
+    setContract(prevContract => ({ ...prevContract, [field]: value }));
+  };
+  
 
   const fetchCountries = async () => {
     let country = await Axios.get(
@@ -115,11 +120,10 @@ export default function FormPartner({ professions, manager }) {
         price: entry.price,
       })),
       manager: formData.get('manager') || null,
-      contract: JSON.stringify({
-        sum: formData.get('contractSum'),
-        type: formData.get('contractType'),
-        subscribe: formData.get('contractSubscribe'),
-      }),
+      contract: {
+        type: formData.get('contractType') || '',
+        sum: formData.get('contractSum') || '',
+      },
       status: formData.get('status') || '',
       drivePermis: selectedDrive.map(d => d.value).join(', '),
       leaving: formData.get('leaving') || '',
@@ -199,24 +203,20 @@ export default function FormPartner({ professions, manager }) {
               <div>Контракт</div>
               <div >
                 <div>Тип контракта</div>
-                <select className="select w-full max-w-xs" id="contractType" name="contractType">
-                  <option disabled selected value={null}>Выберите тип контракта</option>
-                  <option>Не можем договорится</option>
-                  <option>Почасовый</option>
-                  <option>От объёма</option>
-                  <option>Налог</option>
-                </select>
+                <select className="select w-full max-w-xs" id="contractType" name="contractType" value={contract.type} onChange={(e) => handleContractChange('type', e.target.value)}>
+  <option disabled selected value={""}>Выберите тип контракта</option>
+  <option>Не можем договорится</option>
+  <option>Почасовый</option>
+  <option>От объёма</option>
+  <option>Налог</option>
+</select>
+
               </div>
               <div>
                 <div>Стоимость контарка</div>
                 <input className="input input-bordered input-accent w-full max-w-xs"
                 id="contractSum" name="contractSum" type="text" placeholder="20 euro" /> </div>
-                <div className="form-control">
-  <label className="label cursor-pointer">
-    <span className="label-text">Контракт подписан</span> 
-    <input type="checkbox" defaultChecked className="checkbox" id='contractSubscribe' name='contractSubscribe' />
-  </label>
-</div>
+
             </label>
             <label htmlFor="status">
               <div>Статус</div>

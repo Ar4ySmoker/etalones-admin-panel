@@ -1,7 +1,5 @@
-import { subscribe } from "diagnostics_channel";
 import mongoose from "mongoose";
-import { type } from "os";
-import { boolean } from "zod";
+
 
 
 
@@ -61,12 +59,15 @@ price: String
     ref:'Candidate',
     required: false
   }],
-  contract:{
-sum: String,
-type: String,
-subscribe: Boolean,
-required: false
-  },
+  contract: {
+    type: {
+      type: String,
+      required: false
+    },
+    sum: {
+      type: String,
+      required: false
+    }},
   status:{
     type: String
    },
