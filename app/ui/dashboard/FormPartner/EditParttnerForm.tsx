@@ -13,7 +13,7 @@ const drivePermis = [
     { label: "Код 95", value: "Код 95" },
   ];
 
-export default function EditPartnerForm({ id, partner, manager, professions }) {
+export default function EditPartnerForm({ id, partner, managers, professions }) {
   let [countries, setCountries] = useState([]);
   const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
   const [cities, setCities] = useState([[]]); // Массив массивов для городов
@@ -161,7 +161,7 @@ export default function EditPartnerForm({ id, partner, manager, professions }) {
                   <div>Менеджер</div>
                   <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager._id}>
                     <option disabled selected value={null}>Выберите менеджера</option>
-                    {manager.map(m => (
+                    {managers.map(m => (
                       <option key={m._id} value={m._id}>{m.name}</option>
                     ))}
                   </select>
@@ -169,7 +169,7 @@ export default function EditPartnerForm({ id, partner, manager, professions }) {
                 <label htmlFor="name">
                   <div>Имя</div>
                   <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="name" name="name" type="text" placeholder={partner.name} defaultValue={partner?.name} />
+                    id="name" name="name" type="text" placeholder={partner?.name} defaultValue={partner?.name} />
                 </label>
                 <label htmlFor="phone">
                   <div>Телефон</div>

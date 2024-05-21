@@ -115,7 +115,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             name: formData.get('langue') || candidate.langue.name,
             level: formData.get('langueLvl') || candidate.langue.Lvl },
           status: formData.get('status') || candidate.status,
-          manager: formData.get('manager') || candidate.manager,
+          manager: formData.get('manager') || candidate.manager.name,
           comment: formData.get('comment') || candidate.comment };
         try {
             const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
