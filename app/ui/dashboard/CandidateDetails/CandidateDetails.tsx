@@ -40,7 +40,8 @@ export default function CandidateDetails({ candidate }) {
 <div >Номер телефона: {candidate.phone}</div>
 <div>Местоположение: {candidate.locations}</div>
 <div>Знание языка: {candidate.langue.name}</div>
-<div>Статус: {candidate.status}</div>        
+<div>Статус: {candidate.status}</div>
+<div>Статус трудоустройства: <span>{candidate.statusFromPartner.status}</span>работает <span>{candidate.statusFromPartner.who}</span></div>
 <div>Менеджер: {candidate.manager.name}</div>
 <div>Номер счёта: {candidate.cardNumber}</div>
 <div>Профессии: {renderProfessions(candidate.professions)}</div>

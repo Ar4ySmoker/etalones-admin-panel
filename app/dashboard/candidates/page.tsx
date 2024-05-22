@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
-import { AddCommentForm } from '@/app/ui/dashboard/AddCommentForm/AddCommentForm';
 
 async function deleteCandidate(candidateId: string): Promise<Response> {
   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
