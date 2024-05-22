@@ -22,7 +22,7 @@ const getPartnerById = async (id) => {
  
 export default async function EditPartner({ params }) {
     const { id } = params;
-    const  {partner}  = await getPartnerById(id);
+    const  { partner }  = await getPartnerById(id);
     
     // const { name, age, phone, profession, location, langue, status, manager, experience } = candidate;
  

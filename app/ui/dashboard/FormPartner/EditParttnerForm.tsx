@@ -116,7 +116,8 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                   profession: entry.profession,
                   numberPeople: entry.numberPeople,
                   price: entry.price,
-                  
+                  country: singleCountry[index],
+                  city: singleCity[index]
                 })),
                 manager: formData.get('manager') || partner.manager,
                 contract: JSON.stringify({
@@ -212,13 +213,8 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                   <div>
                     <div>Стоимость контарка</div>
                     <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="contractSum" name="contractSum" type="text" defaultValue={partner.contract} placeholder={partner.contract} /> </div>
-                    <div className="form-control">
-      <label className="label cursor-pointer">
-        <span className="label-text">Контракт подписан</span> 
-        <input type="checkbox" defaultChecked className="checkbox" id='contractSubscribe' name='contractSubscribe' />
-      </label>
-    </div>
+                    id="contractSum" name="contractSum" type="text" defaultValue={partner.contract.sum} placeholder={partner.contract} /> </div>
+                    
                 </label>
                 <label htmlFor="status">
                   <div>Статус</div>
