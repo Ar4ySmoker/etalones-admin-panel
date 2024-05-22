@@ -159,7 +159,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
               <div className='grid justify-start items-stretch content-space-evenly '>
               <label htmlFor="manager">
                   <div>Менеджер</div>
-                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager}>
+                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager.name}>
                     <option disabled selected value={null}>Выберите менеджера</option>
                     {managers.map(m => (
                       <option key={m._id} value={m._id}>{m.name}</option>

@@ -1,11 +1,11 @@
 //app\editProduct\[id]\page.js
 
-import CandidateDetails from "@/app/ui/dashboard/CandidateDetails/CandidateDetails";
+import PartnerDetails from "@/app/ui/dashboard/PartnerDetails/PartnerDetails";
 
  
-const getCandidateById = async (id) => {
+const getPartnerById = async (id) => {
     try {
-        const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+        const res = await fetch(`http:localhost:3000/api/partners/${id}`, {
             cache: "no-store",
         });
  
@@ -19,9 +19,10 @@ const getCandidateById = async (id) => {
     }
 };
  
-export default async function EditCandidate({ params }) {
+export default async function EditPartner({ params }) {
     const { id } = params;
-    const { candidate } = await getCandidateById(id);
+    const  {partner}  = await getPartnerById(id);
+    // const {name, companyName, phone} = partner
 
-    return <CandidateDetails  candidate={candidate} />;
+    return <PartnerDetails  partner={partner}   />;
 }
