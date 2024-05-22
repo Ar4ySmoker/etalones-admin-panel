@@ -67,7 +67,13 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     ));
   };
   // const [newName, setNewName] = useState(candidate.name);
-   
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
  
     const router = useRouter();
     const [professionEntries, setProfessionEntries] = useState(candidate.professions || []);
@@ -256,7 +262,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </label>
         <label htmlFor="workHours">
               <div>Желаемые часы отработки</div>
-            <input className="accent w-full max-w-xs" type="number"  id='workHours' name='workHours' defaultValue={candidate.workHours}/>
+            <input className="accent w-full max-w-xs" type="number"  id='workHours' name='workHours' defaultValue={candidate.workHours} />
             </label> 
         <label htmlFor="manager">
           <div>Менеджер</div>
@@ -271,7 +277,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </label>
         <label htmlFor="leaving">
               <div>Готов выехать</div>
-            <input className="accent w-full max-w-xs" type="date"  id='leaving' name='leaving' defaultValue={candidate.leaving}/>
+            <input className="accent w-full max-w-xs" type="date"  id='leaving' name='leaving'  defaultValue={formatDate(candidate.leaving)}/>
             </label>
         <label htmlFor="cardNumber" className=" w-full max-w-xs">
           <div>Номер счёта</div>

@@ -66,13 +66,13 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
   }, [singleCountry, singleCity]);
   
 
-  const addLocationEntry = () => {
-    setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0, price:'' }]);
-    setCombinedLocation([...combinedLocation, ""]);
-    setSingleCountry([...singleCountry, ""]);
-    setSingleCity([...singleCity, ""]);
-    setCities([...cities, []]);
-  };
+  // const addLocationEntry = () => {
+  //   setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0, price:'' }]);
+  //   setCombinedLocation([...combinedLocation, ""]);
+  //   setSingleCountry([...singleCountry, ""]);
+  //   setSingleCity([...singleCity, ""]);
+  //   setCities([...cities, []]);
+  // };
   const handleLocationChange = (index, field, value) => {
     const newEntries = [...locationEntries];
     newEntries[index] = { ...newEntries[index], [field]: value };
@@ -98,7 +98,13 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
 
     const router = useRouter();
     
-
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -202,7 +208,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                   <div>Контракт</div>
                   <div >
                     <div>Тип контракта</div>
-                    <select className="select w-full max-w-xs" id="contractType" name="contractType" defaultValue={partner.contract}>
+                    <select className="select w-full max-w-xs" id="contractType" name="contractType" defaultValue={partner.contract.type}>
                       <option disabled selected value={null}>Выберите тип контракта</option>
                       <option>Не можем договорится</option>
                       <option>Почасовый</option>
@@ -230,7 +236,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 </label>
                 <label htmlFor="drivePermis">
                   <div>
-                    <h3>Требуется В/У кат.</h3>
+                    <h3>Требуется В/У кат. - было выбранно {partner.drivePermis}</h3>
                     <MultiSelect
                       options={drivePermis}
                       value={selectedDrive}
@@ -241,16 +247,16 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 </label>
                 <label htmlFor="leaving">
                   <div>Готов принимать людей с:</div>
-                  <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' defaultValue={partner.leaving} />
+                  <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' defaultValue={formatDate(partner.leaving)} />
                 </label>
                 <label htmlFor="workHours">
                   <div>Даёт часы отработки</div>
-                  <input className="accent w-full max-w-xs" type="number" id='workHours' name='workHours' defaultValue={partner.workHours} />
+                  <input className="accent w-full max-w-xs" type="number" id='workHours' name='workHours'  defaultValue={partner.workHours} />
                 </label>
                 <label className='flex gap-1 items-end' htmlFor="langue">
                   <div className='flex flex-col justify-between h-full'>
                     <div>Знание языка</div>
-                    <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={partner.langue}>
+                    <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={partner.langue.name}>
                       <option disabled selected value={null}>Знание языка</option>
                       <option>Не знает языков</option>
                       <option>Английский</option>
@@ -260,7 +266,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                   </div>
                   <div className='flex flex-col justify-between  h-full'>
                     <div>Уровень</div>
-                    <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+                    <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" defaultValue={partner.langue.level} value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
                       <option disabled selected value={null}>Уровень знание языка</option>
                       <option>Уровень А1</option>
                       <option>Уровень А2</option>
@@ -270,7 +276,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                   </div>
                 </label>
               </div>
-              <div className='grid justify-center items-stretch content-space-evenly'>
+              {/* <div className='grid justify-center items-stretch content-space-evenly'>
                 <label htmlFor="locations">
                   <div>
                     <h3>Нужны люди</h3>
@@ -330,7 +336,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                     </div>
                   ))}
                 </label>
-              </div>
+              </div> */}
             </div>
             <label htmlFor="comment">
               <div>Комментарий</div>

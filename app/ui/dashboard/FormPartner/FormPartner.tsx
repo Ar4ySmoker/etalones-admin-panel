@@ -274,7 +274,7 @@ export default function FormPartner({ professions, manager }) {
               </div>
             </label>
           </div>
-          <div className='grid justify-center items-stretch content-space-evenly'>
+          {/* <div className='grid justify-center items-stretch content-space-evenly'>
             <label htmlFor="locations">
               <div>
                 <h3>Нужны люди</h3>
@@ -334,7 +334,7 @@ export default function FormPartner({ professions, manager }) {
                 </div>
               ))}
             </label>
-          </div>
+          </div> */}
         </div>
         <label htmlFor="comment">
           <div>Комментарий</div>
