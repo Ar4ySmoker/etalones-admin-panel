@@ -12,6 +12,11 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   let [singleCity, setSingleCity] = useState("");
   let [combinedLocation, setCombinedLocation] = useState(""); 
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
+  let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
+
+  const handleStatusFromPartnerChange = (field, value) => {
+    setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
+  };
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
   };
@@ -115,6 +120,10 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             name: formData.get('langue') || candidate.langue.name,
             level: formData.get('langueLvl') || candidate.langue.Lvl },
           status: formData.get('status') || candidate.status,
+          statusFromPartner:{
+            status: formData.get('statusFromPartner') || candidate.statusFromPartner.status,
+            who: formData.get('who') || candidate.statusFromPartner.who
+          },
           manager: formData.get('manager') || candidate.manager,
           comment: formData.get('comment') || candidate.comment };
         try {
@@ -233,6 +242,46 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <option>В отпуске</option>
           <option>В ЧС</option>
         </select>
+        </label>
+        <label className='flex gap-1 items-end' htmlFor="statusFromPartner">
+          <div className='flex flex-col justify-between h-full'>
+          <div>Статус трудоустройства</div>
+          <select className="select w-full max-w-xs" id="statusFromPartner" name="statusFromPartner" defaultValue={candidate.statusFromPartner}>
+          <option disabled selected value={null}>Статус Трудоустройства</option>
+        <option>Не трудоустроен</option>
+        <option >Трудоустроен</option>
+        <option >В отпуске</option>
+        </select>
+          </div>
+          <div className='flex flex-col justify-between  h-full'>
+          <div>Заказчик</div>
+          <select className="select w-full max-w-xs" id="who" name="who"  value={statusFromPartner.who || ''} onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
+          <option disabled selected value={null}>Выберите заказчика</option>
+          <option >Нет заказчика</option>
+        <option >WERTBAU NORD GmbH </option>
+        <option >TEREBRO </option>
+        <option >Konstantin Sain </option>
+        <option >A&K Trockenbau </option>
+        <option >ВИКТОР ГАЛЛИАРД</option>
+        <option>David Batiridis</option>
+        <option>Gennadios Panagkasidis</option>
+        <option> INDEPENDA солнечные панели</option>
+        <option >GARDTBaU</option>
+        <option >Baugerüste Sky GbR-Илья</option>
+        <option >Seidel & Zinenko GbR - Владимир  </option>
+        <option >Zolarix GmbH  </option>
+        <option >Vitalii Savchuk  </option>
+        <option >ПЛИТКА Дрезден - Лилия </option>
+        <option >ANTON FREI  </option>
+        <option >SIGA BAU </option>
+        <option >ВИТАЛИЙ АЛАВАСКИ </option>
+        <option > RAIMONDA  </option>
+        <option >K und K Bau GbR </option>
+        <option >PALLETE HPZ  </option>
+        <option >Monolith GmbH  </option>
+
+        </select>
+          </div>
         </label>
         <label htmlFor="manager">
           <div>Менеджер</div>

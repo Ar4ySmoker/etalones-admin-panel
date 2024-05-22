@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 
 
@@ -125,7 +126,11 @@ required: false
   commentMng: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CommentMng'
-  }]
+  }],
+  statusFromPartner:{
+    status: String,
+    who: String
+  }
   
 
 },
