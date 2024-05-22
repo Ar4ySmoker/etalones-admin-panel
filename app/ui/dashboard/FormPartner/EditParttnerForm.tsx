@@ -111,11 +111,12 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 site: formData.get('site') || partner.site,
                 companyName: formData.get('companyName') || partner.companyName,
                 numberDE: formData.get('numberDE') || partner.numberDE,
-                location: locationEntries.map((entry, index) => ({
+                vacancies: locationEntries.map((entry, index) => ({
                   name: combinedLocation[index], // Используем combinedLocation в качестве name
                   profession: entry.profession,
                   numberPeople: entry.numberPeople,
                   price: entry.price,
+                  
                 })),
                 manager: formData.get('manager') || partner.manager,
                 contract: JSON.stringify({
@@ -159,7 +160,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
               <div className='grid justify-start items-stretch content-space-evenly '>
               <label htmlFor="manager">
                   <div>Менеджер</div>
-                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager.name}>
+                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager._id}>
                     <option disabled selected value={null}>Выберите менеджера</option>
                     {managers.map(m => (
                       <option key={m._id} value={m._id}>{m.name}</option>

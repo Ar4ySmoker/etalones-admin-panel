@@ -118,7 +118,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           manager: formData.get('manager') || candidate.manager.name,
           comment: formData.get('comment') || candidate.comment };
         try {
-            const res = await fetch(`http:localhost:3000/api/candidates/${id}`, {
+            const res = await fetch(`/api/candidates/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-type": "application/json",

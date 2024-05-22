@@ -113,11 +113,13 @@ export default function FormPartner({ professions, manager }) {
       site: formData.get('site') || '',
       companyName: formData.get('companyName') || '',
       numberDE: formData.get('numberDE') || 0,
-      location: locationEntries.map((entry, index) => ({
+      vacancies: locationEntries.map((entry, index) => ({
         name: combinedLocation[index], // Используем combinedLocation в качестве name
         profession: entry.profession,
         numberPeople: entry.numberPeople,
         price: entry.price,
+        country: singleCountry[index],
+        city: singleCity[index],
       })),
       manager: formData.get('manager') || null,
       contract: {

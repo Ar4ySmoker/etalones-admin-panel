@@ -1,3 +1,4 @@
+import { Country } from "country-state-city";
 import mongoose from "mongoose";
 
 
@@ -43,11 +44,13 @@ unique: true
 type: Number,
 unique: true
   },
-  location:[{
+  vacancies:[{
 name: String,
 profession: String,
 numberPeople: Number,
-price: String
+price: String,
+country:String,
+city:String,
   }],
   manager:{
     type: mongoose.Schema.Types.ObjectId,
