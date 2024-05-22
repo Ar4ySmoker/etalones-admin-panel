@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Axios from "axios";
+import { MultiSelect } from "react-multi-select-component";
 
+const drivePermis = [
+  { label: "В", value: "B" },
+  { label: "C", value: "C" },
+  { label: "D", value: "D"},
+  { label: "E", value: "E"},
+  { label: "Код 95", value: "Код 95"},
+];
 
 export default function EditCandidateForm({ id, candidate, managers, professions }) {
   let [countries, setCountries] = useState([]);
@@ -11,6 +19,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   let [Cities, setCities] = useState([]);
   let [singleCity, setSingleCity] = useState("");
   let [combinedLocation, setCombinedLocation] = useState(""); 
+  const [selectedDrive, setSelectedDrive] = useState([]);
+
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -99,15 +109,13 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             const formData = new FormData(e.target);
 
         const body = {
-          name: formData.get('name') || candidate.name, // Добавляем проверку на пустое значение
+          name: formData.get('name') || candidate.name, 
           age: formData.get('age') || candidate.age,
           phone: formData.get('phone') || candidate.phone,
-          // Добавляем проверку на пустое значение для professions и исключаем пустые записи
           professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
           locations: combinedLocation || candidate.locatons,
-          // Добавляем проверку на пустое значение для documents и исключаем пустые записи
           documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
-          drivePermis: formData.get('drivePermis') || candidate.drivePermis,
+          drivePermis: selectedDrive.map(d => d.value).join(', ') || candidate.drivePermis,
           leaving: formData.get('leaving') || candidate.leaving,
           cardNumber: formData.get('cardNumber') || candidate.cardNumber,
           workHours: formData.get('workHours') || candidate.workHours,
@@ -206,7 +214,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label className='flex gap-1 items-end' htmlFor="langue">
           <div className='flex flex-col justify-between h-full'>
           <div>Знание языка</div>
-          <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={candidate.langue}>
+          <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={candidate.langue.name}>
           <option disabled selected value={null}>Знание языка</option>
         <option>Не знает языков</option>
         <option >Английский</option>
@@ -215,7 +223,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Уровень</div>
-          <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+          <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl"defaultValue={candidate.langue.level} value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
           <option disabled selected value={null}>Уровень знание языка</option>
         <option >Уровень А1</option>
         <option >Уровень А2</option>
@@ -234,6 +242,22 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <option>В ЧС</option>
         </select>
         </label>
+        <label htmlFor="drivePermis">
+         <div></div> 
+        <div>
+      <h3>Категории В/У - Было выбранно {candidate.drivePermis}</h3>
+      <MultiSelect
+        options={drivePermis}
+        value={selectedDrive}
+        onChange={setSelectedDrive}
+        labelledBy="drivePermis"
+      />
+    </div>
+        </label>
+        <label htmlFor="workHours">
+              <div>Желаемые часы отработки</div>
+            <input className="accent w-full max-w-xs" type="number"  id='workHours' name='workHours' defaultValue={candidate.workHours}/>
+            </label> 
         <label htmlFor="manager">
           <div>Менеджер</div>
         <select className="select w-full max-w-xs"  
@@ -245,6 +269,10 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           ))}
         </select>
         </label>
+        <label htmlFor="leaving">
+              <div>Готов выехать</div>
+            <input className="accent w-full max-w-xs" type="date"  id='leaving' name='leaving' defaultValue={candidate.leaving}/>
+            </label>
         <label htmlFor="cardNumber" className=" w-full max-w-xs">
           <div>Номер счёта</div>
         <input className="input input-bordered input-accent w-full max-w-xs"
@@ -319,7 +347,11 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </label>
           </div>
         </div>
-        
+        <label htmlFor="comment">
+          <div>Комментарий</div>
+        <textarea className="textarea textarea-accent w-full "
+         id="comment" name="comment" placeholder="Комментарий" />
+        </label>
  
             <button className="btn btn-primary w-full max-w-xs">
                 Update Candidate

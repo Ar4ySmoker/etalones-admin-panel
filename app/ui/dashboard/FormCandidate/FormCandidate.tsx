@@ -98,13 +98,11 @@ export default function Form({ professions,  manager }) {
 
     const formData = new FormData(event.target);
     const body = {
-      name: formData.get('name') || '', // Добавляем проверку на пустое значение
+      name: formData.get('name') || '', 
       age: formData.get('age') || '',
       phone: formData.get('phone') || '',
-      // Добавляем проверку на пустое значение для professions и исключаем пустые записи
       professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
       locations: combinedLocation,
-      // Добавляем проверку на пустое значение для documents и исключаем пустые записи
       documents: documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.numberDoc.trim() !== ''),
       drivePermis: selectedDrive.map(d => d.value).join(', '),
       leaving: formData.get('leaving') || '',
