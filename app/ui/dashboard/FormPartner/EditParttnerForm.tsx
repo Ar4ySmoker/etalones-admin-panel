@@ -13,7 +13,7 @@ const drivePermis = [
     { label: "Код 95", value: "Код 95" },
   ];
 
-export default function EditPartnerForm({ id, partner, managers, professions }) {
+export default function EditPartnerForm({ id, partner, managers}) {
   let [countries, setCountries] = useState([]);
   const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
   const [cities, setCities] = useState([[]]); // Массив массивов для городов
@@ -34,25 +34,25 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
     setCountries(country.data.data);
   };
 
-  const fetchCities = (country, index) => {
-    const countryData = countries.find(c => c.country === country);
-    const newCities = [...cities];
-    newCities[index] = countryData ? countryData.cities : [];
-    setCities(newCities);
+  // const fetchCities = (country, index) => {
+  //   const countryData = countries.find(c => c.country === country);
+  //   const newCities = [...cities];
+  //   newCities[index] = countryData ? countryData.cities : [];
+  //   setCities(newCities);
 
-    const newSingleCountry = [...singleCountry];
-    newSingleCountry[index] = country;
-    setSingleCountry(newSingleCountry);
+  //   const newSingleCountry = [...singleCountry];
+  //   newSingleCountry[index] = country;
+  //   setSingleCountry(newSingleCountry);
 
-    const newSingleCity = [...singleCity];
-    newSingleCity[index] = ""; // Сброс города при изменении страны
-    setSingleCity(newSingleCity);
-  };
-  const handleCityChange = (index, city) => {
-    const newSingleCity = [...singleCity];
-    newSingleCity[index] = city;
-    setSingleCity(newSingleCity);
-  };
+  //   const newSingleCity = [...singleCity];
+  //   newSingleCity[index] = ""; // Сброс города при изменении страны
+  //   setSingleCity(newSingleCity);
+  // };
+  // const handleCityChange = (index, city) => {
+  //   const newSingleCity = [...singleCity];
+  //   newSingleCity[index] = city;
+  //   setSingleCity(newSingleCity);
+  // };
 
   useEffect(() => {
     fetchCountries();
@@ -73,28 +73,28 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
   //   setSingleCity([...singleCity, ""]);
   //   setCities([...cities, []]);
   // };
-  const handleLocationChange = (index, field, value) => {
-    const newEntries = [...locationEntries];
-    newEntries[index] = { ...newEntries[index], [field]: value };
-    setLocationEntries(newEntries);
-  };
+  // const handleLocationChange = (index, field, value) => {
+  //   const newEntries = [...locationEntries];
+  //   newEntries[index] = { ...newEntries[index], [field]: value };
+  //   setLocationEntries(newEntries);
+  // };
 
-  const removeLocationEntry = (index) => {
-    const newEntries = locationEntries.filter((_, i) => i !== index);
-    setLocationEntries(newEntries);
+  // const removeLocationEntry = (index) => {
+  //   const newEntries = locationEntries.filter((_, i) => i !== index);
+  //   setLocationEntries(newEntries);
 
-    const newCombinedLocation = combinedLocation.filter((_, i) => i !== index);
-    setCombinedLocation(newCombinedLocation);
+  //   const newCombinedLocation = combinedLocation.filter((_, i) => i !== index);
+  //   setCombinedLocation(newCombinedLocation);
 
-    const newSingleCountry = singleCountry.filter((_, i) => i !== index);
-    setSingleCountry(newSingleCountry);
+  //   const newSingleCountry = singleCountry.filter((_, i) => i !== index);
+  //   setSingleCountry(newSingleCountry);
 
-    const newSingleCity = singleCity.filter((_, i) => i !== index);
-    setSingleCity(newSingleCity);
+  //   const newSingleCity = singleCity.filter((_, i) => i !== index);
+  //   setSingleCity(newSingleCity);
 
-    const newCities = cities.filter((_, i) => i !== index);
-    setCities(newCities);
-  };
+  //   const newCities = cities.filter((_, i) => i !== index);
+  //   setCities(newCities);
+  // };
 
     const router = useRouter();
     
@@ -141,7 +141,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 comment: formData.get('comment') || partner.comment
               };
         try {
-            const res = await fetch(`http://hocalhost:3000/api/partners/${id}`, {
+            const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-type": "application/json",

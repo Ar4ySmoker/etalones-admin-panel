@@ -22,12 +22,12 @@ export default function Form({ professions,  manager }) {
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
 
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [selectedLangue, setSelectedLangue] = useState("");
-  let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
+  // const [selectedLangue, setSelectedLangue] = useState("");
+  // let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
 
-  const handleStatusFromPartnerChange = (field, value) => {
-    setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
-  };
+  // const handleStatusFromPartnerChange = (field, value) => {
+  //   setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
+  // };
 
   const handleStatusFromPartnerChange = (field, value) => {
     setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));

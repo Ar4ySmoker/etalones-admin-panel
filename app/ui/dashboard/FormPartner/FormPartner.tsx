@@ -12,7 +12,7 @@ const drivePermis = [
   { label: "Код 95", value: "Код 95" },
 ];
 
-export default function FormPartner({ professions, manager }) {
+export default function FormPartner({ manager }) {
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([[]]); // Массив массивов для городов
   const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
@@ -38,26 +38,26 @@ export default function FormPartner({ professions, manager }) {
     setCountries(country.data.data);
   };
 
-  const fetchCities = (country, index) => {
-    const countryData = countries.find(c => c.country === country);
-    const newCities = [...cities];
-    newCities[index] = countryData ? countryData.cities : [];
-    setCities(newCities);
+  // const fetchCities = (country, index) => {
+  //   const countryData = countries.find(c => c.country === country);
+  //   const newCities = [...cities];
+  //   newCities[index] = countryData ? countryData.cities : [];
+  //   setCities(newCities);
 
-    const newSingleCountry = [...singleCountry];
-    newSingleCountry[index] = country;
-    setSingleCountry(newSingleCountry);
+  //   const newSingleCountry = [...singleCountry];
+  //   newSingleCountry[index] = country;
+  //   setSingleCountry(newSingleCountry);
 
-    const newSingleCity = [...singleCity];
-    newSingleCity[index] = ""; // Сброс города при изменении страны
-    setSingleCity(newSingleCity);
-  };
+  //   const newSingleCity = [...singleCity];
+  //   newSingleCity[index] = ""; // Сброс города при изменении страны
+  //   setSingleCity(newSingleCity);
+  // };
 
-  const handleCityChange = (index, city) => {
-    const newSingleCity = [...singleCity];
-    newSingleCity[index] = city;
-    setSingleCity(newSingleCity);
-  };
+  // const handleCityChange = (index, city) => {
+  //   const newSingleCity = [...singleCity];
+  //   newSingleCity[index] = city;
+  //   setSingleCity(newSingleCity);
+  // };
 
   useEffect(() => {
     fetchCountries();
@@ -70,36 +70,36 @@ export default function FormPartner({ professions, manager }) {
     setCombinedLocation(newCombinedLocation);
   }, [singleCountry, singleCity]);
 
-  const addLocationEntry = () => {
-    setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0, price:'' }]);
-    setCombinedLocation([...combinedLocation, ""]);
-    setSingleCountry([...singleCountry, ""]);
-    setSingleCity([...singleCity, ""]);
-    setCities([...cities, []]);
-  };
+  // const addLocationEntry = () => {
+  //   setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0, price:'' }]);
+  //   setCombinedLocation([...combinedLocation, ""]);
+  //   setSingleCountry([...singleCountry, ""]);
+  //   setSingleCity([...singleCity, ""]);
+  //   setCities([...cities, []]);
+  // };
 
-  const handleLocationChange = (index, field, value) => {
-    const newEntries = [...locationEntries];
-    newEntries[index] = { ...newEntries[index], [field]: value };
-    setLocationEntries(newEntries);
-  };
+  // const handleLocationChange = (index, field, value) => {
+  //   const newEntries = [...locationEntries];
+  //   newEntries[index] = { ...newEntries[index], [field]: value };
+  //   setLocationEntries(newEntries);
+  // };
 
-  const removeLocationEntry = (index) => {
-    const newEntries = locationEntries.filter((_, i) => i !== index);
-    setLocationEntries(newEntries);
+  // const removeLocationEntry = (index) => {
+  //   const newEntries = locationEntries.filter((_, i) => i !== index);
+  //   setLocationEntries(newEntries);
 
-    const newCombinedLocation = combinedLocation.filter((_, i) => i !== index);
-    setCombinedLocation(newCombinedLocation);
+  //   const newCombinedLocation = combinedLocation.filter((_, i) => i !== index);
+  //   setCombinedLocation(newCombinedLocation);
 
-    const newSingleCountry = singleCountry.filter((_, i) => i !== index);
-    setSingleCountry(newSingleCountry);
+  //   const newSingleCountry = singleCountry.filter((_, i) => i !== index);
+  //   setSingleCountry(newSingleCountry);
 
-    const newSingleCity = singleCity.filter((_, i) => i !== index);
-    setSingleCity(newSingleCity);
+  //   const newSingleCity = singleCity.filter((_, i) => i !== index);
+  //   setSingleCity(newSingleCity);
 
-    const newCities = cities.filter((_, i) => i !== index);
-    setCities(newCities);
-  };
+  //   const newCities = cities.filter((_, i) => i !== index);
+  //   setCities(newCities);
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();

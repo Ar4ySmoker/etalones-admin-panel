@@ -14,8 +14,6 @@ async function deletePartner(partnerId: string): Promise<Response> {
 function PartnersPage() {
   const [partners, setPartners] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPartner, setSelectedPartner] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,20 +39,19 @@ function PartnersPage() {
     fetchPartners(currentPage, searchTerm);
   }, [currentPage, searchTerm]);
 
-  const handleDeletePartner = async (partnerId) => {
-    try {
-      const response = await deletePartner(partnerId);
-      if (response.ok) {
-        alert('Кандидат успешно удален');
-        setModalOpen(false);
-        setPartners(partners.filter(part => part._id !== partnerId));
-      } else {
-        throw new Error('Ошибка при удалении кандидата');
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  // const handleDeletePartner = async (partnerId) => {
+  //   try {
+  //     const response = await deletePartner(partnerId);
+  //     if (response.ok) {
+  //       alert('Кандидат успешно удален');
+  //       setPartners(partners.filter(part => part._id !== partnerId));
+  //     } else {
+  //       throw new Error('Ошибка при удалении кандидата');
+  //     }
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
 
 
 

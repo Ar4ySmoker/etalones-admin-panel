@@ -14,8 +14,6 @@ async function deleteCandidate(candidateId: string): Promise<Response> {
 function CandidatesPage() {
   const [candidates, setCandidates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,20 +39,19 @@ function CandidatesPage() {
     fetchCandidates(currentPage, searchTerm);
   }, [currentPage, searchTerm]);
 
-  const handleDeleteCandidate = async (candidateId) => {
-    try {
-      const response = await deleteCandidate(candidateId);
-      if (response.ok) {
-        alert('Кандидат успешно удален');
-        setModalOpen(false);
-        setCandidates(candidates.filter(cand => cand._id !== candidateId));
-      } else {
-        throw new Error('Ошибка при удалении кандидата');
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  // const handleDeleteCandidate = async (candidateId) => {
+  //   try {
+  //     const response = await deleteCandidate(candidateId);
+  //     if (response.ok) {
+  //       alert('Кандидат успешно удален');
+  //       setCandidates(candidates.filter(cand => cand._id !== candidateId));
+  //     } else {
+  //       throw new Error('Ошибка при удалении кандидата');
+  //     }
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
 
 
 
