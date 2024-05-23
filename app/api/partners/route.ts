@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/app/lib/utils'; // Предполагаемый путь к вашей функции подключения к базе данных
-import { Candidate } from '@/app/lib/models'; // Предполагаемый путь к вашей модели Mongoose
+import { Partner } from '@/app/lib/models'; // Предполагаемый путь к вашей модели Mongoose
 
 export const GET = async (request) => {
   try {
@@ -12,15 +12,15 @@ export const GET = async (request) => {
 
     const offset = (page - 1) * limit;
 
-    const candidates = await Candidate.find().sort({ createdAt: -1 }).skip(offset).limit(limit).populate(['manager']);;
-    const totalCandidates = await Candidate.countDocuments();
-    const totalPages = Math.ceil(totalCandidates / limit);
+    const partners = await Partner.find().sort({ createdAt: -1 }).skip(offset).limit(limit).populate(['manager', 'candidates']);;
+    const totalPartners = await Partner.countDocuments();
+    const totalPages = Math.ceil(totalPartners / limit);
 
     const response = {
-      candidates,
+      partners,
       page,
       totalPages,
-      totalCandidates,
+      totalPartners,
       hasNextPage: page < totalPages,
       hasPrevPage: page > 1
     };
@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
       { $limit: limit },
     ];
 
-    const candidates = await Candidate.aggregate(pipeline);
-    const total = await Candidate.countDocuments({ phone: { $regex: searchTerm, $options: 'i' } });
+    const candidates = await Partner.aggregate(pipeline);
+    const total = await Partner.countDocuments({ phone: { $regex: searchTerm, $options: 'i' } });
 
     const response = {
       candidates,

@@ -11,6 +11,7 @@ const drivePermis = [
   { label: "E", value: "E"},
   { label: "Код 95", value: "Код 95"},
 ];
+
 export default function Form({ professions,  manager }) {
   let [countries, setCountries] = useState([]);
   let [singleCountry, setSingleCountry] = useState("");
@@ -21,6 +22,12 @@ export default function Form({ professions,  manager }) {
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
 
   const [selectedDrive, setSelectedDrive] = useState([]);
+  const [selectedLangue, setSelectedLangue] = useState("");
+  let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
+
+  const handleStatusFromPartnerChange = (field, value) => {
+    setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
+  };
 
   const handleStatusFromPartnerChange = (field, value) => {
     setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
@@ -101,13 +108,11 @@ export default function Form({ professions,  manager }) {
 
     const formData = new FormData(event.target);
     const body = {
-      name: formData.get('name') || '', // Добавляем проверку на пустое значение
+      name: formData.get('name') || '', 
       age: formData.get('age') || '',
       phone: formData.get('phone') || '',
-      // Добавляем проверку на пустое значение для professions и исключаем пустые записи
       professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
       locations: combinedLocation,
-      // Добавляем проверку на пустое значение для documents и исключаем пустые записи
       documents: documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.numberDoc.trim() !== ''),
       drivePermis: selectedDrive.map(d => d.value).join(', '),
       leaving: formData.get('leaving') || '',
@@ -210,11 +215,14 @@ export default function Form({ professions,  manager }) {
         <label className='flex gap-1 items-end' htmlFor="langue">
           <div className='flex flex-col justify-between h-full'>
           <div>Знание языка</div>
+          
           <select className="select w-full max-w-xs" id="langue" name="langue" >
           <option disabled selected value={null}>Знание языка</option>
         <option>Не знает языков</option>
         <option >Английский</option>
         <option >Немецкий</option>
+        <option >Польский</option>
+
         </select>
           </div>
           <div className='flex flex-col justify-between  h-full'>
@@ -223,6 +231,8 @@ export default function Form({ professions,  manager }) {
           <option disabled selected value={null}>Уровень знание языка</option>
         <option >Уровень А1</option>
         <option >Уровень А2</option>
+        <option >Уровень B1</option>
+        <option >Уровень B2</option>
         </select>
           </div>
         </label>
@@ -233,8 +243,8 @@ export default function Form({ professions,  manager }) {
           <option>Не обработан</option>
           <option>Документы не готовы</option>
           <option>Ждёт работу</option>
-          <option>Работает</option>
-          <option>В отпуске</option>
+          <option>На собеседовании</option>
+          <option>На объекте</option>
           <option>В ЧС</option>
         </select>
         </label>
@@ -332,7 +342,8 @@ export default function Form({ professions,  manager }) {
     <label htmlFor="experience">
       <div>Опыт работы</div>
       <select className="select select-accent w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
-        <option disabled selected value={null}>Опыт работы</option>
+        <option value={null} disabled selected >Опыт работы</option>
+        <option >Без опыта</option>
         <option >Меньше года</option>
         <option >От 2-х лет</option>
         <option >Более 10-ти лет</option>

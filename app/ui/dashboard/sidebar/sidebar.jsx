@@ -39,11 +39,11 @@ const menuItems = [
     ],
   },
   {
-    title: "Analytics",
+    title: "Аналитика",
     list: [
       {
-        title: "Revenue",
-        path: "/dashboard/revenue",
+        title: "Трудоустроенные",
+        path: "/dashboard/employed",
         icon: <MdWork />,
       },
       {

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
-import { AddCommentForm } from '@/app/ui/dashboard/AddCommentForm/AddCommentForm';
 
 async function deleteCandidate(candidateId: string): Promise<Response> {
   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
@@ -112,6 +111,7 @@ function CandidatesPage() {
           <table className="table">
             <thead>
               <tr>
+                <th>Менеджер</th>
                 <th>Имя</th>
                 <th>Телефон</th>
                 <th>Профессия</th>
@@ -123,6 +123,9 @@ function CandidatesPage() {
             <tbody>
               {candidates.map((candidate) => (
                 <tr key={candidate._id}>
+                  <td className='flex flex-col gap-2'>
+                  <div className='badge-md w-max badge-outline font-bold'>{candidate.manager?.name}</div>
+                  <div className='flex flex-col gap-1'>Статус<span className='badge badge-ghost badge-sm w-max'>{candidate.status}</span> </div></td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div>

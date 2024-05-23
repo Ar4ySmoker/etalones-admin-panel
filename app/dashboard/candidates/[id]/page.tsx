@@ -5,7 +5,7 @@ import CandidateDetails from "@/app/ui/dashboard/CandidateDetails/CandidateDetai
  
 const getCandidateById = async (id) => {
     try {
-        const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+        const res = await fetch(`http://hocalhost:3000/api/candidates/${id}`, {
             cache: "no-store",
         });
  
