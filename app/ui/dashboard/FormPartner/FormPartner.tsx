@@ -17,7 +17,7 @@ export default function FormPartner({ manager }) {
   // const [cities, setCities] = useState([[]]); // Массив массивов для городов
   // const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
   // const [singleCity, setSingleCity] = useState([""]); // Массив для хранения города каждой локации
-  const [combinedLocation, setCombinedLocation] = useState([""]);
+  // const [combinedLocation, setCombinedLocation] = useState([""]);
   const [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
   // const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
@@ -31,12 +31,12 @@ export default function FormPartner({ manager }) {
   };
   
 
-  const fetchCountries = async () => {
-    let country = await Axios.get(
-      "https://countriesnow.space/api/v0.1/countries"
-    );
-    // setCountries(country.data.data);
-  };
+  // const fetchCountries = async () => {
+  //   let country = await Axios.get(
+  //     "https://countriesnow.space/api/v0.1/countries"
+  //   );
+  //   // setCountries(country.data.data);
+  // };
 
   // const fetchCities = (country, index) => {
   //   const countryData = countries.find(c => c.country === country);
@@ -59,9 +59,9 @@ export default function FormPartner({ manager }) {
   //   setSingleCity(newSingleCity);
   // };
 
-  useEffect(() => {
-    fetchCountries();
-  }, []);
+  // useEffect(() => {
+  //   fetchCountries();
+  // }, []);
 
   // useEffect(() => {
   //   const newCombinedLocation = singleCountry.map((country, index) => `${country}, ${singleCity[index]}`);

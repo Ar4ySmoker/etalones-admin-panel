@@ -23,32 +23,32 @@ interface WorkCandidateTableProps {
   managerName: string;
 }
 
-const WorkCandidateTable: React.FC<WorkCandidateTableProps> = ({ initialCandidates, initialPage, totalPages, status, managerName }) => {
+const WorkCandidateTable = ({ initialCandidates, initialPage, totalPages, status, managerName }) => {
   const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [totalPagesState, setTotalPagesState] = useState(totalPages);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const candidatesPerPage = 5;
 
-  const fetchCandidates = async (page = 1, status = '', managerName = '') => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/candidates?page=${page}&limit=${candidatesPerPage}&status=${status}&managerName=${managerName}`);
-      const data = await response.json();
-      setCandidates(data.candidates || []);
-      setCurrentPage(data.page || 1);
-      setTotalPagesState(data.totalPages || 1);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setIsLoading(false);
-    }
-  };
+  // const fetchCandidates = async (page = 1, status = '', managerName = '') => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await fetch(`/api/candidates?page=${page}&limit=${candidatesPerPage}&status=${status}&managerName=${managerName}`);
+  //     const data = await response.json();
+  //     setCandidates(data.candidates || []);
+  //     setCurrentPage(data.page || 1);
+  //     setTotalPagesState(data.totalPages || 1);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchCandidates(currentPage, status, managerName);
-  }, [currentPage, status, managerName]);
+  // useEffect(() => {
+  //   fetchCandidates(currentPage, status, managerName);
+  // }, [currentPage, status, managerName]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);

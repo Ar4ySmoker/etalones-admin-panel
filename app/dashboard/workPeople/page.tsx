@@ -1,9 +1,6 @@
 import WorkCandidateTable from "@/app/ui/dashboard/WorkCandidateTable/WorkCandidateTable";
 
-// Интерфейсы для пропсов компонента
-interface WorkPeoplePageProps {
-  searchParams: URLSearchParams;
-}
+
 
 async function fetchCandidates(status: string, managerName: string) {
   try {
@@ -16,7 +13,7 @@ async function fetchCandidates(status: string, managerName: string) {
   }
 }
 
-async function WorkPeoplePage({ searchParams }: WorkPeoplePageProps) {
+async function WorkPeoplePage() {
   const status = 'Работает';
 
   try {

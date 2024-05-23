@@ -14,7 +14,6 @@ import Link from "next/link";
 function CandidatesPage() {
   const [candidates, setCandidates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchManager, setSearchManager] = useState('');
   const [searchProfession, setSearchProfession] = useState('');
   const [searchDocument, setSearchDocument] = useState('');  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);

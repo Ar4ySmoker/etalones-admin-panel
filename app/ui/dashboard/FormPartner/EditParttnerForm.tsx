@@ -15,10 +15,10 @@ const drivePermis = [
 
 export default function EditPartnerForm({ id, partner, managers}) {
   // let [countries, setCountries] = useState([]);
-  const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
+  // const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
   // const [cities, setCities] = useState([[]]); // Массив массивов для городов
-  const [singleCity, setSingleCity] = useState([""]); // Массив для хранения города каждой локации
-  const [combinedLocation, setCombinedLocation] = useState([""]);
+  // const [singleCity, setSingleCity] = useState([""]); // Массив для хранения города каждой локации
+  // const [combinedLocation, setCombinedLocation] = useState([""]);
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
   // const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
@@ -58,12 +58,12 @@ export default function EditPartnerForm({ id, partner, managers}) {
     fetchCountries();
   }, []);
 
-  useEffect(() => {
-    const newCombinedLocation = singleCountry.map((country, index) => `${country}, ${singleCity[index]}`);
-    console.log('singleCountry:', singleCountry); // Логируем значения singleCountry
-    console.log('singleCity:', singleCity);
-    setCombinedLocation(newCombinedLocation);
-  }, [singleCountry, singleCity]);
+  // useEffect(() => {
+  //   const newCombinedLocation = singleCountry.map((country, index) => `${country}, ${singleCity[index]}`);
+  //   console.log('singleCountry:', singleCountry); // Логируем значения singleCountry
+  //   console.log('singleCity:', singleCity);
+  //   setCombinedLocation(newCombinedLocation);
+  // }, [singleCountry, singleCity]);
   
 
   // const addLocationEntry = () => {
