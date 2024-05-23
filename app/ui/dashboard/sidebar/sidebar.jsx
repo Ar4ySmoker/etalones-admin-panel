@@ -20,21 +20,25 @@ const menuItems = [
         title: "Главная",
         path: "/dashboard",
         icon: <MdDashboard />,
+        disabled: true,
       },
       {
         title: "Кандидаты",
         path: "/dashboard/candidates",
         icon: <MdSupervisedUserCircle />,
+        disabled: false,
       },
       {
         title: "Заказчики",
         path: "/dashboard/partners",
         icon: <MdAttachMoney />,
+        disabled: false,
       },
       {
         title: "Вакансии",
         path: "/dashboard/posts",
         icon: <MdShoppingBag />,
+        disabled: true,
       },
     ],
   },
@@ -45,31 +49,36 @@ const menuItems = [
         title: "Люди в работе",
         path: "/dashboard/workPeople",
         icon: <MdWork />,
+        disabled: true,
       },
       {
-        title: "Reports",
+        title: "Счёта",
         path: "/dashboard/reports",
         icon: <MdAnalytics />,
+        disabled: true,
       },
       {
-        title: "Teams",
+        title: "Не обработанные контакты",
         path: "/dashboard/teams",
         icon: <MdPeople />,
+        disabled: true,
       },
     ],
   },
   {
-    title: "User",
+    title: "Пользователи",
     list: [
       {
-        title: "Settings",
+        title: "Настройки",
         path: "/dashboard/settings",
         icon: <MdOutlineSettings />,
+        disabled: true,
       },
       {
-        title: "Help",
+        title: "Помощь",
         path: "/dashboard/help",
         icon: <MdHelpCenter />,
+        disabled: true,
       },
     ],
   },
@@ -94,7 +103,7 @@ const Sidebar = async () => {
       </div>
       <ul className={styles.list}>
         {menuItems.map((cat) => (
-          <li key={cat.title}>
+          <li key={cat.title} >
             <span className={styles.cat}>{cat.title}</span>
             {cat.list.map((item) => (
               <MenuLink item={item} key={item.title} />

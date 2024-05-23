@@ -14,16 +14,30 @@ import Link from "next/link";
 function CandidatesPage() {
   const [candidates, setCandidates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchManager, setSearchManager] = useState('');
+  const [searchProfession, setSearchProfession] = useState('');
+  const [searchDocument, setSearchDocument] = useState('');  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const candidatesPerPage = 5;
 
-  const fetchCandidates = async (page = 1, term = '') => {
+  const fetchCandidates = async (page = 1, term = '', profession = '', document = '') => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/candidates?page=${page}&limit=${candidatesPerPage}&searchTerm=${term}`);
+      const response = await fetch(`/api/candidates/search`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page,
+          limit: candidatesPerPage,
+          searchTerm: term,
+          profession,
+          document,
+        }),
+      });
       const data = await response.json();
       setCandidates(data.candidates);
       setCurrentPage(data.page);
@@ -36,8 +50,26 @@ function CandidatesPage() {
   };
 
   useEffect(() => {
-    fetchCandidates(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
+    fetchCandidates(currentPage, searchTerm, searchProfession, searchDocument);
+  }, [currentPage, searchTerm, searchProfession, searchDocument]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+
+
+  const handleSearchProfessionChange = (event) => {
+    setSearchProfession(event.target.value.toLowerCase());
+  };
+
+  const handleSearchDocumentChange = (event) => {
+    setSearchDocument(event.target.value.toLowerCase());
+  };
+
+
+  // useEffect(() => {
+  //   fetchCandidates(currentPage, searchTerm);
+  // }, [currentPage, searchTerm]);
 
   // const handleDeleteCandidate = async (candidateId) => {
   //   try {
@@ -56,9 +88,9 @@ function CandidatesPage() {
 
 
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value.toLowerCase());
-  };
+  // const handleSearchChange = (event) => {
+  //   setSearchTerm(event.target.value.toLowerCase());
+  // };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -90,11 +122,25 @@ function CandidatesPage() {
   return (
     <div className="overflow-x-auto">
       <div className={styles.top}>
-        <input
+      <input
           type="text"
-          placeholder="Search for a Candidate..."
+          placeholder="Поиск по имени"
           value={searchTerm}
           onChange={handleSearchChange}
+          className={styles.searchInput}
+        />
+        <input
+          type="text"
+          placeholder="Поиск по профессии"
+          value={searchProfession}
+          onChange={handleSearchProfessionChange}
+          className={styles.searchInput}
+        />
+        <input
+          type="text"
+          placeholder="Поиск по документам"
+          value={searchDocument}
+          onChange={handleSearchDocumentChange}
           className={styles.searchInput}
         />
         <Link href="/dashboard/candidates/add">
