@@ -14,14 +14,14 @@ const drivePermis = [
   ];
 
 export default function EditPartnerForm({ id, partner, managers}) {
-  let [countries, setCountries] = useState([]);
+  // let [countries, setCountries] = useState([]);
   const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
-  const [cities, setCities] = useState([[]]); // Массив массивов для городов
+  // const [cities, setCities] = useState([[]]); // Массив массивов для городов
   const [singleCity, setSingleCity] = useState([""]); // Массив для хранения города каждой локации
   const [combinedLocation, setCombinedLocation] = useState([""]);
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
+  // const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -31,7 +31,7 @@ export default function EditPartnerForm({ id, partner, managers}) {
       "https://countriesnow.space/api/v0.1/countries"
     );
     console.log(country);
-    setCountries(country.data.data);
+    // setCountries(country.data.data);
   };
 
   // const fetchCities = (country, index) => {
@@ -117,14 +117,14 @@ export default function EditPartnerForm({ id, partner, managers}) {
                 site: formData.get('site') || partner.site,
                 companyName: formData.get('companyName') || partner.companyName,
                 numberDE: formData.get('numberDE') || partner.numberDE,
-                vacancies: locationEntries.map((entry, index) => ({
-                  name: combinedLocation[index], // Используем combinedLocation в качестве name
-                  profession: entry.profession,
-                  numberPeople: entry.numberPeople,
-                  price: entry.price,
-                  country: singleCountry[index],
-                  city: singleCity[index]
-                })),
+                // vacancies: locationEntries.map((entry, index) => ({
+                //   name: combinedLocation[index], // Используем combinedLocation в качестве name
+                //   profession: entry.profession,
+                //   numberPeople: entry.numberPeople,
+                //   price: entry.price,
+                //   country: singleCountry[index],
+                //   city: singleCity[index]
+                // })),
                 manager: formData.get('manager') || partner.manager,
                 contract: JSON.stringify({
                   sum: formData.get('contractSum'),

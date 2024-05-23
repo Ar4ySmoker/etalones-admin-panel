@@ -31,5 +31,5 @@ export default async function EditPartner({ params }) {
     const professions = await allProfessions.json();
     const allManagers = await fetch("http://www.candidat.store/api/manager");
     const managers = await allManagers.json();
-    return <EditPartnerForm id={id} partner={partner} professions={professions}  managers={managers} />;
+    return <EditPartnerForm id={id} partner={partner}  managers={managers} />;
 }

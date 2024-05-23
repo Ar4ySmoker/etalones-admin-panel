@@ -4,12 +4,12 @@ import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
 
-async function deleteCandidate(candidateId: string): Promise<Response> {
-  const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
-    method: 'DELETE',
-  });
-  return response;
-}
+// async function deleteCandidate(candidateId: string): Promise<Response> {
+//   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
+//     method: 'DELETE',
+//   });
+//   return response;
+// }
 
 function CandidatesPage() {
   const [candidates, setCandidates] = useState([]);

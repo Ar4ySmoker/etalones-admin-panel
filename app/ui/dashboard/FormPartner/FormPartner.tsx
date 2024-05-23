@@ -13,14 +13,14 @@ const drivePermis = [
 ];
 
 export default function FormPartner({ manager }) {
-  const [countries, setCountries] = useState([]);
-  const [cities, setCities] = useState([[]]); // Массив массивов для городов
-  const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
-  const [singleCity, setSingleCity] = useState([""]); // Массив для хранения города каждой локации
+  // const [countries, setCountries] = useState([]);
+  // const [cities, setCities] = useState([[]]); // Массив массивов для городов
+  // const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
+  // const [singleCity, setSingleCity] = useState([""]); // Массив для хранения города каждой локации
   const [combinedLocation, setCombinedLocation] = useState([""]);
   const [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
+  // const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
   const [contract, setContract] = useState({ type: "", sum: ""});
 
   const handleLangueChange = (field, value) => {
@@ -35,7 +35,7 @@ export default function FormPartner({ manager }) {
     let country = await Axios.get(
       "https://countriesnow.space/api/v0.1/countries"
     );
-    setCountries(country.data.data);
+    // setCountries(country.data.data);
   };
 
   // const fetchCities = (country, index) => {
@@ -63,12 +63,12 @@ export default function FormPartner({ manager }) {
     fetchCountries();
   }, []);
 
-  useEffect(() => {
-    const newCombinedLocation = singleCountry.map((country, index) => `${country}, ${singleCity[index]}`);
-    console.log('singleCountry:', singleCountry); // Логируем значения singleCountry
-    console.log('singleCity:', singleCity);
-    setCombinedLocation(newCombinedLocation);
-  }, [singleCountry, singleCity]);
+  // useEffect(() => {
+  //   const newCombinedLocation = singleCountry.map((country, index) => `${country}, ${singleCity[index]}`);
+  //   console.log('singleCountry:', singleCountry); // Логируем значения singleCountry
+  //   console.log('singleCity:', singleCity);
+  //   setCombinedLocation(newCombinedLocation);
+  // }, [singleCountry, singleCity]);
 
   // const addLocationEntry = () => {
   //   setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0, price:'' }]);
@@ -103,7 +103,7 @@ export default function FormPartner({ manager }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Submitting with PROFESSIONS:', locationEntries);
+    // console.log('Submitting with PROFESSIONS:', locationEntries);
 
     const formData = new FormData(event.target);
     const body = {
@@ -113,14 +113,14 @@ export default function FormPartner({ manager }) {
       site: formData.get('site') || '',
       companyName: formData.get('companyName') || '',
       numberDE: formData.get('numberDE') || 0,
-      vacancies: locationEntries.map((entry, index) => ({
-        name: combinedLocation[index], // Используем combinedLocation в качестве name
-        profession: entry.profession,
-        numberPeople: entry.numberPeople,
-        price: entry.price,
-        country: singleCountry[index],
-        city: singleCity[index],
-      })),
+      // vacancies: locationEntries.map((entry, index) => ({
+      //   name: combinedLocation[index], // Используем combinedLocation в качестве name
+      //   profession: entry.profession,
+      //   numberPeople: entry.numberPeople,
+      //   price: entry.price,
+      //   country: singleCountry[index],
+      //   city: singleCity[index],
+      // })),
       manager: formData.get('manager') || null,
       contract: {
         type: formData.get('contractType') || '',

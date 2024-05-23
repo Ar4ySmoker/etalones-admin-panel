@@ -10,7 +10,7 @@ export default async function Page() {
   return (
       <main>
           <FormPartner 
-        professions={professions}
+     
         manager={manager} />
       </main>
   );
