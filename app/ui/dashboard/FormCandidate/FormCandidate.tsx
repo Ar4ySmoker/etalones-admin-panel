@@ -242,6 +242,8 @@ export default function Form({ professions,  manager }) {
           <option disabled selected value={null}>Выберите Статус</option>
           <option>Не обработан</option>
           <option>Документы не готовы</option>
+          <option>Не подошла вакансия</option>
+          <option>Нашел другую работу</option>
           <option>Ждёт работу</option>
           <option>На собеседовании</option>
           <option>На объекте</option>
@@ -370,6 +372,8 @@ export default function Form({ professions,  manager }) {
               <option value="Виза">Виза</option>
               <option value="Песель">Песель</option>
               <option value="Паспорт">Паспорт</option>
+              <option value="Паспорт">Паспорт Биометрия Украины</option>
+              <option value="Паспорт">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
             </select>
             </label>

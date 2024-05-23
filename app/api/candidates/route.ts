@@ -16,8 +16,13 @@ export const GET = async (request: NextRequest) => {
 
     const offset = (page - 1) * limit;
 
-    const candidates = await Candidate.find().sort({ createdAt: -1 }).skip(offset).limit(limit).populate(['manager']);
-    const totalCandidates = await Candidate.countDocuments();
+    const candidates = await Candidate.find({})
+      .sort({ 'createdAt' :-1 })
+      .skip(offset)
+      .limit(limit)
+      .populate('manager');
+
+    const totalCandidates = await Candidate.countDocuments({});
     const totalPages = Math.ceil(totalCandidates / limit);
 
     const response = {
@@ -31,6 +36,7 @@ export const GET = async (request: NextRequest) => {
 
     return new NextResponse(JSON.stringify(response), { status: 200 });
   } catch (error) {
+    console.error("Error in fetching:", error);
     return new NextResponse("Error in fetching: " + error, { status: 500 });
   }
 };

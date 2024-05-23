@@ -239,6 +239,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <option disabled selected value={null}>Выберите Статус</option>
           <option>Не обработан</option>
           <option>Документы не готовы</option>
+          <option>Не подошла вакансия</option>
+          <option>Нашел другую работу</option>
           <option>Ждёт работу</option>
           <option>Работает</option>
           <option>В отпуске</option>
@@ -352,6 +354,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               <option value="Виза">Виза</option>
               <option value="Песель">Песель</option>
               <option value="Паспорт">Паспорт</option>
+              <option value="Паспорт">Паспорт Биометрия Украины</option>
+              <option value="Паспорт">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
             </select>
             </label>

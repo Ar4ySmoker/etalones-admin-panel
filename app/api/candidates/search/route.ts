@@ -6,7 +6,7 @@ export const POST = async (request: NextRequest) => {
   try {
     await connectToDB();
 
-    const { page = 1, limit = 5, searchTerm = '', profession = '', document = '' } = await request.json();
+    const { page = 1, limit = 5, searchTerm = '',phone = '', profession = '', document = '' } = await request.json();
 
     const offset = (page - 1) * limit;
 
@@ -18,6 +18,9 @@ export const POST = async (request: NextRequest) => {
     if (profession) {
       searchQuery.$and.push({ 'professions.name': { $regex: profession, $options: 'i' } });
     }
+    if (phone) {
+        searchQuery.$and.push({ phone: { $regex: phone, $options: 'i' } });
+      }
     if (document) {
       searchQuery.$and.push({ 'documents.docType': { $regex: document, $options: 'i' } });
     }
@@ -27,6 +30,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     const candidates = await Candidate.find(searchQuery)
+      .sort({"updatedAt" : -1})
       .skip(offset)
       .limit(limit)
       .populate('manager');
