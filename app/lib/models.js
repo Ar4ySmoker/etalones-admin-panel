@@ -1,6 +1,5 @@
-import { Country } from "country-state-city";
 import mongoose from "mongoose";
-
+import { type } from "os";
 
 
 
@@ -33,60 +32,33 @@ unique:true
 type: String,
 unique: true
   },
-  site:{
-type: String,
-  },
   companyName:{
 type: String,
 unique: true
   },
   numberDE:{
-type: Number,
+type: String,
 unique: true
   },
-  vacancies:[{
-name: String,
-profession: String,
-numberPeople: Number,
-price: String,
-country:String,
-city:String,
-  }],
+  location:{
+type: mongoose.Schema.Types.ObjectId,
+ref: 'Location'
+  },
   manager:{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Manager',
-    required: false
+    ref: 'Manager'
   },
   candidates:[{
     type: mongoose.Schema.Types.ObjectId,
-    ref:'Candidate',
-    required: false
+    ref:'Candidate'
   }],
-  contract: {
-    type: {
-      type: String,
-      required: false
-    },
-    sum: {
-      type: String,
-      required: false
-    }},
-  status:{
-    type: String
-   },
-   drivePermis:{
-    type: String,
-      },
-  leaving:{
-    type: Date,
+  contractSum:{
+type: Number
   },
-  workHours:{
-    type: String,
-  },
-  langue:{
-    name: String,
-    level: String,
-   },
+  documents:[{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Document'
+  }],
   comment:{
 type: String,
   }
@@ -154,7 +126,11 @@ required: false
   commentMng: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CommentMng'
-  }]
+  }],
+  statusFromPartner:{
+    status: String,
+    who: String
+  }
   
 
 },

@@ -141,7 +141,7 @@ export default function EditPartnerForm({ id, partner, managers, professions }) 
                 comment: formData.get('comment') || partner.comment
               };
         try {
-            const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
+            const res = await fetch(`http://hocalhost:3000/api/partners/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-type": "application/json",
