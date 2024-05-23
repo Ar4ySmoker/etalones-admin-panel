@@ -14,7 +14,7 @@ import Link from "next/link";
 function CandidatesPage() {
   const [candidates, setCandidates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchManager, setSearchManager] = useState('');
+  const [searchPhone, setSearchPhone] = useState('');
   const [searchProfession, setSearchProfession] = useState('');
   const [searchDocument, setSearchDocument] = useState('');  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -22,7 +22,7 @@ function CandidatesPage() {
 
   const candidatesPerPage = 5;
 
-  const fetchCandidates = async (page = 1, term = '', profession = '', document = '') => {
+  const fetchCandidates = async (page = 1, term = '', phone = '', profession = '', document = '') => {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/candidates/search`, {
@@ -34,6 +34,7 @@ function CandidatesPage() {
           page,
           limit: candidatesPerPage,
           searchTerm: term,
+          phone,
           profession,
           document,
         }),
@@ -50,13 +51,16 @@ function CandidatesPage() {
   };
 
   useEffect(() => {
-    fetchCandidates(currentPage, searchTerm, searchProfession, searchDocument);
-  }, [currentPage, searchTerm, searchProfession, searchDocument]);
+    fetchCandidates(currentPage, searchTerm, searchPhone, searchProfession, searchDocument);
+  }, [currentPage, searchTerm, searchPhone, searchProfession, searchDocument]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value.toLowerCase());
   };
 
+  const handlePhoneSearchChange = (event) => {
+    setSearchPhone(event.target.value.toLowerCase());
+  };
 
   const handleSearchProfessionChange = (event) => {
     setSearchProfession(event.target.value.toLowerCase());
@@ -127,6 +131,13 @@ function CandidatesPage() {
           placeholder="Поиск по имени"
           value={searchTerm}
           onChange={handleSearchChange}
+          className={styles.searchInput}
+        />
+        <input
+          type="text"
+          placeholder="Поиск по телефону"
+          value={searchPhone}
+          onChange={handlePhoneSearchChange}
           className={styles.searchInput}
         />
         <input
