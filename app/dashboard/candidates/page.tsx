@@ -4,18 +4,16 @@ import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
 
-async function deleteCandidate(candidateId: string): Promise<Response> {
-  const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
-    method: 'DELETE',
-  });
-  return response;
-}
+// async function deleteCandidate(candidateId: string): Promise<Response> {
+//   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
+//     method: 'DELETE',
+//   });
+//   return response;
+// }
 
 function CandidatesPage() {
   const [candidates, setCandidates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,20 +39,19 @@ function CandidatesPage() {
     fetchCandidates(currentPage, searchTerm);
   }, [currentPage, searchTerm]);
 
-  const handleDeleteCandidate = async (candidateId) => {
-    try {
-      const response = await deleteCandidate(candidateId);
-      if (response.ok) {
-        alert('Кандидат успешно удален');
-        setModalOpen(false);
-        setCandidates(candidates.filter(cand => cand._id !== candidateId));
-      } else {
-        throw new Error('Ошибка при удалении кандидата');
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  // const handleDeleteCandidate = async (candidateId) => {
+  //   try {
+  //     const response = await deleteCandidate(candidateId);
+  //     if (response.ok) {
+  //       alert('Кандидат успешно удален');
+  //       setCandidates(candidates.filter(cand => cand._id !== candidateId));
+  //     } else {
+  //       throw new Error('Ошибка при удалении кандидата');
+  //     }
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
 
 
 
@@ -111,6 +108,7 @@ function CandidatesPage() {
           <table className="table">
             <thead>
               <tr>
+                <th>Менеджер</th>
                 <th>Имя</th>
                 <th>Телефон</th>
                 <th>Профессия</th>
@@ -122,6 +120,9 @@ function CandidatesPage() {
             <tbody>
               {candidates.map((candidate) => (
                 <tr key={candidate._id}>
+                  <td className='flex flex-col gap-2'>
+                  <div className='badge-md w-max badge-outline font-bold'>{candidate.manager?.name}</div>
+                  <div className='flex flex-col gap-1'>Статус<span className='badge badge-ghost badge-sm w-max'>{candidate.status}</span> </div></td>
                   <td>
                     <div className="flex items-center gap-3">
                       <div>
