@@ -27,6 +27,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     const candidates = await Candidate.find(searchQuery)
+      .sort({"updatedAt" : -1})
       .skip(offset)
       .limit(limit)
       .populate('manager');
