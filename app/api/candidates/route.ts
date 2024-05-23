@@ -20,7 +20,7 @@ export const GET = async (request: NextRequest) => {
 
     const offset = (page - 1) * limit;
 
-    const filter: { [key: string]: any } = {};
+        const filter: { [key: string]: any } = {};
     if (status) {
       filter.status = status;
     }
@@ -49,6 +49,45 @@ export const GET = async (request: NextRequest) => {
 
     return new NextResponse(JSON.stringify(response), { status: 200 });
   } catch (error) {
+    return new NextResponse("Error in fetching: " + error, { status: 500 });
+  }
+};
+
+
+export async function POST(request: NextRequest) {
+  try {
+    await connectToDB();
+    
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '5', 10);
+    const searchTerm = searchParams.get('searchTerm') || '';
+
+    const pipeline = [
+      {
+        $search: {
+          text: {
+            query: searchTerm,
+            path: 'phone',
+          },
+        },
+      },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
+    ];
+
+    const candidates = await Candidate.aggregate(pipeline);
+    const total = await Candidate.countDocuments({ phone: { $regex: searchTerm, $options: 'i' } });
+
+    const response = {
+      candidates,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
+
+    return NextResponse.json(response);
+  } catch (error) {
+    return new NextResponse(`Error fetching candidates: ${error}`, { status: 500 });
     console.error('Error fetching candidates:', error);
     return new NextResponse(`Error in fetching: ${error}`, { status: 500 });
   }

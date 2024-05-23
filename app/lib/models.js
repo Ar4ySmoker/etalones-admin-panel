@@ -20,6 +20,11 @@ const managerShema = new mongoose.Schema({
 })
 
 const partnerShema = new mongoose.Schema({
+  professions: [{
+    name:  String,
+    experience: String,
+    
+  }],
   name:{
 type: String,
   },
