@@ -71,31 +71,6 @@ function CandidatesPage() {
   };
 
 
-  // useEffect(() => {
-  //   fetchCandidates(currentPage, searchTerm);
-  // }, [currentPage, searchTerm]);
-
-  // const handleDeleteCandidate = async (candidateId) => {
-  //   try {
-  //     const response = await deleteCandidate(candidateId);
-  //     if (response.ok) {
-  //       alert('Кандидат успешно удален');
-  //       setCandidates(candidates.filter(cand => cand._id !== candidateId));
-  //     } else {
-  //       throw new Error('Ошибка при удалении кандидата');
-  //     }
-  //   } catch (error) {
-  //     alert(error.message);
-  //   }
-  // };
-
-
-
-
-  // const handleSearchChange = (event) => {
-  //   setSearchTerm(event.target.value.toLowerCase());
-  // };
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
