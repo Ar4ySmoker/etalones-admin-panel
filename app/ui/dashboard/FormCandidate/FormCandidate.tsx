@@ -20,7 +20,7 @@ export default function Form({ professions,  manager }) {
   let [combinedLocation, setCombinedLocation] = useState("");
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [selectedDrive, setSelectedDrive] = useState([]);
   // const [selectedLangue, setSelectedLangue] = useState("");
   // let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
@@ -61,10 +61,15 @@ export default function Form({ professions,  manager }) {
   }, []);
 
   useEffect(() => {
-    if (singleCountry && singleCity) {
-      setCombinedLocation(`${singleCountry}, ${singleCity}`);
+    if (singleCountry) {
+      if (singleCity) {
+        setCombinedLocation(`${singleCountry}, ${singleCity}`);
+      } else {
+        setCombinedLocation(singleCountry);
+      }
     }
   }, [singleCountry, singleCity]);
+  
   
   const router = useRouter();
 
@@ -103,6 +108,7 @@ export default function Form({ professions,  manager }) {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
     console.log('Submitting with documents:', documentEntries);
     console.log('Submitting with PROFESSIONS:', professionEntries);
 
@@ -145,7 +151,7 @@ export default function Form({ professions,  manager }) {
         router.refresh();
         router.push("/dashboard/candidates");
       } else {
-        console.error('Failed to create candidate:', result);
+        setErrorMessage(result.message); // Устанавливаем сообщение об ошибке
       }
     } catch (error) {
       console.error('Network error:', error);
@@ -372,8 +378,8 @@ export default function Form({ professions,  manager }) {
               <option value="Виза">Виза</option>
               <option value="Песель">Песель</option>
               <option value="Паспорт">Паспорт</option>
-              <option value="Паспорт">Паспорт Биометрия Украины</option>
-              <option value="Паспорт">Параграф 24</option>
+              <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
+              <option value="Параграф 24">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
             </select>
             </label>
@@ -398,9 +404,14 @@ export default function Form({ professions,  manager }) {
         <textarea className="textarea textarea-accent w-full "
          id="comment" name="comment" placeholder="Комментарий" />
         </label>
-        <button className="btn btn-success w-full" type="submit">Сохранить кандидата</button>
+        
+        {errorMessage && <div className="alert alert-error mt-2">{errorMessage}</div>}
+        {statusFromPartner.status === "В ЧС" && <div className="alert alert-blacklist mt-2">Кандидат находится в чёрном списке</div>}
+
+<button className="btn btn-accent w-full mt-4" type="submit">Создать кандидата</button>
         
       </form>
     </div>
+    
   );
 }

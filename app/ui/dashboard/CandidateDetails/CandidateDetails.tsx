@@ -17,7 +17,7 @@ export default function CandidateDetails({ candidate }) {
       return "нет документов";
     }
     return documents.map((doc, index) => (
-      <div key={index} className='flex '>
+      <div key={index} className='w-max'>
         <p>{doc.docType}: <span className="badge badge-neutral">{doc.dateExp ? doc.dateExp: "дата не указана"}</span></p>
         
       </div>
@@ -28,13 +28,13 @@ export default function CandidateDetails({ candidate }) {
 
   return (
     <>
-      <div className="flex">
-        <h1 className="font-bold py-10 text-2xl text-center">Анкета {candidate.name}  </h1>
-        <h2 className='flex gap-3'>Профессии: {renderProfessions(candidate.professions)}</h2>
+      <div className="flex flex-col justify-center items-center gap-5">
+        <div className="font-bold py-10 text-2xl text-center h1 py-0">Анкета {candidate.name}  </div>
+        <div className='flex flex-wrap gap-3 '><strong>Профессии:</strong> {renderProfessions(candidate.professions)}</div>
       </div>
       <div>
         <div>
-          <div className='flex flex-col w-full gap-2'>
+          <div className='flex flex-col w-full gap-2 mt-5'>
             <div>Имя: {candidate.name}</div>
             <div>Возраст: {candidate.age}</div>
             <div>Номер телефона: {candidate.phone}</div>
