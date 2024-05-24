@@ -11,6 +11,13 @@ const drivePermis = [
   { label: "E", value: "E"},
   { label: "Код 95", value: "Код 95"},
 ];
+const statuses = [
+  { label: "Не трудоустроен", value: "Не трудоустроен" },
+  { label: "Трудоустроен", value: "Трудоустроен" },
+  { label: "В отпуске", value: "В отпуске"},
+  { label: "Уволен", value: "Уволен"},
+  ,
+]
 
 export default function Form({ professions,  manager }) {
   let [countries, setCountries] = useState([]);
@@ -22,6 +29,8 @@ export default function Form({ professions,  manager }) {
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedDrive, setSelectedDrive] = useState([]);
+  const [selectedStatusP, setSelectedStatusP] = useState([]);
+
 
 
   const handleStatusFromPartnerChange = (field, value) => {
@@ -128,7 +137,7 @@ export default function Form({ professions,  manager }) {
       status: formData.get('status') || null,
       citizenship: formData.get('citizenship') || null,
       statusFromPartner:{
-        status: formData.get('statusFromPartner'),
+        status: selectedStatusP.map(s => s.value).join(', '),
         who: formData.get('who')
       },
       manager: formData.get('manager') || null,
@@ -260,17 +269,24 @@ export default function Form({ professions,  manager }) {
         <label className='flex gap-1 items-end' htmlFor="statusFromPartner">
           <div className='flex flex-col justify-between h-full'>
           <div>Статус трудоустройства</div>
-          <select className="select w-full max-w-xs" id="statusFromPartner" name="statusFromPartner" >
+          <MultiSelect
+          className='w-[250px]'
+        options={statuses}
+        value={selectedStatusP}
+        onChange={setSelectedStatusP}
+        labelledBy="statusFromPartner"
+      />
+          {/* <select className="select w-full max-w-xs" id="statusFromPartner" name="statusFromPartner" >
           <option disabled selected value={null}>Статус Трудоустройства</option>
         <option>Не трудоустроен</option>
         <option >Трудоустроен</option>
         <option >В отпуске</option>
         <option >Уволен</option>
-        </select>
+        </select> */}
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Заказчик</div>
-          <select className="select w-full max-w-xs" id="who" name="who" value={statusFromPartner.who || ''} onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
+          <select className="select w-[200px] max-w-xs" id="who" name="who" value={statusFromPartner.who || ''} onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
           <option disabled selected value={null}>Выберите заказчика</option>
           <option >Нет заказчика</option>
           <option >WERTBAU NORD GmbH </option>

@@ -11,7 +11,13 @@ const drivePermis = [
   { label: "E", value: "E"},
   { label: "Код 95", value: "Код 95"},
 ];
-
+const statuses = [
+  { label: "Не трудоустроен", value: "Не трудоустроен" },
+  { label: "Трудоустроен", value: "Трудоустроен" },
+  { label: "В отпуске", value: "В отпуске"},
+  { label: "Уволен", value: "Уволен"},
+  ,
+]
 
 export default function EditCandidateForm({ id, candidate, managers, professions }) {
   let [countries, setCountries] = useState([]);
@@ -22,6 +28,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
+  const [selectedStatusP, setSelectedStatusP] = useState([]);
 
   const handleStatusFromPartnerChange = (field, value) => {
     setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
@@ -122,7 +129,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
           locations: combinedLocation || candidate.locatons,
           documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
-          drivePermis: formData.get('drivePermis') || candidate.drivePermis,
+          drivePermis: selectedDrive.map(d => d.value).join(', ') || candidate.drivePermis,
           leaving: formData.get('leaving') || candidate.leaving,
           dateArrival: formData.get('dateArrival') || candidate.dateArrival,
           cardNumber: formData.get('cardNumber') || candidate.cardNumber,
@@ -133,7 +140,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           status: formData.get('status') || candidate.status,
           citizenship: formData.get('citizenship') || candidate.citizenship,
           statusFromPartner:{
-            status: formData.get('statusFromPartner') || candidate.statusFromPartner.status,
+            status: selectedStatusP.map(s => s.value).join(', ')  || candidate.statusFromPartner.status,
             who: formData.get('who') || candidate.statusFromPartner.who
           },
           manager: formData.get('manager') || candidate.manager,
@@ -276,17 +283,29 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label className='flex gap-1 items-end' htmlFor="statusFromPartner">
           <div className='flex flex-col justify-between h-full'>
           <div>Статус трудоустройства</div>
-          <select className="select w-full max-w-xs" id="statusFromPartner" name="statusFromPartner" defaultValue={candidate.statusFromPartner}>
+          <MultiSelect
+          className='w-[250px]'
+        options={statuses}
+        value={selectedStatusP}
+        onChange={setSelectedStatusP}
+        labelledBy="statusFromPartner"
+      />
+          {/* <select className="select w-full max-w-xs" id="statusFromPartner" name="statusFromPartner" 
+          defaultValue={candidate.statusFromPartner.status}
+          onChange={(e) => handleStatusFromPartnerChange('status', e.target.value || '')}
+          >
           <option disabled selected value={null}>Статус Трудоустройства</option>
         <option>Не трудоустроен</option>
         <option >Трудоустроен</option>
         <option >В отпуске</option>
         <option >Уволен</option>
-        </select>
+        </select> */}
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Заказчик</div>
-          <select className="select w-full max-w-xs" id="who" name="who"  value={statusFromPartner.who || ''} onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
+          <select className="select w-full max-w-xs" id="who" name="who" 
+          defaultValue={candidate.statusFromPartner.who}  value={statusFromPartner.who || ''} 
+          onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
           <option disabled selected value={null}>Выберите заказчика</option>
           <option >Нет заказчика</option>
         <option >WERTBAU NORD GmbH </option>
