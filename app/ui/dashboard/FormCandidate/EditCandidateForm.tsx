@@ -191,7 +191,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                 </label>
               </div>
               <div >
-              {new Date(candidate.age).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {candidate.age ? new Date(candidate.age).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
               </div>
             </label>
           <label htmlFor="phone">
@@ -327,12 +327,12 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     </div>
         </label>
         <label htmlFor="leaving">
-              <div>Готов выехать<br />{candidate.leaving.slice(0, 10)}</div>
+        <div>Готов выехать<br />{candidate.leaving ? candidate.leaving.slice(0, 10) : ''}</div>
             <input className="input input-bordered input-accent w-full max-w-xs" 
             type="date"  id='leaving' name='leaving' />
             </label>
             <label htmlFor="dateArrival">
-              <div>Приехал на объект<br />{candidate.dateArrival.slice(0, 10)}</div>
+              <div>Приехал на объект<br />{candidate.dateArrival ? candidate.dateArrival.slice(0, 10) : ''}</div>
             <input className="input input-bordered input-accent w-full max-w-xs" 
             type="date"  id='dateArrival' name='dateArrival' />
             </label>
