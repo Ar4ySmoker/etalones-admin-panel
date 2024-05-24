@@ -16,7 +16,6 @@ const statuses = [
   { label: "Трудоустроен", value: "Трудоустроен" },
   { label: "В отпуске", value: "В отпуске"},
   { label: "Уволен", value: "Уволен"},
-  ,
 ]
 
 export default function EditCandidateForm({ id, candidate, managers, professions }) {

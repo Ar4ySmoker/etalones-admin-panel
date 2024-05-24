@@ -1,27 +1,6 @@
 'use client'
-import { useState, useEffect } from "react";
 
-interface Manager {
-  _id: string;
-  name: string;
-  phone: string;
-}
 
-interface Candidate {
-  _id: string;
-  name: string;
-  manager: Manager;
-  status: string;
-  // другие поля, если необходимо
-}
-
-interface WorkCandidateTableProps {
-  initialCandidates: Candidate[];
-  initialPage: number;
-  totalPages: number;
-  status: string;
-  managerName: string;
-}
 
 const WorkCandidateTable = () => {
  

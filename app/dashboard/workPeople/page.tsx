@@ -14,7 +14,7 @@ async function fetchCandidates(status: string, managerName: string) {
 }
 
 async function WorkPeoplePage() {
-  const status = 'Работает';
+  
 
   try {
     const dataLilia = await fetchCandidates('Работает', 'Лилия');

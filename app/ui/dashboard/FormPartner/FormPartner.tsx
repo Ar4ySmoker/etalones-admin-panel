@@ -1,8 +1,8 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { useRouter } from "next/navigation";
 import { MultiSelect } from "react-multi-select-component";
-import Axios from "axios";
+// import Axios from "axios";
 
 const drivePermis = [
   { label: "В", value: "B" },
