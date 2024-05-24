@@ -27,20 +27,12 @@ async function WorkPeoplePage() {
       <div>
         <h2> Лилия</h2>
         <WorkCandidateTable 
-          initialCandidates={dataLilia.candidates} 
-          initialPage={dataLilia.page} 
-          totalPages={dataLilia.totalPages} 
-          status={status} 
-          managerName="Лилия"
+         
         />
 
         <h2> Татьяна</h2>
         <WorkCandidateTable 
-          initialCandidates={dataTatyana.candidates} 
-          initialPage={dataTatyana.page} 
-          totalPages={dataTatyana.totalPages} 
-          status={status} 
-          managerName="Татьяна"
+          
         />
       </div>
     );

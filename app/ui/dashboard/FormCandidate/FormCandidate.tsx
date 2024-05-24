@@ -22,12 +22,7 @@ export default function Form({ professions,  manager }) {
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedDrive, setSelectedDrive] = useState([]);
-  // const [selectedLangue, setSelectedLangue] = useState("");
-  // let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
 
-  // const handleStatusFromPartnerChange = (field, value) => {
-  //   setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
-  // };
 
   const handleStatusFromPartnerChange = (field, value) => {
     setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
@@ -76,7 +71,7 @@ export default function Form({ professions,  manager }) {
   const [documentEntries, setDocumentEntries] = useState([]);
 
   const addDocumentEntry = () => {
-    setDocumentEntries([...documentEntries, { docType: 'Нет документов', dateExp: '', numberDoc: '' }]);
+    setDocumentEntries([...documentEntries, { docType: 'Нет документов', dateExp: '', dateOfIssue: '', numberDoc: '' }]);
   };
 
   const handleDocumentChange = (index, field, value) => {
@@ -116,19 +111,22 @@ export default function Form({ professions,  manager }) {
     const body = {
       name: formData.get('name') || '', 
       age: formData.get('age') || '',
+      ageNum: formData.get('ageNum') || '',
       phone: formData.get('phone') || '',
       professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
       locations: combinedLocation,
-      documents: documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.numberDoc.trim() !== ''),
+      documents: documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== ''),
       drivePermis: selectedDrive.map(d => d.value).join(', '),
       leaving: formData.get('leaving') || '',
+      dateArrival: formData.get('dateArrival') || '',
       cardNumber: formData.get('cardNumber') || '',
-      workHours: formData.get('workHours') || '',
+      // workHours: formData.get('workHours') || '',
       langue: {
         name: formData.get('langue') || '',
         level: formData.get('langueLvl') || ''
       },
       status: formData.get('status') || null,
+      citizenship: formData.get('citizenship') || null,
       statusFromPartner:{
         status: formData.get('statusFromPartner'),
         who: formData.get('who')
@@ -169,10 +167,19 @@ export default function Form({ professions,  manager }) {
  id="name" name="name" type="text" placeholder="Сергей" required />
         </label>
         <label htmlFor="age">
-  <div>Возраст</div>
-<input className="input input-bordered input-accent w-full max-w-xs"
-         id="age" name="age" type="text" placeholder="32 года" />
-        </label>
+              <div>Возраст</div>
+              <div className='flex gap-1'>
+                <label htmlFor="age">
+                  <div>Дата рождения</div>
+                  <input className="input input-bordered input-accent w-full max-w-xs" 
+                  id="age" name="age" type="date"   />
+                </label>
+                <label htmlFor="ageNum">
+                  <div>Возраст</div>
+                  <input className="input input-bordered input-accent w-full max-w-xs" id="ageNum" name="ageNum" type="text"   />
+                </label>
+              </div>
+            </label>
         <label htmlFor="phone">
   <div>Телефон</div>
 <input className="input input-bordered input-accent w-full max-w-xs"
@@ -180,12 +187,6 @@ export default function Form({ professions,  manager }) {
         </label>
         <label htmlFor="locations">
   <div>Местоположение - {combinedLocation}</div>
-        {/* <select id="locations" name="locations" className="select w-full max-w-xs">
-         <option value="Город" disabled selected>Выберите Город</option>
-          {locations.map(location => (
-            <option key={location._id} value={location._id}>{location.name}</option>
-          ))}
-        </select> */}
          <div>
           <div className='flex gap-1'>
           {countries && (
@@ -264,6 +265,7 @@ export default function Form({ professions,  manager }) {
         <option>Не трудоустроен</option>
         <option >Трудоустроен</option>
         <option >В отпуске</option>
+        <option >Уволен</option>
         </select>
           </div>
           <div className='flex flex-col justify-between  h-full'>
@@ -306,14 +308,23 @@ export default function Form({ professions,  manager }) {
       />
     </div>
         </label>
+        <div>
         <label htmlFor="leaving">
               <div>Готов выехать</div>
-            <input className="accent w-full max-w-xs" type="date"  id='leaving' name='leaving' />
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date"  id='leaving' name='leaving' />
             </label>
-            <label htmlFor="workHours">
+            <label htmlFor="dateArrival">
+              <div>Приехал на объект</div>
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date"  id='dateArrival' name='dateArrival' />
+            </label>
+        </div>
+       
+            {/* <label htmlFor="workHours">
               <div>Желаемые часы отработки</div>
             <input className="accent w-full max-w-xs" type="number"  id='workHours' name='workHours' />
-            </label>    
+            </label>     */}
         <label htmlFor="manager">
           <div>Менеджер</div>
         <select className="select w-full max-w-xs" id="manager" name="manager">
@@ -365,7 +376,23 @@ export default function Form({ professions,  manager }) {
         <div className='grid justify-center items-stretch content-space-evenly '>
         <label htmlFor="documents" className='flex flex-col '>
         <div>
-          <h3>Документы</h3>
+          <label htmlFor="citizenship">
+            <div>Гражданство</div>
+          <select className="select w-full max-w-xs" id="citizenship" name="citizenship" >
+          <option disabled selected value={null}>Укажите гражданство</option>
+          <option>Евросоюза</option>
+          <option>Молдовы</option>
+          <option>Украины</option>
+          <option>Беларусь</option>
+          <option>Узбекистана</option>
+          <option>Таджикистана</option>
+          <option>Киргизии</option>
+          <option>Армении</option>
+          <option>Грузии</option>
+          <option>Другое</option>
+        </select>
+        </label>
+        <div>Документы</div>
         <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
 
         </div>
@@ -381,16 +408,29 @@ export default function Form({ professions,  manager }) {
               <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
               <option value="Параграф 24">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
+              <option value="Приглашение">Приглашение</option>
             </select>
             </label>
-            
-            <label htmlFor="documDate">
-              <div>До какаого числа</div>
-            <input className="accent w-full max-w-xs" type="date" value={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
+          
+          
+            <div className='flex gap-1'>
+            <label htmlFor="dateOfIssue">
+              <div>Дата выдачи</div>
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date" value={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
             </label>
+            <label htmlFor="documDate">
+              <div>До какого числа</div>
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date" value={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
+            </label>
+            </div>
+            
+            
             <label htmlFor="nunberDoc">
               <div>Номер документа</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" type="text" value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
+            <input className="input input-bordered input-accent w-full max-w-xs" type="text" 
+            value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
             </label>
             <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
           </div>

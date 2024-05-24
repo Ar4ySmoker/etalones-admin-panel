@@ -36,7 +36,7 @@ export default function CandidateDetails({ candidate }) {
         <div>
           <div className='flex flex-col w-full gap-2 mt-5'>
             <div>Имя: {candidate.name}</div>
-            <div>Возраст: {candidate.age}</div>
+            <div>Возраст: {candidate.ageNum}</div>
             <div>Номер телефона: {candidate.phone}</div>
             <div>Местоположение: {candidate.locations}</div>
             <div>Знание языка: {candidate.langue?.name}</div>
@@ -47,6 +47,8 @@ export default function CandidateDetails({ candidate }) {
             <div>Менеджер: {candidate.manager?.name}</div>
             <div>Номер счёта: {candidate.cardNumber ? candidate.cardNumber : "нет номера счёта"}</div>
             <div>Документы: {renderDocuments(candidate.documents)}</div>
+            <div>Комментарий: {candidate.comment ? candidate.comment : "Пусто..."}</div>
+
           </div>
         </div>
       </div>

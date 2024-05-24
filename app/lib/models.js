@@ -80,13 +80,19 @@ type: String,
     unique: true,
   },
   age:{
-    type: String,
+    type: Date,
+  },
+  ageNum:{
+    type: String, 
   },
   citizenship:{
 type: String,
   },
 
   leaving:{
+    type: Date,
+  },
+  dateArrival:{
     type: Date,
   },
   drivePermis:{
@@ -109,6 +115,7 @@ type: String,
   }],
   documents: [{ 
     docType: String,
+    dateOfIssue: String,
     dateExp: String,
     numberDoc: String
   }],

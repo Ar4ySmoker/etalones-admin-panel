@@ -1,8 +1,16 @@
 "use client";
- 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Axios from "axios";
+import { MultiSelect } from "react-multi-select-component";
+
+const drivePermis = [
+  { label: "В", value: "B" },
+  { label: "C", value: "C" },
+  { label: "D", value: "D"},
+  { label: "E", value: "E"},
+  { label: "Код 95", value: "Код 95"},
+];
 
 
 export default function EditCandidateForm({ id, candidate, managers, professions }) {
@@ -13,6 +21,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   let [combinedLocation, setCombinedLocation] = useState(""); 
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
+  const [selectedDrive, setSelectedDrive] = useState([]);
 
   const handleStatusFromPartnerChange = (field, value) => {
     setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
@@ -45,8 +54,12 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   }, []);
 
   useEffect(() => {
-    if (singleCountry && singleCity) {
-      setCombinedLocation(`${singleCountry}, ${singleCity}`);
+    if (singleCountry) {
+      if (singleCity) {
+        setCombinedLocation(`${singleCountry}, ${singleCity}`);
+      } else {
+        setCombinedLocation(singleCountry);
+      }
     }
   }, [singleCountry, singleCity]);
   
@@ -61,8 +74,6 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       </p>
     ));
   };
-  // const [newName, setNewName] = useState(candidate.name);
-   
  
     const router = useRouter();
     const [professionEntries, setProfessionEntries] = useState(candidate.professions || []);
@@ -85,7 +96,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     const [documentEntries, setDocumentEntries] = useState(candidate.documents || []);
 
   const addDocumentEntry = () => {
-    setDocumentEntries([...documentEntries, { docType: 'Нет документов', dateExp: '', numberDoc: '' }]);
+    setDocumentEntries([...documentEntries, { docType: 'Нет документов', dateExp: '', dateOfIssue: '', numberDoc: '' }]);
   };
 
   const handleDocumentChange = (index, field, value) => {
@@ -106,20 +117,21 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         const body = {
           name: formData.get('name') || candidate.name, // Добавляем проверку на пустое значение
           age: formData.get('age') || candidate.age,
+          ageNum: formData.get('ageNum') || candidate.ageNum,
           phone: formData.get('phone') || candidate.phone,
-          // Добавляем проверку на пустое значение для professions и исключаем пустые записи
           professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
           locations: combinedLocation || candidate.locatons,
-          // Добавляем проверку на пустое значение для documents и исключаем пустые записи
-          documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
+          documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
           drivePermis: formData.get('drivePermis') || candidate.drivePermis,
           leaving: formData.get('leaving') || candidate.leaving,
+          dateArrival: formData.get('dateArrival') || candidate.dateArrival,
           cardNumber: formData.get('cardNumber') || candidate.cardNumber,
-          workHours: formData.get('workHours') || candidate.workHours,
+          // workHours: formData.get('workHours') || candidate.workHours,
           langue: {
             name: formData.get('langue') || candidate.langue.name,
             level: formData.get('langueLvl') || candidate.langue.Lvl },
           status: formData.get('status') || candidate.status,
+          citizenship: formData.get('citizenship') || candidate.citizenship,
           statusFromPartner:{
             status: formData.get('statusFromPartner') || candidate.statusFromPartner.status,
             who: formData.get('who') || candidate.statusFromPartner.who
@@ -127,8 +139,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           manager: formData.get('manager') || candidate.manager,
           comment: formData.get('comment') || candidate.comment };
         try {
-            // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
-              const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+              // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
 
             method: "PUT",
                 headers: {
@@ -163,12 +175,25 @@ export default function EditCandidateForm({ id, candidate, managers, professions
  required />
           </label>
           <label htmlFor="age">
-  <div>Возраст</div>
-<input className="input input-bordered input-accent w-full max-w-xs"
-         id="age" name="age" type="text" 
-         placeholder={candidate.age}
-         defaultValue={candidate.age} />
-          </label>
+             
+              <div className='flex gap-1'>
+                <label htmlFor="age">
+                  <div>Дата рождения</div>
+                  <input className="input input-bordered input-accent w-full max-w-xs" 
+                  id="age" name="age" type="date"
+                  placeholder={candidate.age} defaultValue={candidate.age}   />
+                </label>
+                <label htmlFor="ageNum">
+                  <div>Возраст</div>
+                  <input className="input input-bordered input-accent w-full max-w-xs" 
+                  id="ageNum" name="ageNum" type="text" 
+                  placeholder={candidate.ageNum} defaultValue={candidate.ageNum} />
+                </label>
+              </div>
+              <div >
+              {new Date(candidate.age).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+              </div>
+            </label>
           <label htmlFor="phone">
             <div className="label">
     <span className="label-text">Номер телефона</span>
@@ -222,6 +247,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <option>Не знает языков</option>
         <option >Английский</option>
         <option >Немецкий</option>
+        <option >Польский</option>
         </select>
           </div>
           <div className='flex flex-col justify-between  h-full'>
@@ -242,8 +268,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <option>Не подошла вакансия</option>
           <option>Нашел другую работу</option>
           <option>Ждёт работу</option>
-          <option>Работает</option>
-          <option>В отпуске</option>
+          <option>На собеседовании</option>
+          <option>На объекте</option>
           <option>В ЧС</option>
         </select>
         </label>
@@ -255,6 +281,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <option>Не трудоустроен</option>
         <option >Трудоустроен</option>
         <option >В отпуске</option>
+        <option >Уволен</option>
         </select>
           </div>
           <div className='flex flex-col justify-between  h-full'>
@@ -287,6 +314,29 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </select>
           </div>
         </label>
+        <div>
+        <label htmlFor="drivePermis">
+        <div>
+      <h3>Категории В/У</h3>
+      <MultiSelect
+        options={drivePermis}
+        value={selectedDrive}
+        onChange={setSelectedDrive}
+        labelledBy="drivePermis"
+      />
+    </div>
+        </label>
+        <label htmlFor="leaving">
+              <div>Готов выехать<br />{candidate.leaving.slice(0, 10)}</div>
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date"  id='leaving' name='leaving' />
+            </label>
+            <label htmlFor="dateArrival">
+              <div>Приехал на объект<br />{candidate.dateArrival.slice(0, 10)}</div>
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date"  id='dateArrival' name='dateArrival' />
+            </label>
+        </div>
         <label htmlFor="manager">
           <div>Менеджер</div>
         <select className="select w-full max-w-xs"  
@@ -327,6 +377,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       <div>Опыт работы</div>
       <select className="select select-accent w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
         <option disabled selected value={null}>Опыт работы</option>
+        <option >Без опыта</option>
         <option >Меньше года</option>
         <option >От 2-х лет</option>
         <option >Более 10-ти лет</option>
@@ -351,22 +402,34 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               <div>Название документа</div>
             <select  className="select w-full max-w-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
              <option  value={null}>Выберите документ</option>
-              <option value="Виза">Виза</option>
+             <option value="Виза">Виза</option>
               <option value="Песель">Песель</option>
               <option value="Паспорт">Паспорт</option>
-              <option value="Паспорт">Паспорт Биометрия Украины</option>
-              <option value="Паспорт">Параграф 24</option>
+              <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
+              <option value="Параграф 24">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
+              <option value="Приглашение">Приглашение</option>
             </select>
             </label>
             
-            <label htmlFor="documDate">
-              <div>До какаого числа</div>
-            <input className="accent w-full max-w-xs" type="date" value={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
+            <div className='flex gap-1'>
+            <label htmlFor="dateOfIssue">
+              <div>Дата выдачи</div>
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date" 
+            value={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
             </label>
+            <label htmlFor="documDate">
+              <div>До какого числа</div>
+            <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date" 
+            value={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
+            </label>
+            </div>
             <label htmlFor="nunberDoc">
               <div>Номер документа</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" type="text" value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
+            <input className="input input-bordered input-accent w-full max-w-xs" type="text" 
+            value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
             </label>
             <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
           </div>
@@ -375,7 +438,12 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           </div>
         </div>
         
- 
+        <label htmlFor="comment">
+          <div>Комментарий</div>
+        <textarea className="textarea textarea-accent w-full "
+         id="comment" name="comment" placeholder="Комментарий" 
+         defaultValue={candidate.comment}/>
+        </label>
             <button className="btn btn-primary w-full max-w-xs">
                 Update Candidate
             </button>
