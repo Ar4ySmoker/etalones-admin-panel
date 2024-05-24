@@ -1,9 +1,6 @@
 import WorkCandidateTable from "@/app/ui/dashboard/WorkCandidateTable/WorkCandidateTable";
 
-// Интерфейсы для пропсов компонента
-interface WorkPeoplePageProps {
-  searchParams: URLSearchParams;
-}
+
 
 async function fetchCandidates(status: string, managerName: string) {
   try {
@@ -16,7 +13,7 @@ async function fetchCandidates(status: string, managerName: string) {
   }
 }
 
-async function WorkPeoplePage({ searchParams }: WorkPeoplePageProps) {
+async function WorkPeoplePage() {
   const status = 'Работает';
 
   try {
@@ -30,20 +27,12 @@ async function WorkPeoplePage({ searchParams }: WorkPeoplePageProps) {
       <div>
         <h2> Лилия</h2>
         <WorkCandidateTable 
-          initialCandidates={dataLilia.candidates} 
-          initialPage={dataLilia.page} 
-          totalPages={dataLilia.totalPages} 
-          status={status} 
-          managerName="Лилия"
+         
         />
 
         <h2> Татьяна</h2>
         <WorkCandidateTable 
-          initialCandidates={dataTatyana.candidates} 
-          initialPage={dataTatyana.page} 
-          totalPages={dataTatyana.totalPages} 
-          status={status} 
-          managerName="Татьяна"
+          
         />
       </div>
     );

@@ -13,14 +13,9 @@ const drivePermis = [
 ];
 
 export default function FormPartner({ manager }) {
-  // const [countries, setCountries] = useState([]);
-  // const [cities, setCities] = useState([[]]); // Массив массивов для городов
-  // const [singleCountry, setSingleCountry] = useState([""]); // Массив для хранения страны каждой локации
-  // const [singleCity, setSingleCity] = useState([""]); // Массив для хранения города каждой локации
-  const [combinedLocation, setCombinedLocation] = useState([""]);
+ 
   const [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  // const [locationEntries, setLocationEntries] = useState([{ name: '', profession: '', numberPeople: 0, price: '' }]);
   const [contract, setContract] = useState({ type: "", sum: ""});
 
   const handleLangueChange = (field, value) => {
@@ -31,79 +26,22 @@ export default function FormPartner({ manager }) {
   };
   
 
-  const fetchCountries = async () => {
-    let country = await Axios.get(
-      "https://countriesnow.space/api/v0.1/countries"
-    );
-    // setCountries(country.data.data);
-  };
-
-  // const fetchCities = (country, index) => {
-  //   const countryData = countries.find(c => c.country === country);
-  //   const newCities = [...cities];
-  //   newCities[index] = countryData ? countryData.cities : [];
-  //   setCities(newCities);
-
-  //   const newSingleCountry = [...singleCountry];
-  //   newSingleCountry[index] = country;
-  //   setSingleCountry(newSingleCountry);
-
-  //   const newSingleCity = [...singleCity];
-  //   newSingleCity[index] = ""; // Сброс города при изменении страны
-  //   setSingleCity(newSingleCity);
+  // const fetchCountries = async () => {
+  //   let country = await Axios.get(
+  //     "https://countriesnow.space/api/v0.1/countries"
+  //   );
   // };
 
-  // const handleCityChange = (index, city) => {
-  //   const newSingleCity = [...singleCity];
-  //   newSingleCity[index] = city;
-  //   setSingleCity(newSingleCity);
-  // };
 
-  useEffect(() => {
-    fetchCountries();
-  }, []);
 
   // useEffect(() => {
-  //   const newCombinedLocation = singleCountry.map((country, index) => `${country}, ${singleCity[index]}`);
-  //   console.log('singleCountry:', singleCountry); // Логируем значения singleCountry
-  //   console.log('singleCity:', singleCity);
-  //   setCombinedLocation(newCombinedLocation);
-  // }, [singleCountry, singleCity]);
+  //   fetchCountries();
+  // }, []);
 
-  // const addLocationEntry = () => {
-  //   setLocationEntries([...locationEntries, { name: '', profession: '', numberPeople: 0, price:'' }]);
-  //   setCombinedLocation([...combinedLocation, ""]);
-  //   setSingleCountry([...singleCountry, ""]);
-  //   setSingleCity([...singleCity, ""]);
-  //   setCities([...cities, []]);
-  // };
 
-  // const handleLocationChange = (index, field, value) => {
-  //   const newEntries = [...locationEntries];
-  //   newEntries[index] = { ...newEntries[index], [field]: value };
-  //   setLocationEntries(newEntries);
-  // };
-
-  // const removeLocationEntry = (index) => {
-  //   const newEntries = locationEntries.filter((_, i) => i !== index);
-  //   setLocationEntries(newEntries);
-
-  //   const newCombinedLocation = combinedLocation.filter((_, i) => i !== index);
-  //   setCombinedLocation(newCombinedLocation);
-
-  //   const newSingleCountry = singleCountry.filter((_, i) => i !== index);
-  //   setSingleCountry(newSingleCountry);
-
-  //   const newSingleCity = singleCity.filter((_, i) => i !== index);
-  //   setSingleCity(newSingleCity);
-
-  //   const newCities = cities.filter((_, i) => i !== index);
-  //   setCities(newCities);
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // console.log('Submitting with PROFESSIONS:', locationEntries);
 
     const formData = new FormData(event.target);
     const body = {
@@ -113,14 +51,7 @@ export default function FormPartner({ manager }) {
       site: formData.get('site') || '',
       companyName: formData.get('companyName') || '',
       numberDE: formData.get('numberDE') || 0,
-      // vacancies: locationEntries.map((entry, index) => ({
-      //   name: combinedLocation[index], // Используем combinedLocation в качестве name
-      //   profession: entry.profession,
-      //   numberPeople: entry.numberPeople,
-      //   price: entry.price,
-      //   country: singleCountry[index],
-      //   city: singleCity[index],
-      // })),
+     
       manager: formData.get('manager') || null,
       contract: {
         type: formData.get('contractType') || '',
@@ -274,67 +205,7 @@ export default function FormPartner({ manager }) {
               </div>
             </label>
           </div>
-          {/* <div className='grid justify-center items-stretch content-space-evenly'>
-            <label htmlFor="locations">
-              <div>
-                <h3>Нужны люди</h3>
-                <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addLocationEntry}>Добавить локацию</button>
-              </div>
-              {locationEntries.map((loc, index) => (
-                <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
-                  <div>
-                    <div>Местоположение - {combinedLocation[index]}</div>
-                    <div className='flex gap-1'>
-                      {countries && (
-                        <select className="select w-full max-w-xs" onChange={(e) => fetchCities(e.target.value, index)} value={singleCountry[index]}>
-                          <option selected hidden disabled>
-                            Выберите страну
-                          </option>
-                          {countries.map((country) => (
-                            <option key={country.country} value={country.country}>
-                              {country.country}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {cities[index]?.length > 0 && (
-                        <select className="select w-full max-w-xs" onChange={(e) => handleCityChange(index, e.target.value)} value={singleCity[index]}>
-                          <option selected hidden disabled>
-                            Выберите город
-                          </option>
-                          {cities[index].map((city) => (
-                            <option key={city} value={city}>
-                              {city}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    </div>
-                  </div>
-                  <input type="hidden" value={combinedLocation[index]} />
-                  <label htmlFor="profession">
-                    <div>Профессия</div>
-                    <select className="select w-full max-w-xs" value={loc.profession || ''} onChange={e => handleLocationChange(index, 'profession', e.target.value)}>
-                      <option value={null} disabled selected>Выберите профессию</option>
-                      <option>Нет профессии</option>
-                      {professions.map(profession => (
-                        <option key={profession._id} value={profession.name}>{profession.name}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label htmlFor="numberPeople">
-                    <div>Количество человек</div>
-                    <input className="input input-bordered input-accent w-full max-w-xs" type="number" value={loc.numberPeople} onChange={e => handleLocationChange(index, 'numberPeople', e.target.value)} />
-                  </label>
-                  <label htmlFor="price">
-                    <div>Цена контракта</div>
-                    <input className="input input-bordered input-accent w-full max-w-xs" type="text" value={loc.price} onChange={e => handleLocationChange(index, 'price', e.target.value)} />
-                  </label>
-                  <button className="btn btn-outline btn-error mt-3 btn-xs w-full" type="button" onClick={() => removeLocationEntry(index)}>Удалить локацию</button>
-                </div>
-              ))}
-            </label>
-          </div> */}
+          
         </div>
         <label htmlFor="comment">
           <div>Комментарий</div>
