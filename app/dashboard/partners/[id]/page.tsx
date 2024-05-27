@@ -5,12 +5,14 @@ import PartnerDetails from "@/app/ui/dashboard/PartnerDetails/PartnerDetails";
  
 const getPartnerById = async (id) => {
     try {
-        const res = await fetch(`http:localhost:3000/api/partners/${id}`, {
-            cache: "no-store",
+        // const res = await fetch(`http://localhost:3000/api/partners/${id}`, {
+ const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
+
+        cache: "no-store",
         });
- 
+ console.log('PARTNERS!!!!:::', res)
         if (!res.ok) {
-            throw new Error("Failed to fetch candidate");
+            throw new Error("Failed to fetch partner");
         }
  
         return res.json();
@@ -19,10 +21,9 @@ const getPartnerById = async (id) => {
     }
 };
  
-export default async function EditPartner({ params }) {
+export default async function PartnerDetailsPage({ params }) {
     const { id } = params;
-    const  {partner}  = await getPartnerById(id);
-    // const {name, companyName, phone} = partner
+    const  { partner }  = await getPartnerById(id);
 
-    return <PartnerDetails  partner={partner}   />;
+    return <PartnerDetails  partner={ partner }   />;
 }

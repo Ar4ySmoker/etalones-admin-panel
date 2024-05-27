@@ -24,7 +24,7 @@ export default function CandidatsTable({ candidates }) {
         <td>
           {candidate.name}
           <br/>
-          <span className="badge badge-ghost badge-sm">{candidate.manager.name}</span>
+          <span className="badge badge-ghost badge-sm">{candidate.name}</span>
         </td>
         <td>Purple</td>
         <th>

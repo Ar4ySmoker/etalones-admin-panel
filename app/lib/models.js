@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 
 
@@ -22,31 +23,48 @@ const managerShema = new mongoose.Schema({
 const partnerShema = new mongoose.Schema({
   professions: [{
     name:  String,
-    experience: String,
-    
+    experience: String,    
   }],
   name:{
 type: String,
   },
   phone:{
 type: String,
-unique:true
+unique:true,
+required: false
   },
   email:{
 type: String,
-unique: true
+unique: true,
+required: false
+
+  },
+  site:{
+type: String
   },
   companyName:{
 type: String,
 unique: true
   },
+  rentPrice:{
+type: String
+  },
+  avans:{
+    type:String
+  },
+  workwear:{
+    type: String
+  },
+  workHours:{
+    type: String
+  },
   numberDE:{
 type: String,
-unique: true
+unique: true,
+required: false
   },
   location:{
-type: mongoose.Schema.Types.ObjectId,
-ref: 'Location'
+    type: String,
   },
   manager:{
     type: mongoose.Schema.Types.ObjectId,
@@ -56,13 +74,27 @@ ref: 'Location'
     type: mongoose.Schema.Types.ObjectId,
     ref:'Candidate'
   }],
-  contractSum:{
-type: Number
+  contract:{
+typeC: String,
+sum: String,
   },
   documents:[{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Document'
   }],
+  status:{
+    type: String
+  },
+  drivePermis:{
+    type: String,
+      },
+  leaving:{
+    type: Date,
+      },
+  langue:{
+     name: String,
+     level: String,
+       },
   comment:{
 type: String,
   }

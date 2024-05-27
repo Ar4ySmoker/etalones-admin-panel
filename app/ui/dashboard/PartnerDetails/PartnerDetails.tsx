@@ -1,32 +1,6 @@
 
 export default function PartnerDetails({ partner }) {
-    
-    // const renderProfessions = (professions) => {
-    //   if (!professions || professions.length === 0) {
-    //     return "нет профессий";
-    //   }
-    //   return professions.map((prof, index) => (
-    //     <p key={index} className='flex flex-col'>
-    //       <p>{prof.name}</p>
-    //       <small>{prof.experience}</small>
-    //     </p>
-    //   ));
-    // };
-    // const renderDocuments = (documents) => {
-    //   if (!documents || documents.length === 0) {
-    //     return "нет документов";
-    //   }
-    //   return documents.map((doc, index) => (
-    //     <p key={index} className='flex flex-col'>
-    //       <p>{doc.docType}</p>
-    //       <p>{doc.dateExp}</p>
-    //     </p>
-    //   ));
-    // };
-   
-  
-  
-   
+      
       return (
           <>
           <div className="">

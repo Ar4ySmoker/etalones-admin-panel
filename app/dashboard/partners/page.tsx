@@ -70,14 +70,14 @@ function PartnersPage() {
     if (!location || location.length === 0) {
       return "нет Вакансий";
     }
-    return location.map((loc, index) => (
-      <div key={index} className='w-max'>
-        <p>{loc.profession} - {loc.numberPeople} чел.</p>
-        <small className="badge badge-sm w-full">Город {loc.name}</small>
-        <small className="badge badge-sm">Сумма контракта {loc.price}</small>
+    // return location.map((loc, index) => (
+    //   <div key={index} className='w-max'>
+    //     <p>{loc.profession} - {loc.numberPeople} чел.</p>
+    //     <small className="badge badge-sm w-full">Город {loc.name}</small>
+    //     <small className="badge badge-sm">Сумма контракта {loc.price}</small>
 
-      </div>
-    ));
+    //   </div>
+    // ));
   };
 
   return (

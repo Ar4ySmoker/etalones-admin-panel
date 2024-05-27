@@ -1,8 +1,9 @@
-import {  fetchManager } from "@/app/lib/myData";
+import {  fetchManager, fetchProfession } from "@/app/lib/myData";
 import FormPartner from "@/app/ui/dashboard/FormPartner/FormPartner";
 
 export default async function Page() {
   const manager = await fetchManager();
+  const professions = await fetchProfession();
   
 
 
@@ -10,7 +11,7 @@ export default async function Page() {
       <main>
           <FormPartner 
      
-        manager={manager} />
+        manager={manager} professions={professions} />
       </main>
   );
 }
