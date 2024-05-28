@@ -330,7 +330,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label htmlFor="manager">
           <div>Менеджер</div>
         <select className="select w-full max-w-xs"  
-          defaultValue={candidate?.manager._id}
+          defaultValue={candidate?.manager?._id}
           name="manager" id="manager">
          <option disabled selected value={null}>Выберите менеджера</option>
           {managers.map(m => (

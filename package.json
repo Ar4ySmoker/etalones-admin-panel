@@ -17,6 +17,7 @@
     "country-state-city": "^3.2.1",
     "dotenv": "^16.4.5",
     "isomorphic-ws": "^5.0.0",
+    "moment-timezone": "^0.5.45",
     "mongoose": "8.4.0",
     "next": "14.0.1",
     "npx": "^10.2.2",
