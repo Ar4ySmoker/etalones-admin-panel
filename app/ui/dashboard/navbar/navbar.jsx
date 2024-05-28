@@ -8,7 +8,7 @@ import {
 } from "react-icons/md";
 
 const Navbar = () => {
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   return (
     <div className={styles.container}>

@@ -64,17 +64,17 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
   const handleContractChange = (field, value) => {
     setContract(prevContract => ({ ...prevContract, [field]: value }));
   };
-  const renderProfessions = (professions) => {
-    if (!professions || professions.length === 0) {
-      return "нет профессий";
-    }
-    return professions.map((prof, index) => (
-      <p key={index} className='flex flex-col'>
-        <p>{prof.name}</p>
-        <small>{prof.experience}</small>
-      </p>
-    ));
-  };
+  // const renderProfessions = (professions) => {
+  //   if (!professions || professions.length === 0) {
+  //     return "нет профессий";
+  //   }
+  //   return professions.map((prof, index) => (
+  //     <p key={index} className='flex flex-col'>
+  //       <p>{prof.name}</p>
+  //       <small>{prof.experience}</small>
+  //     </p>
+  //   ));
+  // };
     const router = useRouter();
     
     const formatDate = (dateString) => {

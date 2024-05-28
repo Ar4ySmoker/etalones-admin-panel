@@ -1,9 +1,4 @@
 import mongoose from "mongoose";
-import { type } from "os";
-
-
-
-
 
 const managerShema = new mongoose.Schema({
   name:{
@@ -222,19 +217,7 @@ required: false
 { timestamps: true }
 )
 
-// Добавляем хук для преобразования времени в локальное время перед сохранением
-candidateSchema.pre('save', function (next) {
-  const candidate = this;
-  const timezone = 'Europe/Minsk'; // Укажите ваш часовой пояс
 
-  if (candidate.isModified('leaving')) {
-    candidate.leaving = moment(candidate.leaving).tz(timezone).format();
-  }
-  if (candidate.isModified('dateArrival')) {
-    candidate.dateArrival = moment(candidate.dateArrival).tz(timezone).format();
-  }
-  next();
-});
 // Хук для обновления партнёра перед сохранением кандидата
 candidateSchema.pre('save', async function(next) {
   if (this.isModified('partner') || this.isNew) {
