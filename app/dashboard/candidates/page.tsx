@@ -22,6 +22,22 @@ function CandidatesPage() {
 
   const candidatesPerPage = 5;
 
+ // Функция для форматирования времени
+ const formatTime = (timeString) => {
+  if (!timeString) return '';
+
+  // Создаем новый объект Date из строки времени
+  const updatedAt = new Date(timeString);
+
+  // Добавляем 3 часа к времени
+  updatedAt.setHours(updatedAt.getHours());
+
+  // Получаем строку времени в формате HH:mm
+  const hours = String(updatedAt.getHours()).padStart(2, '0');
+  const minutes = String(updatedAt.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
   const fetchCandidates = async (page = 1, term = '', phone = '', profession = '', document = '') => {
     setIsLoading(true);
     try {
@@ -174,7 +190,10 @@ function CandidatesPage() {
                       </div>
                     </div>
                   </td>
-                  <td>{candidate.createdAt?.substring(0, 10)}</td>
+                  <td><div className='flex flex-col'>
+                  <p>{candidate.createdAt?.substring(0, 10)}</p>
+                  <span className="badge badge-sm">{formatTime(candidate.updatedAt)}</span>
+                  </div></td>
                   <td>{renderDocuments(candidate.documents)}</td>
                   <td>
                     <div className={styles.buttons}>
