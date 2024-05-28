@@ -134,8 +134,7 @@ function CandidatesPage() {
         </Link>
       </div>
       {isLoading ? (
-        <p>Loading...</p>
-      ) : (
+        <p><span className="loading loading-spinner loading-md"></span> Загрузка</p>      ) : (
         <>
           <table className="table">
             <thead>

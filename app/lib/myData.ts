@@ -1,5 +1,5 @@
-import { LocationField, ProfessionField, LangueField, ManagerField, StatusField } from "./definitions";
-import {  Location, Profession,  Langue, Manager, Status } from "./models";
+import { LocationField, ProfessionField, LangueField, ManagerField, StatusField, PartnersField } from "./definitions";
+import {  Location, Profession,  Langue, Manager, Status, Partner } from "./models";
 import { connectToDB } from "./utils";
 
 
@@ -72,6 +72,22 @@ export const fetchProfession = async (): Promise<ProfessionField[]> => {
             _id: profession._id.toString(), // Преобразование _id в строку
             name: profession.name,
             description: profession.description // Убедитесь, что поле description существует в модели
+          }));
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch Profession!");
+    }
+};
+
+export const fetchPartners = async (): Promise<PartnersField[]> => {
+    try {
+         await connectToDB(); // Добавлен await для гарантии асинхронного подключения
+        console.log("Connected to db Profession");
+        const partners = await Partner.find({}, 'name companyName').lean();
+        return partners.map(partner => ({
+            _id: partner._id.toString(), // Преобразование _id в строку
+            name: partner.name,
+            companyName: partner.companyName,
           }));
     } catch (err) {
         console.log(err);

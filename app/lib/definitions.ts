@@ -145,3 +145,8 @@ export type StatusField = {
 _id: string;
 name: string;
 }
+export type PartnersField = {
+  _id: string;
+  name: string;
+  companyName: string;
+}

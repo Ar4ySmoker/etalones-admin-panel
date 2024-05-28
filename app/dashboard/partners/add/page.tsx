@@ -10,7 +10,6 @@ export default async function Page() {
   return (
       <main>
           <FormPartner 
-     
         manager={manager} professions={professions} />
       </main>
   );

@@ -95,7 +95,7 @@ function PartnersPage() {
         </Link>
       </div>
       {isLoading ? (
-        <p>Загрузка...</p>
+        <p><span className="loading loading-spinner loading-md"></span> Загрузка</p> 
       ) : (
         <>
           <table className="table">

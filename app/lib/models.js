@@ -97,7 +97,24 @@ sum: String,
        },
   comment:{
 type: String,
-  }
+  },
+  brigade:[{
+    mainBrigade: String,
+    name: String,
+    documents: [{ 
+      docType: String,
+      dateOfIssue: String,
+      dateExp: String,
+      numberDoc: String
+    }],
+    professions: [{
+      name:  String,
+      experience: String,
+    }],
+    cardNumber:{
+      type: String,
+        },
+  }]
 
 },
 { timestamps: true })
@@ -105,6 +122,10 @@ type: String,
 const candidateSchema = new mongoose.Schema({
   name: {
 type: String,
+  },
+  partner:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Partner'
   },
   phone:{
     type: String,
@@ -143,7 +164,6 @@ type: String,
   professions: [{
     name:  String,
     experience: String,
-    
   }],
   documents: [{ 
     docType: String,
@@ -173,12 +193,69 @@ required: false
   statusFromPartner:{
     status: String,
     who: String
-  }
-  
+  },
+  invoice:[{
+    hours: Number,
+    bet: Number,
+    with: Date,
+    by: Date,
+  }],
+  brigade:[{
+    mainBrigade: String,
+    name: String,
+    documents: [{ 
+      docType: String,
+      dateOfIssue: String,
+      dateExp: String,
+      numberDoc: String
+    }],
+    professions: [{
+      name:  String,
+      experience: String,
+    }],
+    cardNumber:{
+      type: String,
+        },
+  }]
 
 },
 { timestamps: true }
 )
+
+// Хук для обновления партнёра перед сохранением кандидата
+candidateSchema.pre('save', async function(next) {
+  if (this.isModified('partner') || this.isNew) {
+    const Partner = mongoose.model('Partner');
+    const Candidate = mongoose.model('Candidate');
+    
+    // Удаляем кандидата из старого партнёра, если он существует и изменился
+    if (!this.isNew) {
+      const oldCandidate = await Candidate.findById(this._id);
+      if (oldCandidate.partner && oldCandidate.partner.toString() !== this.partner.toString()) {
+        await Partner.findByIdAndUpdate(oldCandidate.partner, {
+          $pull: { candidates: this._id }
+        });
+      }
+    }
+
+    // Добавляем кандидата к новому партнёру
+    await Partner.findByIdAndUpdate(this.partner, {
+      $addToSet: { candidates: this._id }
+    });
+  }
+  next();
+});
+
+// Хук для обновления партнёра после удаления кандидата
+candidateSchema.post('remove', async function(doc) {
+  const Partner = mongoose.model('Partner');
+  if (doc.partner) {
+    await Partner.findByIdAndUpdate(doc.partner, {
+      $pull: { candidates: doc._id }
+    });
+  }
+});
+
 const commentMngSchema = new mongoose.Schema({
   commentText: {
     type: String,

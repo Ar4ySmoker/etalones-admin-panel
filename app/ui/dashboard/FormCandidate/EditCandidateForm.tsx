@@ -18,7 +18,7 @@ const statuses = [
   { label: "Уволен", value: "Уволен"},
 ]
 
-export default function EditCandidateForm({ id, candidate, managers, professions }) {
+export default function EditCandidateForm({ id, candidate, managers, professions, partners }) {
   let [countries, setCountries] = useState([]);
   let [singleCountry, setSingleCountry] = useState("");
   let [Cities, setCities] = useState([]);
@@ -145,8 +145,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           manager: formData.get('manager') || candidate.manager,
           comment: formData.get('comment') || candidate.comment };
         try {
-            // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
-              const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+              // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
 
             method: "PUT",
                 headers: {
@@ -177,7 +177,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <label htmlFor="name">
           <div>Имя</div>
         <input className="input input-bordered input-accent w-full max-w-xs"
- id="name" name="name" type="text" placeholder={candidate.name} defaultValue={candidate.name}
+ id="name" name="name" type="text" placeholder={candidate?.name} defaultValue={candidate?.name}
  required />
           </label>
           <label htmlFor="age">
@@ -187,17 +187,17 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                   <div>Дата рождения</div>
                   <input className="input input-bordered input-accent w-full max-w-xs" 
                   id="age" name="age" type="date"
-                  placeholder={candidate.age} defaultValue={candidate.age}   />
+                  placeholder={candidate?.age} defaultValue={candidate?.age}   />
                 </label>
                 <label htmlFor="ageNum">
                   <div>Возраст</div>
                   <input className="input input-bordered input-accent w-full max-w-xs" 
                   id="ageNum" name="ageNum" type="text" 
-                  placeholder={candidate.ageNum} defaultValue={candidate.ageNum} />
+                  placeholder={candidate?.ageNum} defaultValue={candidate?.ageNum} />
                 </label>
               </div>
               <div >
-              {candidate.age ? new Date(candidate.age).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
+              {candidate?.age ? new Date(candidate?.age).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
               </div>
             </label>
           <label htmlFor="phone">
@@ -205,18 +205,18 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     <span className="label-text">Номер телефона</span>
             </div>
             <input  id="phone" name="phone"
-            defaultValue={candidate.phone}
-             placeholder={candidate.phone}
+            defaultValue={candidate?.phone}
+             placeholder={candidate?.phone}
                 className="input input-bordered input-accent w-full max-w-xs"
                 type="text"
             />
             </label>
           <label htmlFor="locations">
-  <div>Местоположение - {candidate.locations}</div>
+  <div>Местоположение - {candidate?.locations}</div>
          <div>
           <div className='flex gap-1'>
           {countries && (
-        <select className="select w-full max-w-xs" defaultValue={candidate.location}  onChange={(e) => fetchCities(e.target.value)} >
+        <select className="select w-full max-w-xs" defaultValue={candidate?.location}  onChange={(e) => fetchCities(e.target.value)} >
           <option selected hidden disabled>
             Выберите страну
           </option>
@@ -242,13 +242,13 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       )}
           </div>
     </div>
-    <input type="hidden" name="locations" id='locations' value={combinedLocation} defaultValue={candidate.combinedLocation}/>
+    <input type="hidden" name="locations" id='locations' value={combinedLocation} defaultValue={candidate?.combinedLocation}/>
 
         </label>
         <label className='flex gap-1 items-end' htmlFor="langue">
           <div className='flex flex-col justify-between h-full'>
           <div>Знание языка</div>
-          <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={candidate.langue}>
+          <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={candidate?.langue}>
           <option disabled selected value={null}>Знание языка</option>
         <option>Не знает языков</option>
         <option >Английский</option>
@@ -267,7 +267,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </label>
         <label htmlFor="status">
             <div>Статус</div>
-          <select className="select w-full max-w-xs" id="status" name="status"  defaultValue={candidate.status}>
+          <select className="select w-full max-w-xs" id="status" name="status"
+            defaultValue={candidate?.status}>
           <option disabled selected value={null}>Выберите Статус</option>
           <option>Не обработан</option>
           <option>Документы не готовы</option>
@@ -283,52 +284,23 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <div className='flex flex-col justify-between h-full'>
           <div>Статус трудоустройства</div>
           <MultiSelect
-          className='w-[250px]'
+          className='w-[150px]'
         options={statuses}
         value={selectedStatusP}
         onChange={setSelectedStatusP}
         labelledBy="statusFromPartner"
       />
-          {/* <select className="select w-full max-w-xs" id="statusFromPartner" name="statusFromPartner" 
-          defaultValue={candidate.statusFromPartner.status}
-          onChange={(e) => handleStatusFromPartnerChange('status', e.target.value || '')}
-          >
-          <option disabled selected value={null}>Статус Трудоустройства</option>
-        <option>Не трудоустроен</option>
-        <option >Трудоустроен</option>
-        <option >В отпуске</option>
-        <option >Уволен</option>
-        </select> */}
+
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Заказчик</div>
-          <select className="select w-full max-w-xs" id="who" name="who" 
-          defaultValue={candidate.statusFromPartner.who}  value={statusFromPartner.who || ''} 
+          <select className="select w-full max-w-xs"  
+          id="who" name="who" value={statusFromPartner.who || ''} 
           onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
-          <option disabled selected value={null}>Выберите заказчика</option>
-          <option >Нет заказчика</option>
-        <option >WERTBAU NORD GmbH </option>
-        <option >TEREBRO </option>
-        <option >Konstantin Sain </option>
-        <option >A&K Trockenbau </option>
-        <option >ВИКТОР ГАЛЛИАРД</option>
-        <option>David Batiridis</option>
-        <option>Gennadios Panagkasidis</option>
-        <option> INDEPENDA солнечные панели</option>
-        <option >GARDTBaU</option>
-        <option >Baugerüste Sky GbR-Илья</option>
-        <option >Seidel & Zinenko GbR - Владимир  </option>
-        <option >Zolarix GmbH  </option>
-        <option >Vitalii Savchuk  </option>
-        <option >ПЛИТКА Дрезден - Лилия </option>
-        <option >ANTON FREI  </option>
-        <option >SIGA BAU </option>
-        <option >ВИТАЛИЙ АЛАВАСКИ </option>
-        <option > RAIMONDA  </option>
-        <option >K und K Bau GbR </option>
-        <option >PALLETE HPZ  </option>
-        <option >Monolith GmbH  </option>
-
+         <option disabled selected value={null}>Выберите заказчика</option>
+          {partners.map(p => (
+            <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
+          ))}
         </select>
           </div>
         </label>
@@ -345,12 +317,12 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     </div>
         </label>
         <label htmlFor="leaving">
-        <div>Готов выехать<br />{candidate.leaving ? candidate.leaving.slice(0, 10) : ''}</div>
+        <div>Готов выехать<br />{candidate?.leaving ? candidate?.leaving.slice(0, 10) : ''}</div>
             <input className="input input-bordered input-accent w-full max-w-xs" 
             type="date"  id='leaving' name='leaving' />
             </label>
             <label htmlFor="dateArrival">
-              <div>Приехал на объект<br />{candidate.dateArrival ? candidate.dateArrival.slice(0, 10) : ''}</div>
+              <div>Приехал на объект<br />{candidate?.dateArrival ? candidate?.dateArrival.slice(0, 10) : ''}</div>
             <input className="input input-bordered input-accent w-full max-w-xs" 
             type="date"  id='dateArrival' name='dateArrival' />
             </label>
@@ -358,7 +330,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label htmlFor="manager">
           <div>Менеджер</div>
         <select className="select w-full max-w-xs"  
-          defaultValue={candidate.manager._id}
+          defaultValue={candidate?.manager._id}
           name="manager" id="manager">
          <option disabled selected value={null}>Выберите менеджера</option>
           {managers.map(m => (
@@ -369,7 +341,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label htmlFor="cardNumber" className=" w-full max-w-xs">
           <div>Номер счёта</div>
         <input className="input input-bordered input-accent w-full max-w-xs"
-         id="cardNumber" name="cardNumber" type="text" placeholder="Номер счёта" defaultValue={candidate.cardNumber} />
+         id="cardNumber" name="cardNumber" type="text" placeholder="Номер счёта" defaultValue={candidate?.cardNumber} />
         </label>
           </div>
           <div className='grid justify-start items-stretch content-space-evenly '>
@@ -379,7 +351,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
 
       </div>
-     <div>{renderProfessions(candidate.professions)}</div>
+     <div>{renderProfessions(candidate?.professions)}</div>
         {professionEntries.map((prof, index) => (
   <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
     <label htmlFor="profession">
@@ -460,7 +432,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <div>Комментарий</div>
         <textarea className="textarea textarea-accent w-full "
          id="comment" name="comment" placeholder="Комментарий" 
-         defaultValue={candidate.comment}/>
+         defaultValue={candidate?.comment}/>
         </label>
             <button className="btn btn-primary w-full max-w-xs">
                 Update Candidate

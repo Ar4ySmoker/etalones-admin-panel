@@ -18,7 +18,7 @@ const statuses = [
   { label: "Уволен", value: "Уволен"},
 ]
 
-export default function Form({ professions,  manager }) {
+export default function Form({ professions,  manager, partners }) {
   let [countries, setCountries] = useState([]);
   let [singleCountry, setSingleCountry] = useState("");
   let [Cities, setCities] = useState([]);
@@ -285,7 +285,15 @@ export default function Form({ professions,  manager }) {
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Заказчик</div>
-          <select className="select w-[200px] max-w-xs" id="who" name="who" value={statusFromPartner.who || ''} onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
+          <select className="select w-full max-w-xs"  
+         id="who" name="who" value={statusFromPartner.who || ''} 
+         onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
+         <option disabled selected value={null}>Выберите заказчика</option>
+          {partners.map(p => (
+            <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
+          ))}
+        </select>
+          {/* <select className="select w-[200px] max-w-xs" id="who" name="who" value={statusFromPartner.who || ''} onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
           <option disabled selected value={null}>Выберите заказчика</option>
           <option >Нет заказчика</option>
           <option >WERTBAU NORD GmbH </option>
@@ -309,7 +317,7 @@ export default function Form({ professions,  manager }) {
         <option >K und K Bau GbR </option>
         <option >PALLETE HPZ  </option>
         <option >Monolith GmbH  </option>
-        </select>
+        </select> */}
           </div>
         </label>
         <label htmlFor="drivePermis">
