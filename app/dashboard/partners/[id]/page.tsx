@@ -5,8 +5,8 @@ import PartnerDetails from "@/app/ui/dashboard/PartnerDetails/PartnerDetails";
  
 const getPartnerById = async (id) => {
     try {
-        const res = await fetch(`http://localhost:3000/api/partners/${id}`, {
-//  const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
+        // const res = await fetch(`http://localhost:3000/api/partners/${id}`, {
+ const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
 
         cache: "no-store",
         });
