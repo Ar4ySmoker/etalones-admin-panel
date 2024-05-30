@@ -25,13 +25,17 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   let [singleCity, setSingleCity] = useState("");
   let [combinedLocation, setCombinedLocation] = useState(""); 
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
-  let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
+  // let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [selectedStatusP, setSelectedStatusP] = useState([]);
+  const [statusFromPartner, setStatusFromPartner] = useState({
+    status: candidate?.statusFromPartner?.status || 'Не трудоустроен',
+    from: candidate?.statusFromPartner?.from || '',
+    to: candidate?.statusFromPartner?.to || '',
+    dismissalDate: candidate?.statusFromPartner?.dismissalDate || '',
+  });
+    const [showDismissalDate, setShowDismissalDate] = useState(false);
 
-  const handleStatusFromPartnerChange = (field, value) => {
-    setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
-  };
+
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
   };
@@ -82,7 +86,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   };
  
     const router = useRouter();
-    const [professionEntries, setProfessionEntries] = useState(candidate.professions || []);
+    const [professionEntries, setProfessionEntries] = useState(candidate?.professions || []);
     
     const addProfessionEntry = () => {
       setProfessionEntries([...professionEntries, { name: 'Нет профессии', experience: '' }]);
@@ -139,14 +143,17 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           status: formData.get('status') || candidate.status,
           citizenship: formData.get('citizenship') || candidate.citizenship,
           statusFromPartner:{
-            status: selectedStatusP.map(s => s.value).join(', ')  || candidate.statusFromPartner.status,
-            who: formData.get('who') || candidate.statusFromPartner.who
+            status: formData.get('statusFromPartner') || candidate.statusFromPartner.status,
+            from: formData.get('from') || candidate.statusFromPartner.from,
+            to:formData.get('to') || candidate.statusFromPartner.to,
+            dismissalDate: formData.get('dismissalDate') || candidate.statusFromPartner.dismissalDate
           },
+          partners: formData.get('partners') || candidate.partners,
           manager: formData.get('manager') || candidate.manager,
           comment: formData.get('comment') || candidate.comment };
         try {
-            // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
-              const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+              // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
 
             method: "PUT",
                 headers: {
@@ -165,7 +172,10 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             console.log(error);
         }
     };
- 
+
+    const handleDismissalClick = () => {
+      setShowDismissalDate(true);
+    };
     return (
         <>
         <div className="">
@@ -280,30 +290,59 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <option>В ЧС</option>
         </select>
         </label>
-        <label className='flex gap-1 items-end' htmlFor="statusFromPartner">
-          <div className='flex flex-col justify-between h-full'>
-          <div>Статус трудоустройства</div>
-          <MultiSelect
-          className='w-[150px]'
-        options={statuses}
-        value={selectedStatusP}
-        onChange={setSelectedStatusP}
-        labelledBy="statusFromPartner"
-      />
-
-          </div>
-          <div className='flex flex-col justify-between  h-full'>
-          <div>Заказчик</div>
-          <select className="select w-full max-w-xs"  
-          id="who" name="who" value={statusFromPartner.who || ''} 
-          onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
-         <option disabled selected value={null}>Выберите заказчика</option>
+        <label htmlFor="statusFromPartner">
+              <div>Статус от партнера</div>
+              <label htmlFor="partners">
+              <select className="select w-full max-w-xs"
+              defaultValue={candidate?.partners?._id}  
+          id="partners" name="partners" >
+         <option disabled  value={null}>Выберите заказчика</option>
           {partners.map(p => (
             <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
           ))}
-        </select>
+              </select>
+              </label>
+              
+              <select className="select w-full" id="statusFromPartner" name="statusFromPartner" 
+              defaultValue={candidate.statusFromPartner.status}>
+                {statuses.map(status => (
+                  <option key={status.value} value={status.value}>{status.label}</option>
+                ))}
+              </select>
+              <div className='flex gap-1 items-center justify-between'>
+                <p>С</p>
+              <input className="input input-bordered input-accent w-full max-w-xs" 
+           type="date" id="from" name="from" 
+           value={candidate?.statusFromPartner?.from}/>
+                </div>
+                <div className='flex gap-1 items-center justify-between'>
+                <p>До</p>
+              <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date"  id='to' name='to' 
+            value={candidate?.statusFromPartner?.to}/>
+                </div>
+            </label>
+           <div>
+             
+              </div>
+              <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>
+          Добавить статус "Уволен"
+        </button>
+        
+        {/* Показывать поле для даты увольнения, если showDismissalDate === true */}
+        {showDismissalDate && (
+          <div>
+            <label htmlFor="dismissalDate">
+              <div>Дата увольнения</div>
+              <input
+                className="input input-bordered input-accent w-full max-w-xs"
+                id="dismissalDate"
+                name="dismissalDate"
+                type="date"
+              />
+            </label>
           </div>
-        </label>
+        )}
         <div>
         <label htmlFor="drivePermis">
         <div>
@@ -382,6 +421,25 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           <div className='grid justify-start items-stretch content-space-evenly '>
           <label htmlFor="documents" className='flex flex-col '>
         <div>
+        <label htmlFor="citizenship">
+            <div>Гражданство</div>
+          <select className="select w-full max-w-xs"
+           id="citizenship" name="citizenship"
+           defaultValue={candidate?.citizenship} >
+          <option disabled selected value={null}>Укажите гражданство</option>
+          <option>Не известно</option>
+          <option>Евросоюза</option>
+          <option>Молдовы</option>
+          <option>Украины</option>
+          <option>Беларусь</option>
+          <option>Узбекистана</option>
+          <option>Таджикистана</option>
+          <option>Киргизии</option>
+          <option>Армении</option>
+          <option>Грузии</option>
+          <option>Другое</option>
+        </select>
+        </label>
           <h3>Документы</h3>
         <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
 

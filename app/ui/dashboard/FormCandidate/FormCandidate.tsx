@@ -30,9 +30,9 @@ export default function Form({ professions,  manager, partners }) {
   const [selectedDrive, setSelectedDrive] = useState([]);
   const [showDismissalDate, setShowDismissalDate] = useState(false);
 
-  const handleStatusFromPartnerChange = (field, value) => {
-    setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
-  };
+  // const handleStatusFromPartnerChange = (field, value) => {
+  //   setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
+  // };
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -140,7 +140,7 @@ export default function Form({ professions,  manager, partners }) {
         to:formData.get('to'),
         dismissalDate: formData.get('dismissalDate') || ''
       },
-      partner:formData.get('who'),
+      partners:formData.get('partners') || null,
       manager: formData.get('manager') || null,
       comment: formData.get('comment') || ''
     };
@@ -271,6 +271,16 @@ export default function Form({ professions,  manager, partners }) {
         </label>
         <label htmlFor="statusFromPartner">
               <div>Статус от партнера</div>
+              <label htmlFor="partners">
+              <select className="select w-full max-w-xs"  
+          id="partners" name="partners" >
+         <option disabled selected value={null}>Выберите заказчика</option>
+          {partners.map(p => (
+            <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
+          ))}
+              </select>
+              </label>
+              
               <select className="select w-full" id="statusFromPartner" name="statusFromPartner" >
                 {statuses.map(status => (
                   <option key={status.value} value={status.value}>{status.label}</option>
