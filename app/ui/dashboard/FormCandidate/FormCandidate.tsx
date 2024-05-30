@@ -260,6 +260,7 @@ export default function Form({ professions,  manager, partners }) {
           <select className="select w-full " id="status" name="status" >
           <option disabled selected value={null}>Выберите Статус</option>
           <option>Не обработан</option>
+          <option>Не подходят документы</option>
           <option>Документы не готовы</option>
           <option>Не подошла вакансия</option>
           <option>Нашел другую работу</option>
@@ -411,6 +412,7 @@ export default function Form({ professions,  manager, partners }) {
           <option>Киргизии</option>
           <option>Армении</option>
           <option>Грузии</option>
+          <option>Казахстан</option>
           <option>Другое</option>
         </select>
         </label>
@@ -430,6 +432,7 @@ export default function Form({ professions,  manager, partners }) {
               <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
               <option value="Параграф 24">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
+              <option value="Геверба">Геверба</option>
               <option value="Приглашение">Приглашение</option>
             </select>
             </label>
