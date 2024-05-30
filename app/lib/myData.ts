@@ -67,7 +67,7 @@ export const fetchProfession = async (): Promise<ProfessionField[]> => {
     try {
          await connectToDB(); // Добавлен await для гарантии асинхронного подключения
         console.log("Connected to db Profession");
-        const professions = await Profession.find({}, 'name').lean();
+        const professions = await Profession.find({}, 'name').sort({ name: 1 }).lean();
         return professions.map(profession => ({
             _id: profession._id.toString(), // Преобразование _id в строку
             name: profession.name,
