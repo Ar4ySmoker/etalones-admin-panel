@@ -219,29 +219,52 @@ required: false
 { timestamps: true }
 )
 
-
 candidateSchema.pre('save', async function(next) {
+  console.log('Pre-save hook triggered for candidate:', this);
   if (this.isModified('partners') || this.isNew) {
     const Partner = mongoose.model('Partner');
     const Candidate = mongoose.model('Candidate');
-    
-    // Удаляем кандидата из старого партнёра, если он существует и изменился
+
     if (!this.isNew) {
-      const oldCandidate = await Candidate.findById(this._id);
-      if (oldCandidate.partners && oldCandidate.partners.toString() !== this.partners.toString()) {
-        await Partner.findByIdAndUpdate(oldCandidate.partners, {
-          $pull: { candidates: this._id }
-        });
+      const oldCandidate = await Candidate.findById(this._id).lean();
+      if (oldCandidate && oldCandidate.partners && oldCandidate.partners.toString() !== this.partners.toString()) {
+        console.log('Removing candidate from old partner:', oldCandidate.partners);
+        await Partner.findByIdAndUpdate(oldCandidate.partners, { $pull: { candidates: this._id } });
       }
     }
 
-    // Добавляем кандидата к новому партнёру
-    await Partner.findByIdAndUpdate(this.partners, {
-      $addToSet: { candidates: this._id }
-    });
+    if (this.partners) {
+      console.log('Adding candidate to new partner:', this.partners);
+      await Partner.findByIdAndUpdate(this.partners, { $addToSet: { candidates: this._id } });
+    }
   }
   next();
 });
+
+// candidateSchema.pre('save', async function(next) {
+//   if (this.isModified('partners') || this.isNew) {
+//     const Partner = mongoose.model('Partner');
+//     const Candidate = mongoose.model('Candidate');
+    
+//     // Удаляем кандидата из старого партнёра, если он существует и изменился
+//     if (!this.isNew) {
+//       const oldCandidate = await Candidate.findById(this._id).lean(); // Используем lean() для получения простого объекта
+//       if (oldCandidate && oldCandidate.partners && oldCandidate.partners.toString() !== this.partners.toString()) {
+//         await Partner.findByIdAndUpdate(oldCandidate.partners, {
+//           $pull: { candidates: this._id }
+//         });
+//       }
+//     }
+
+//     // Добавляем кандидата к новому партнёру
+//     if (this.partners) {
+//       await Partner.findByIdAndUpdate(this.partners, {
+//         $addToSet: { candidates: this._id }
+//       });
+//     }
+//   }
+//   next();
+// });
 
 
 const commentMngSchema = new mongoose.Schema({
