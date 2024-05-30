@@ -27,12 +27,12 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   // let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [statusFromPartner, setStatusFromPartner] = useState({
-    status: candidate?.statusFromPartner?.status || 'Не трудоустроен',
-    from: candidate?.statusFromPartner?.from || '',
-    to: candidate?.statusFromPartner?.to || '',
-    dismissalDate: candidate?.statusFromPartner?.dismissalDate || '',
-  });
+  // const [statusFromPartner, setStatusFromPartner] = useState({
+  //   status: candidate?.statusFromPartner?.status || 'Не трудоустроен',
+  //   from: candidate?.statusFromPartner?.from || '',
+  //   to: candidate?.statusFromPartner?.to || '',
+  //   dismissalDate: candidate?.statusFromPartner?.dismissalDate || '',
+  // });
     const [showDismissalDate, setShowDismissalDate] = useState(false);
 
 
@@ -326,8 +326,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
            <div>
              
               </div>
-              <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>
-          Добавить статус "Уволен"
+              <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>Добавить дату Уволенения
         </button>
         
         {/* Показывать поле для даты увольнения, если showDismissalDate === true */}

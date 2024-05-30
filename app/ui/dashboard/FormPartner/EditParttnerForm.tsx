@@ -21,7 +21,7 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
   let [combinedLocation, setCombinedLocation] = useState("");  
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [contract, setContract] = useState({ typeC: "", sum: ""});
+  // const [contract, setContract] = useState({ typeC: "", sum: ""});
 
 
 
@@ -61,9 +61,9 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
       }
     }
   }, [singleCountry, singleCity]);
-  const handleContractChange = (field, value) => {
-    setContract(prevContract => ({ ...prevContract, [field]: value }));
-  };
+  // const handleContractChange = (field, value) => {
+  //   setContract(prevContract => ({ ...prevContract, [field]: value }));
+  // };
   // const renderProfessions = (professions) => {
   //   if (!professions || professions.length === 0) {
   //     return "нет профессий";
@@ -254,7 +254,9 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
               <div >
                 <div>Тип контракта</div>
                 <select className="select w-full max-w-xs" id="typeC" name="typeC" 
-                defaultValue={partner?.contract?.typeC}  onChange={(e) => handleContractChange('typeC', e.target.value)}>
+                defaultValue={partner?.contract?.typeC}  
+                // onChange={(e) => handleContractChange('typeC', e.target.value)}
+                >
   <option disabled selected value={null}>Выберите тип контракта</option>
   <option>Не можем договорится</option>
   <option>Одноразка</option>

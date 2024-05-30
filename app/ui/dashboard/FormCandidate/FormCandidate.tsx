@@ -25,8 +25,8 @@ export default function Form({ professions,  manager, partners }) {
   let [singleCity, setSingleCity] = useState("");
   let [combinedLocation, setCombinedLocation] = useState("");
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
-  let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
-  const [errorMessage, setErrorMessage] = useState("");
+  // let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
+  // const [errorMessage, setErrorMessage] = useState("");
   const [selectedDrive, setSelectedDrive] = useState([]);
   const [showDismissalDate, setShowDismissalDate] = useState(false);
 
@@ -110,7 +110,7 @@ export default function Form({ professions,  manager, partners }) {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setErrorMessage("");
+    // setErrorMessage("");
     console.log('Submitting with documents:', documentEntries);
     console.log('Submitting with PROFESSIONS:', professionEntries);
 
@@ -159,7 +159,7 @@ export default function Form({ professions,  manager, partners }) {
         router.refresh();
         router.push("/dashboard/candidates");
       } else {
-        setErrorMessage(result.message); // Устанавливаем сообщение об ошибке
+        // setErrorMessage(result.message); // Устанавливаем сообщение об ошибке
       }
     } catch (error) {
       console.error('Network error:', error);
@@ -301,9 +301,7 @@ export default function Form({ professions,  manager, partners }) {
            <div>
              
               </div>
-              <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>
-          Добавить статус "Уволен"
-        </button>
+              <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>Добавить дату увольнения</button>
         
         {/* Показывать поле для даты увольнения, если showDismissalDate === true */}
         {showDismissalDate && (
@@ -470,8 +468,8 @@ export default function Form({ professions,  manager, partners }) {
          id="comment" name="comment" placeholder="Комментарий" />
         </label>
         
-        {errorMessage && <div className="alert alert-error mt-2">{errorMessage}</div>}
-        {statusFromPartner.status === "В ЧС" && <div className="alert alert-blacklist mt-2">Кандидат находится в чёрном списке</div>}
+        {/* {errorMessage && <div className="alert alert-error mt-2">{errorMessage}</div>}
+        {statusFromPartner.status === "В ЧС" && <div className="alert alert-blacklist mt-2">Кандидат находится в чёрном списке</div>} */}
 
 <button className="btn btn-accent w-full mt-4" type="submit">Создать кандидата</button>
         
