@@ -26,7 +26,7 @@ export const GET = async (request: NextRequest) => {
 
     const candidates = await Candidate.find(query)
     .populate('manager')
-    .populate('partner');
+    .populate('partners');
 
     console.log('Candidates fetched:', candidates);
 

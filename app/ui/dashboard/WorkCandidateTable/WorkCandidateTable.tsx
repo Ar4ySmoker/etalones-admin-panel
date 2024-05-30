@@ -13,9 +13,10 @@ const WorkCandidateTable = ({ data }) => {
           {data.map((candidate, _id) => ( 
             <tr key={_id}> 
               <td>{candidate.name}</td> 
-              <td>{candidate.statusFromPartner.status}</td> 
-              <td>{candidate.partner?.companyName || 'Неизвестно'}</td> 
-
+              <td>{candidate.statusFromPartner.status} {candidate.statusFromPartner.dismissalDate ? (
+  <div>дата увольнения {candidate.statusFromPartner.dismissalDate}</div>
+) : null}</td> 
+              <td>{candidate.partners?.companyName || 'Неизвестно'}</td> 
             </tr>
           ))}
         </tbody>
