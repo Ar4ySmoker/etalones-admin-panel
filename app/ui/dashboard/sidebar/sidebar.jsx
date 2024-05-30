@@ -49,7 +49,7 @@ const menuItems = [
         title: "Люди в работе",
         path: "/dashboard/workPeople",
         icon: <MdWork />,
-        disabled: true,
+        disabled: false,
       },
       {
         title: "Счёта",

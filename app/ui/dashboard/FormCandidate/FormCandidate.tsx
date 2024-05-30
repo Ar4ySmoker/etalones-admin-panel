@@ -15,7 +15,7 @@ const statuses = [
   { label: "Не трудоустроен", value: "Не трудоустроен" },
   { label: "Трудоустроен", value: "Трудоустроен" },
   { label: "В отпуске", value: "В отпуске"},
-  { label: "Уволен", value: "Уволен"},
+
 ]
 
 export default function Form({ professions,  manager, partners }) {
@@ -28,13 +28,12 @@ export default function Form({ professions,  manager, partners }) {
   let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [selectedStatusP, setSelectedStatusP] = useState([]);
-
-
+  const [showDismissalDate, setShowDismissalDate] = useState(false);
 
   const handleStatusFromPartnerChange = (field, value) => {
     setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
   };
+
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
   };
@@ -136,9 +135,12 @@ export default function Form({ professions,  manager, partners }) {
       status: formData.get('status') || null,
       citizenship: formData.get('citizenship') || null,
       statusFromPartner:{
-        status: selectedStatusP.map(s => s.value).join(', '),
-        who: formData.get('who')
+        status: formData.get('statusFromPartner'),
+        from: formData.get('from'),
+        to:formData.get('to'),
+        dismissalDate: formData.get('dismissalDate') || ''
       },
+      partner:formData.get('who'),
       manager: formData.get('manager') || null,
       comment: formData.get('comment') || ''
     };
@@ -163,7 +165,9 @@ export default function Form({ professions,  manager, partners }) {
       console.error('Network error:', error);
     }
   };
-
+  const handleDismissalClick = () => {
+    setShowDismissalDate(true);
+  };
   return (
     <div>
       <form onSubmit={handleSubmit}  >
@@ -253,7 +257,7 @@ export default function Form({ professions,  manager, partners }) {
         </label>
         <label htmlFor="status">
             <div>Статус</div>
-          <select className="select w-full max-w-xs" id="status" name="status" >
+          <select className="select w-full " id="status" name="status" >
           <option disabled selected value={null}>Выберите Статус</option>
           <option>Не обработан</option>
           <option>Документы не готовы</option>
@@ -265,61 +269,46 @@ export default function Form({ professions,  manager, partners }) {
           <option>В ЧС</option>
         </select>
         </label>
-        <label className='flex gap-1 items-end' htmlFor="statusFromPartner">
-          <div className='flex flex-col justify-between h-full'>
-          <div>Статус трудоустройства</div>
-          <MultiSelect
-          className='w-[250px]'
-        options={statuses}
-        value={selectedStatusP}
-        onChange={setSelectedStatusP}
-        labelledBy="statusFromPartner"
-      />
-          {/* <select className="select w-full max-w-xs" id="statusFromPartner" name="statusFromPartner" >
-          <option disabled selected value={null}>Статус Трудоустройства</option>
-        <option>Не трудоустроен</option>
-        <option >Трудоустроен</option>
-        <option >В отпуске</option>
-        <option >Уволен</option>
-        </select> */}
+        <label htmlFor="statusFromPartner">
+              <div>Статус от партнера</div>
+              <select className="select w-full" id="statusFromPartner" name="statusFromPartner" >
+                {statuses.map(status => (
+                  <option key={status.value} value={status.value}>{status.label}</option>
+                ))}
+              </select>
+              <div className='flex gap-1 items-center justify-between'>
+                <p>С</p>
+              <input className="input input-bordered input-accent w-full max-w-xs" 
+           type="date" id="from" name="from" />
+                </div>
+                <div className='flex gap-1 items-center justify-between'>
+                <p>До</p>
+              <input className="input input-bordered input-accent w-full max-w-xs" 
+            type="date"  id='to' name='to' />
+                </div>
+            </label>
+           <div>
+             
+              </div>
+              <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>
+          Добавить статус "Уволен"
+        </button>
+        
+        {/* Показывать поле для даты увольнения, если showDismissalDate === true */}
+        {showDismissalDate && (
+          <div>
+            <label htmlFor="dismissalDate">
+              <div>Дата увольнения</div>
+              <input
+                className="input input-bordered input-accent w-full max-w-xs"
+                id="dismissalDate"
+                name="dismissalDate"
+                type="date"
+                // onChange={(e) => handleStatusFromPartnerChange('dismissalDate', e.target.value)}
+              />
+            </label>
           </div>
-          <div className='flex flex-col justify-between  h-full'>
-          <div>Заказчик</div>
-          <select className="select w-full max-w-xs"  
-         id="who" name="who" value={statusFromPartner.who || ''} 
-         onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
-         <option disabled selected value={null}>Выберите заказчика</option>
-          {partners.map(p => (
-            <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
-          ))}
-        </select>
-          {/* <select className="select w-[200px] max-w-xs" id="who" name="who" value={statusFromPartner.who || ''} onChange={(e) => handleStatusFromPartnerChange('who', e.target.value || '')}>
-          <option disabled selected value={null}>Выберите заказчика</option>
-          <option >Нет заказчика</option>
-          <option >WERTBAU NORD GmbH </option>
-        <option >TEREBRO </option>
-        <option >Konstantin Sain </option>
-        <option >A&K Trockenbau </option>
-        <option >ВИКТОР ГАЛЛИАРД</option>
-        <option>David Batiridis</option>
-        <option>Gennadios Panagkasidis</option>
-        <option> INDEPENDA солнечные панели</option>
-        <option >GARDTBaU</option>
-        <option >Baugerüste Sky GbR-Илья</option>
-        <option >Seidel & Zinenko GbR - Владимир  </option>
-        <option >Zolarix GmbH  </option>
-        <option >Vitalii Savchuk  </option>
-        <option >ПЛИТКА Дрезден - Лилия </option>
-        <option >ANTON FREI  </option>
-        <option >SIGA BAU </option>
-        <option >ВИТАЛИЙ АЛАВАСКИ </option>
-        <option > RAIMONDA  </option>
-        <option >K und K Bau GbR </option>
-        <option >PALLETE HPZ  </option>
-        <option >Monolith GmbH  </option>
-        </select> */}
-          </div>
-        </label>
+        )}
         <label htmlFor="drivePermis">
         <div>
       <h3>Категории В/У</h3>

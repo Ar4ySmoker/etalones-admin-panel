@@ -24,7 +24,6 @@ export default function CandidateDetails({ candidate }) {
     ));
   };
 
-  console.log('Candidate Data:', candidate); // Добавим отладочное сообщение
 
   return (
     <>
@@ -36,7 +35,8 @@ export default function CandidateDetails({ candidate }) {
         <div>
           <div className='flex flex-col w-full gap-2 mt-5'>
             <div>Имя: {candidate.name}</div>
-            <div>Возраст: {candidate.ageNum}</div>
+            <div>Гражданство: {candidate.citizenship}</div>
+            <div>Возраст: {candidate.ageNum ? candidate.ageNum: "не указан"}</div>
             <div>Номер телефона: {candidate.phone}</div>
             <div>Местоположение: {candidate.locations}</div>
             <div>Знание языка: {candidate.langue?.name}</div>

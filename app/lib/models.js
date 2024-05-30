@@ -32,7 +32,6 @@ required: false
 type: String,
 unique: true,
 required: false
-
   },
   site:{
 type: String
@@ -187,7 +186,10 @@ required: false
   }],
   statusFromPartner:{
     status: String,
-    who: String
+    who: String,
+    from: Date,
+    to: Date,
+    dismissalDate: Date
   },
   invoice:[{
     hours: Number,
