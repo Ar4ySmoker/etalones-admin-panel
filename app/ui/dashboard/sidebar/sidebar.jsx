@@ -63,6 +63,12 @@ const menuItems = [
         icon: <MdPeople />,
         disabled: true,
       },
+      {
+        title: "Чёрный список",
+        path: "/dashboard/blackList",
+        icon: <MdPeople />,
+        disabled: false,
+      },
     ],
   },
   {

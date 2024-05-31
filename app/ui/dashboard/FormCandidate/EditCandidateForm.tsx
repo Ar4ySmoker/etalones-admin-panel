@@ -10,6 +10,8 @@ const drivePermis = [
   { label: "D", value: "D"},
   { label: "E", value: "E"},
   { label: "Код 95", value: "Код 95"},
+  { label: "Есть своё авто", value: "Есть своё авто"},
+
 ];
 const statuses = [
   { label: "Не трудоустроен", value: "Не трудоустроен" },
@@ -152,8 +154,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           manager: formData.get('manager') || candidate.manager,
           comment: formData.get('comment') || candidate.comment };
         try {
-            // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
-              const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+              // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
 
             method: "PUT",
                 headers: {
@@ -458,6 +460,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               <option value="Параграф 24">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
               <option value="Геверба">Геверба</option>
+              <option value="Карта сталого побыта">Карта сталого побыта</option>
               <option value="Приглашение">Приглашение</option>
             </select>
             </label>

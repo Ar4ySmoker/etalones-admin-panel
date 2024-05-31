@@ -10,6 +10,7 @@ const drivePermis = [
   { label: "D", value: "D"},
   { label: "E", value: "E"},
   { label: "Код 95", value: "Код 95"},
+  { label: "Есть своё авто", value: "Есть своё авто"},
 ];
 const statuses = [
   { label: "Не трудоустроен", value: "Не трудоустроен" },
@@ -431,6 +432,7 @@ export default function Form({ professions,  manager, partners }) {
               <option value="Параграф 24">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>
               <option value="Геверба">Геверба</option>
+              <option value="Карта сталого побыта">Карта сталого побыта</option>
               <option value="Приглашение">Приглашение</option>
             </select>
             </label>

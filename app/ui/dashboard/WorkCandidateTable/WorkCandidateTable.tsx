@@ -3,7 +3,7 @@ const WorkCandidateTable = ({ data }) => {
     <div className="overflow-x-auto">
       <table className="table table-xs">
         <thead>
-          <tr>
+          <tr className="grid grid-cols-3">
             <th>Name</th>
             <th>Трудоустройство</th>
             <th>Фирма</th>
@@ -11,7 +11,7 @@ const WorkCandidateTable = ({ data }) => {
         </thead>
         <tbody>
           {data.map((candidate, _id) => ( 
-            <tr key={_id}> 
+            <tr key={_id} className="grid grid-cols-3"> 
               <td>{candidate.name}</td> 
               <td>{candidate.statusFromPartner.status}
               <div>

@@ -5,7 +5,7 @@ import { Profession } from "@/app/lib/models";
 export const GET = async() =>{
     try{
 await connectToDB()
-const profession = await Profession.find()
+const profession = await Profession.find().sort({ name: 1 })
 console.log("Profession is test:", profession)
 return new NextResponse(JSON.stringify(profession), {status:200})
 

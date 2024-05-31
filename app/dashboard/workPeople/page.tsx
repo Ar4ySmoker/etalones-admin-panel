@@ -4,8 +4,9 @@ import WorkCandidateTable from "@/app/ui/dashboard/WorkCandidateTable/WorkCandid
 
 async function fetchCandidates(status, managerName) {
   try {
-    const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}&managerName=${managerName}`);
-    
+    // const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}&managerName=${managerName}`);
+    const response = await fetch(`http://localhost:3000/api/filtredCandidates?status=${status}&managerName=${managerName}`);
+ 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -56,13 +57,13 @@ const WorkPeoplePage = () => {
     <div>
 <div className='text-center text-2xl'>Люди на обьекте</div>
 
-      <h2>Лилия</h2>
+      <div>Лилия</div>
       <WorkCandidateTable data={dataLilia} />
-      <h2>Татьяна</h2>
+      <div>Татьяна</div>
       <WorkCandidateTable data={dataTatyana} />
-      <h2>Диана</h2>
+      <div>Диана</div>
       <WorkCandidateTable data={dataDiana} />
-      <h2>Иван</h2>
+      <div>Иван</div>
       <WorkCandidateTable data={dataIvan} />
     </div>
   );
