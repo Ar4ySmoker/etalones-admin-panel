@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
-import Pagination from "@/app/ui/dashboard/Pagination/pagination"
+import Pagination from "@/app/ui/dashboard/Pagination/Pagination"
 
 // async function deleteCandidate(candidateId: string): Promise<Response> {
 //   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
