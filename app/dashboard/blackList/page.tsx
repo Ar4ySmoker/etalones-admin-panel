@@ -5,8 +5,8 @@ import BlackListP from '@/app/ui/dashboard/BlackList/BlackListP';
 
 async function fetchCandidates(status) {
   try {
-    // const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}&managerName=${managerName}`);
-    const response = await fetch(`http://localhost:3000/api/blackListC?status=${status}`);
+    const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}`);
+    // const response = await fetch(`http://localhost:3000/api/blackListC?status=${status}`);
  
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -22,8 +22,8 @@ async function fetchCandidates(status) {
 }
 async function fetchPartners(status) {
     try {
-      // const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}&managerName=${managerName}`);
-      const response = await fetch(`http://localhost:3000/api/blackListP?status=${status}`);
+      const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}`);
+    //   const response = await fetch(`http://localhost:3000/api/blackListP?status=${status}`);
    
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
