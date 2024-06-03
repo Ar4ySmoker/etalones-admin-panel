@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+const PaginationC = ({ currentPage, totalPages, onPageChange }) => {
   const totalPagesToShow = 10; // Количество видимых страниц
 
   const renderPagination = () => {
@@ -57,4 +57,4 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   );
 };
 
-export default Pagination;
+export default PaginationC;
