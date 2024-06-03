@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
+import Pagination from "@/app/ui/dashboard/Pagination/pagination"
 
 // async function deleteCandidate(candidateId: string): Promise<Response> {
 //   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
@@ -115,7 +116,7 @@ function CandidatesPage() {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto flex flex-col items-center">
       <div className={styles.top}>
       <input
           type="text"
@@ -221,7 +222,7 @@ function CandidatesPage() {
               ))}
             </tbody>
           </table>
-          <div className="pagination join mt-4">
+          {/* <div className="pagination join mt-4">
             {Array.from({ length: totalPages }, (_, index) => index + 1).map(
               (number) => (
                 <input
@@ -238,7 +239,11 @@ function CandidatesPage() {
                 />
               )
             )}
-          </div>
+          </div> */}
+          <Pagination 
+           currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}/>
         </>
       )}
      

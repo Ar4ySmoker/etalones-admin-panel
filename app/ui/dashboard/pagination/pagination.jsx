@@ -1,44 +1,58 @@
-"use client";
+import React from 'react';
 
-import styles from "./pagination.module.css";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const totalPagesToShow = 10; // Количество видимых страниц
 
-const Pagination = ({ count }) => {
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const pathname = usePathname();
+  const renderPagination = () => {
+    const startPage = Math.max(1, currentPage - Math.floor(totalPagesToShow / 2));
+    const endPage = Math.min(totalPages, startPage + totalPagesToShow - 1);
 
-  const page = searchParams.get("page") || 1;
+    const pages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <input
+          key={i}
+          type="radio"
+          name="options"
+          aria-label={`${i}`}
+          // className={`join-item btn btn-square ${
+          //   currentPage === i ? "btn-primary" : ""
+          // }`}
+          onClick={() => onPageChange(i)}
+          checked={currentPage === i}
+          readOnly
+        />
+      );
+    }
 
-  const params = new URLSearchParams(searchParams);
-  const ITEM_PER_PAGE = 2;
-
-  const hasPrev = ITEM_PER_PAGE * (parseInt(page) - 1) > 0;
-  const hasNext = ITEM_PER_PAGE * (parseInt(page) - 1) + ITEM_PER_PAGE < count;
-
-  const handleChangePage = (type) => {
-    type === "prev"
-      ? params.set("page", parseInt(page) - 1)
-      : params.set("page", parseInt(page) + 1);
-    replace(`${pathname}?${params}`);
+    return (
+      <>
+        <input
+          type="radio"
+          name="options"
+          aria-label="Назад"
+          // className={`join-item btn btn-square`}
+          onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+          readOnly
+        />
+        {pages}
+        <input
+          type="radio"
+          name="options"
+          aria-label="Вперед"
+          // className={`join-item btn btn-square`}
+          onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage === totalPages}
+          readOnly
+        />
+      </>
+    );
   };
 
   return (
-    <div className={styles.container}>
-      <button
-        className={styles.button}
-        disabled={!hasPrev}
-        onClick={() => handleChangePage("prev")}
-      >
-        Previous
-      </button>
-      <button
-        className={styles.button}
-        disabled={!hasNext}
-        onClick={() => handleChangePage("next")}
-      >
-        Next
-      </button>
+    <div className="mt-4 flex justify-center ">
+      {renderPagination()}
     </div>
   );
 };

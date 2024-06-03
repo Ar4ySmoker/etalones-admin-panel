@@ -36,9 +36,9 @@ const menuItems = [
       },
       {
         title: "Вакансии",
-        path: "/dashboard/posts",
+        path: "/dashboard/vacancies",
         icon: <MdShoppingBag />,
-        disabled: true,
+        disabled: false,
       },
     ],
   },
