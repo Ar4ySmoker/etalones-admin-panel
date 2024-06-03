@@ -15,9 +15,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           type="radio"
           name="options"
           aria-label={`${i}`}
-          // className={`join-item btn btn-square ${
-          //   currentPage === i ? "btn-primary" : ""
-          // }`}
+          className={`join-item btn btn-square ${
+            currentPage === i ? "btn-primary" : ""
+          }`}
           onClick={() => onPageChange(i)}
           checked={currentPage === i}
           readOnly
@@ -31,7 +31,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           type="radio"
           name="options"
           aria-label="Назад"
-          // className={`join-item btn btn-square`}
+          className={`join-item btn btn-square`}
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
           readOnly
@@ -41,7 +41,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           type="radio"
           name="options"
           aria-label="Вперед"
-          // className={`join-item btn btn-square`}
+          className={`join-item btn btn-square`}
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
           readOnly
@@ -51,7 +51,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="mt-4 flex justify-center ">
+    <div className="pagination join mt-4">
       {renderPagination()}
     </div>
   );
