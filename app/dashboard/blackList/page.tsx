@@ -22,8 +22,8 @@ async function fetchCandidates(status) {
 }
 async function fetchPartners(status) {
     try {
-      // const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}`);
-      const response = await fetch(`http://localhost:3000/api/blackListP?status=${status}`);
+      const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}`);
+      // const response = await fetch(`http://localhost:3000/api/blackListP?status=${status}`);
    
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
