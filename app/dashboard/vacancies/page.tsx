@@ -1,7 +1,9 @@
-import ImageUpload from '@/app/ui/ImageUpload/ImageUpload'
+import FormVacancy from '@/app/ui/dashboard/FormVacancy/FormVacancy'
 
 export default function VacanciesPage(){
     return(
-        <ImageUpload/>
+        <>
+        <FormVacancy/>   
+        </>
     )
 }

@@ -1,17 +1,21 @@
+import Link from "next/link";
+
 const WorkCandidateTable = ({ data }) => {
   return (
     <div className="overflow-x-auto">
       <table className="table table-xs">
         <thead>
-          <tr className="grid grid-cols-3">
+          <tr className="grid grid-cols-4">
             <th>Name</th>
             <th>Трудоустройство</th>
             <th>Фирма</th>
+            <th>Детали</th>
+
           </tr>
         </thead>
         <tbody>
           {data.map((candidate, _id) => ( 
-            <tr key={_id} className="grid grid-cols-3"> 
+            <tr key={_id} className="grid grid-cols-4"> 
               <td>{candidate.name}</td> 
               <td>{candidate.statusFromPartner.status}
               <div>
@@ -29,6 +33,11 @@ const WorkCandidateTable = ({ data }) => {
               </div>
               </td> 
               <td>{candidate.partners?.companyName || 'Неизвестно'}</td> 
+              <td><Link href={`/dashboard/candidates/${candidate._id}`}>
+                        <button className="btn btn-sm btn-success w-max">
+                          Подробнее
+                        </button>
+                      </Link></td>
             </tr>
           ))}
         </tbody>

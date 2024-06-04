@@ -428,6 +428,7 @@ export default function Form({ professions,  manager, partners }) {
               <option value="Виза">Виза</option>
               <option value="Песель">Песель</option>
               <option value="Паспорт">Паспорт</option>
+              <option value="Паспорт ЕС">Паспорт ЕС</option>
               <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
               <option value="Параграф 24">Параграф 24</option>
               <option value="Карта побыту">Карта побыту</option>

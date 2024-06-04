@@ -20,7 +20,7 @@ const menuItems = [
         title: "Главная",
         path: "/dashboard",
         icon: <MdDashboard />,
-        disabled: true,
+        disabled: false,
       },
       {
         title: "Кандидаты",

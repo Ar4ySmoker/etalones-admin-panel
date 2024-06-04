@@ -1,104 +1,66 @@
-import Image from "next/image";
 import styles from "./transactions.module.css";
+import Link from "next/link";
 
-const Transactions = () => {
+
+const Transactions = ({ candidates }) => {
+  const renderProfessions = (professions) => {
+    if (!professions || professions.length === 0) {
+      return "нет профессий";
+    }
+    return professions.map((prof, index) => (
+      <p key={index} className="flex flex-col">
+        <p>{prof.name}</p>
+        <small className="badge badge-sm">{prof.experience}</small>
+      </p>
+    ));
+  };
+  const renderDocuments = (documents) => {
+    if (!documents || documents.length === 0) {
+      return "нет документов";
+    }
+    return documents.map((doc, index) => (
+      <p key={index}>
+        <p>{doc.docType}</p>
+      </p>
+    ));
+  };
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Latest Transactions</h2>
+      <h2><strong>Кандидаты в ожидании работы</strong></h2>
       <table className={styles.table}>
         <thead>
           <tr>
-            <td>Name</td>
-            <td>Status</td>
-            <td>Date</td>
-            <td>Amount</td>
+            <td>Имя</td>
+            <td>Профессия</td>
+            <td>Обновлён</td>
+            <td>Документы</td>
+            <td>Подробнее</td>
+
           </tr>
         </thead>
         <tbody>
-          <tr>
+        {candidates.map((candidate) => (
+          <tr key={candidate._id}>
             <td>
               <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className={styles.userImage}
-                />
-                John Doe
+                {candidate.name}
               </div>
             </td>
             <td>
-              <span className={`${styles.status} ${styles.pending}`}>
-                Pending
-              </span>
+              {renderProfessions(candidate.professions)}
             </td>
-            <td>14.02.2024</td>
-            <td>$3.200</td>
+            <td>{candidate.createdAt?.substring(0, 10)}</td>
+            <td>{renderDocuments(candidate.documents)}</td>
+            <td><Link href={`/dashboard/candidates/${candidate._id}`}>
+                        <button className="btn btn-sm btn-success">
+                          Открыть карточку
+                        </button>
+                      </Link></td>
           </tr>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>
-              <span className={`${styles.status} ${styles.done}`}>Done</span>
-            </td>
-            <td>14.02.2024</td>
-            <td>$3.200</td>
-          </tr>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>
-              <span className={`${styles.status} ${styles.cancelled}`}>
-                Cancelled
-              </span>
-            </td>
-            <td>14.02.2024</td>
-            <td>$3.200</td>
-          </tr>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>
-              <span className={`${styles.status} ${styles.pending}`}>
-                Pending
-              </span>
-            </td>
-            <td>14.02.2024</td>
-            <td>$3.200</td>
-          </tr>
+  ))}
         </tbody>
       </table>
+      
     </div>
   );
 };

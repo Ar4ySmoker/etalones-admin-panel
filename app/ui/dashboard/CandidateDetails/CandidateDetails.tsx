@@ -18,7 +18,7 @@ export default function CandidateDetails({ candidate }) {
     }
     return documents.map((doc, index) => (
       <div key={index} className='w-max'>
-        <p>{doc.docType}: <span className="badge badge-neutral">{doc.dateExp ? doc.dateExp: "дата не указана"}</span></p>
+        <p>{doc.docType}: <span className="badge badge-neutral">{doc.dateExp ? doc.dateExp: "дата не указана"}</span> <p className="badge badge-neutral">{doc.number ? doc.number: 'Номер не указан'}</p></p>
         
       </div>
     ));

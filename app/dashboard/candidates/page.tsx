@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
-import PaginationC from '@/app/ui/dashboard/Pagination/Pagination';
+import PaginationC from '@/app/ui/dashboard/Pagination/PaginationC';
 
 // async function deleteCandidate(candidateId: string): Promise<Response> {
 //   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
@@ -192,19 +192,19 @@ function CandidatesPage() {
                     </div>
                   </td>
                   <td><div className='flex flex-col'>
-                  <p>{candidate.createdAt?.substring(0, 10)}</p>
+                  <p>{candidate.updatedAt?.substring(0, 10)}</p>
                   <span className="badge badge-sm">{formatTime(candidate.updatedAt)}</span>
                   </div></td>
                   <td>{renderDocuments(candidate.documents)}</td>
                   <td>
                     <div className={styles.buttons}>
                       <Link href={`/dashboard/candidates/edit/${candidate._id}`}>
-                        <button className={`${styles.button} ${styles.view}`}>
+                        <button className="btn btn-sm btn-outline btn-error w-full">
                           Редактировать
                         </button>
                       </Link>
                       <Link href={`/dashboard/candidates/${candidate._id}`}>
-                        <button className={`${styles.button} ${styles.view}`}>
+                        <button className="btn btn-sm btn-success w-full">
                           Подробнее
                         </button>
                       </Link>
@@ -244,8 +244,8 @@ function CandidatesPage() {
         </>
       )}
       <PaginationC currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}/>
+      totalPages={totalPages}
+      onPageChange={handlePageChange}/>
     </div>
   );
 }
