@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Axios from "axios";
 import { MultiSelect } from "react-multi-select-component";
+import TextInput from "../../inputs/TextInput/TextInput";
 
 const drivePermis = [
   { label: "В", value: "B" },
@@ -27,15 +28,10 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   let [singleCity, setSingleCity] = useState("");
   let [combinedLocation, setCombinedLocation] = useState(""); 
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
-  // let [statusFromPartner, setStatusFromPartner] = useState({ status: "Не трудоустроен", who: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  // const [statusFromPartner, setStatusFromPartner] = useState({
-  //   status: candidate?.statusFromPartner?.status || 'Не трудоустроен',
-  //   from: candidate?.statusFromPartner?.from || '',
-  //   to: candidate?.statusFromPartner?.to || '',
-  //   dismissalDate: candidate?.statusFromPartner?.dismissalDate || '',
-  // });
     const [showDismissalDate, setShowDismissalDate] = useState(false);
+    const [showAdditionalPhone, setAdditionalPhone] = useState(true);
+    const [additionalPhones, setAdditionalPhones] = useState(candidate.additionalPhones || [""]);
 
 
   const handleLangueChange = (field, value) => {
@@ -131,6 +127,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           age: formData.get('age') || candidate.age,
           ageNum: formData.get('ageNum') || candidate.ageNum,
           phone: formData.get('phone') || candidate.phone,
+          additionalPhones: additionalPhones.length ? additionalPhones.filter(phone => phone.trim() !== '') : candidate.additionalPhones,
           professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
           locations: combinedLocation || candidate.locatons,
           documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
@@ -154,8 +151,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           manager: formData.get('manager') || candidate.manager,
           comment: formData.get('comment') || candidate.comment };
         try {
-            // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
-              const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+              // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
 
             method: "PUT",
                 headers: {
@@ -177,6 +174,23 @@ export default function EditCandidateForm({ id, candidate, managers, professions
 
     const handleDismissalClick = () => {
       setShowDismissalDate(true);
+    };
+    const handleAdditionalPhone = () => {
+      setAdditionalPhone(true);
+    };
+    const addAdditionalPhone = () => {
+      setAdditionalPhones([...additionalPhones, ""]);
+    };
+  
+    const handleAdditionalPhoneChange = (index, value) => {
+      const phones = [...additionalPhones];
+      phones[index] = value;
+      setAdditionalPhones(phones);
+    };
+  
+    const removeAdditionalPhone = (index) => {
+      const phones = additionalPhones.filter((_, i) => i !== index);
+      setAdditionalPhones(phones);
     };
     return (
         <>
@@ -212,17 +226,38 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               {candidate?.age ? new Date(candidate?.age).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
               </div>
             </label>
-          <label htmlFor="phone">
-            <div className="label">
-    <span className="label-text">Номер телефона</span>
-            </div>
-            <input  id="phone" name="phone"
-            defaultValue={candidate?.phone}
-             placeholder={candidate?.phone}
-                className="input input-bordered input-accent w-full max-w-xs"
-                type="text"
-            />
-            </label>
+            <label htmlFor="phone">
+  <div>Телефон</div>
+<input className="input input-bordered input-accent w-full max-w-xs"
+         id="phone" name="phone" type="text" placeholder="+373696855446" defaultValue={candidate.phone} />
+                <button type="button" className="btn btn-accent" onClick={handleAdditionalPhone}><strong>+</strong></button>
+        </label>
+        {showAdditionalPhone && (
+              <>
+                {additionalPhones.map((phone, index) => (
+                  <div key={index}>
+                    <label htmlFor={`additionalPhone${index}`}>
+                      <div>Доп. Телефон {index + 1}</div>
+                      <input
+                        className="input input-bordered input-accent w-full max-w-xs"
+                        id={`additionalPhone${index}`}
+                        name={`additionalPhone${index}`}
+                        type="phone"
+                        placeholder={phone}
+                        value={phone}
+                        onChange={(e) => handleAdditionalPhoneChange(index, e.target.value)}
+                        required
+                      />
+                    </label>
+                    <button type="button" onClick={() => removeAdditionalPhone(index)}>Удалить</button>
+                  </div>
+                ))}
+                <button type="button" onClick={addAdditionalPhone}>Добавить ещё один доп. телефон</button>
+              </>
+            )}
+            <button type="button" onClick={handleAdditionalPhone}>Добавить доп. телефон</button>
+
+
           <label htmlFor="locations">
   <div>Местоположение - {candidate?.locations}</div>
          <div>

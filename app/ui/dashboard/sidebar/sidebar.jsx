@@ -53,9 +53,9 @@ const menuItems = [
       },
       {
         title: "Счёта",
-        path: "/dashboard/reports",
+        path: "/dashboard/employed",
         icon: <MdAnalytics />,
-        disabled: true,
+        disabled: false,
       },
       {
         title: "Не обработанные контакты",
