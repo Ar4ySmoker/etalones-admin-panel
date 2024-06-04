@@ -18,7 +18,7 @@ export default function CandidateDetails({ candidate }) {
     }
     return documents.map((doc, index) => (
       <div key={index} className='w-max'>
-        <p>{doc.docType}: <span className="badge badge-neutral">{doc.dateExp ? doc.dateExp: "дата не указана"}</span> <p className="badge badge-neutral">{doc.number ? doc.number: 'Номер не указан'}</p></p>
+        <p>{doc.docType}: <span className="badge badge-neutral">{doc.dateExp ? doc.dateExp: "дата не указана"}</span> <p className="badge badge-neutral">{doc.numberDoc ? doc.numberDoc: 'Номер не указан'}</p></p>
         
       </div>
     ));
@@ -37,9 +37,20 @@ export default function CandidateDetails({ candidate }) {
             <div>Имя: {candidate.name}</div>
             <div>Гражданство: {candidate.citizenship}</div>
             <div>Возраст: {candidate.ageNum ? candidate.ageNum: "не указан"}</div>
-            <div>Номер телефона: {candidate.phone}</div>
+            <div>
+  Номер телефона: {candidate.phone}
+  {candidate.additionalPhones && candidate.additionalPhones.length > 0 ? (
+    <ul>
+      {candidate.additionalPhones.map((phone, index) => (
+        <li key={index}>{phone}</li>
+      ))}
+    </ul>
+  ) : (
+    ' дополнительных номеров нет'
+  )}
+</div>
             <div>Местоположение: {candidate.locations}</div>
-            <div>Знание языка: {candidate.langue?.name}</div>
+            <div>Знание языка: {candidate.langue?.name} {candidate.langue?.level ? candidate.langue?.level:''}</div>
             <div>Статус: {candidate.status}</div>
             <div>
               Статус трудоустройства: <div><span className="badge badge-error">{candidate.statusFromPartner?.who}</span> <span className="badge badge-error">{candidate.statusFromPartner?.status}</span></div> 

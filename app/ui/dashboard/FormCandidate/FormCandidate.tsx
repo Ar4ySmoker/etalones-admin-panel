@@ -3,6 +3,7 @@ import React, {useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { MultiSelect } from "react-multi-select-component";
 import Axios from "axios";
+import TextInput from '../../inputs/TextInput/TextInput';
 
 const drivePermis = [
   { label: "В", value: "B" },
@@ -30,6 +31,9 @@ export default function Form({ professions,  manager, partners }) {
   // const [errorMessage, setErrorMessage] = useState("");
   const [selectedDrive, setSelectedDrive] = useState([]);
   const [showDismissalDate, setShowDismissalDate] = useState(false);
+  const [showAdditionalPhone, setAdditionalPhone] = useState(false);
+  const [additionalPhones, setAdditionalPhones] = useState([""]);
+
 
   // const handleStatusFromPartnerChange = (field, value) => {
   //   setStatusFromPartner(prevStatusFromPartner => ({ ...prevStatusFromPartner, [field]: value }));
@@ -121,6 +125,7 @@ export default function Form({ professions,  manager, partners }) {
       age: formData.get('age') || '',
       ageNum: formData.get('ageNum') || '',
       phone: formData.get('phone') || '',
+      additionalPhones: additionalPhones.filter(phone => phone.trim() !== ''),
       professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
       locations: combinedLocation,
       documents: documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== ''),
@@ -169,6 +174,24 @@ export default function Form({ professions,  manager, partners }) {
   const handleDismissalClick = () => {
     setShowDismissalDate(true);
   };
+  const handleAdditionalPhone = () => {
+    setAdditionalPhone(true);
+  };
+  const addAdditionalPhone = () => {
+    setAdditionalPhones([...additionalPhones, ""]);
+  };
+
+  const handleAdditionalPhoneChange = (index, value) => {
+    const phones = [...additionalPhones];
+    phones[index] = value;
+    setAdditionalPhones(phones);
+  };
+
+  const removeAdditionalPhone = (index) => {
+    const phones = additionalPhones.filter((_, i) => i !== index);
+    setAdditionalPhones(phones);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}  >
@@ -197,7 +220,28 @@ export default function Form({ professions,  manager, partners }) {
   <div>Телефон</div>
 <input className="input input-bordered input-accent w-full max-w-xs"
          id="phone" name="phone" type="text" placeholder="+373696855446" required />
+                <button type="button" className="btn btn-accent" onClick={handleAdditionalPhone}><strong>+</strong></button>
         </label>
+        {showAdditionalPhone && (
+                  <div>
+        <button className='btn btn-accent' type="button" onClick={addAdditionalPhone}><strong>+</strong></button>
+
+        {additionalPhones.map((phone, index) => (
+          <div key={index}>
+            <TextInput
+             id='additionalPhone'
+             name='additionalPhone'
+             title='Дополнительный номер'
+              type="text"
+              onChange={(e) => handleAdditionalPhoneChange(index, e.target.value)}
+              placeholder="Дополнительный телефон"
+            />
+            <button type="button" onClick={() => removeAdditionalPhone(index)}>Удалить</button>
+          </div>
+        ))}
+      </div>    
+        )}
+
         <label htmlFor="locations">
   <div>Местоположение - {combinedLocation}</div>
          <div>

@@ -126,6 +126,11 @@ type: String,
     required: true,
     unique: true,
   },
+  additionalPhones:[{
+type: String,
+unique: true,
+
+  }],
   age:{
     type: Date,
   },
