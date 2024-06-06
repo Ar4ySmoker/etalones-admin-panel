@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const managerShema = new mongoose.Schema({
   name:{
@@ -218,6 +219,10 @@ required: false
     cardNumber:{
       type: String,
         },
+  }],
+  invoices:[{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Invoices',
   }]
 
 },
@@ -246,30 +251,6 @@ candidateSchema.pre('save', async function(next) {
   next();
 });
 
-// candidateSchema.pre('save', async function(next) {
-//   if (this.isModified('partners') || this.isNew) {
-//     const Partner = mongoose.model('Partner');
-//     const Candidate = mongoose.model('Candidate');
-    
-//     // Удаляем кандидата из старого партнёра, если он существует и изменился
-//     if (!this.isNew) {
-//       const oldCandidate = await Candidate.findById(this._id).lean(); // Используем lean() для получения простого объекта
-//       if (oldCandidate && oldCandidate.partners && oldCandidate.partners.toString() !== this.partners.toString()) {
-//         await Partner.findByIdAndUpdate(oldCandidate.partners, {
-//           $pull: { candidates: this._id }
-//         });
-//       }
-//     }
-
-//     // Добавляем кандидата к новому партнёру
-//     if (this.partners) {
-//       await Partner.findByIdAndUpdate(this.partners, {
-//         $addToSet: { candidates: this._id }
-//       });
-//     }
-//   }
-//   next();
-// });
 
 
 const commentMngSchema = new mongoose.Schema({
@@ -278,16 +259,16 @@ const commentMngSchema = new mongoose.Schema({
     required: true
   }
 }, { timestamps: true }); 
-const langueShema = new mongoose.Schema({
-  type:String
-})
-const locationSchema = new mongoose.Schema({
-  name: {
-type: String,
-unique: true,
-  }
-}
-)
+// const langueShema = new mongoose.Schema({
+//   type:String
+// })
+// const locationSchema = new mongoose.Schema({
+//   name: {
+// type: String,
+// unique: true,
+//   }
+// }
+// )
 const professionSchema = new mongoose.Schema({
   name: {
 type: String,
@@ -318,10 +299,111 @@ const statusShema = new mongoose.Schema({
     type: String
   }
 })
-export const Location = mongoose.models.Location || mongoose.model("Location", locationSchema);
+const invoicesShema = new mongoose.Schema({
+  invoiceNumber: {
+    type: String
+  },
+  bet: {
+    type: Number
+  },
+  hours: {
+    type: Number
+  },
+  avans: {
+    type: Number
+  },
+  homePrice: {
+    type: Number
+  },
+  fines: {
+    sum: Number,
+    reason: String
+  },
+  awards: {
+    sum: Number,
+    reason: String
+  },
+  dateFrom: {
+    type: Date
+  },
+  dateTo: {
+    type: Date
+  },
+  status: {
+    type: Boolean
+  },
+  partners: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Partners'
+  },
+  manager: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Manager'
+  },
+  candidate: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Candidate'
+  },
+  totalAmount: {
+    type: Number
+  }
+}, { timestamps: true });
+
+// const invoicesShema = new mongoose.Schema({
+//   invoiceNumber: {
+//     type: String
+//   },
+//   bet: {
+//     type: Number
+//   },
+//   hours: {
+//     type: Number
+//   },
+//   avans: {
+//     type: Number
+//   },
+//   homePrice: {
+//     type: Number
+//   },
+//   fines: {
+//     sum: Number,
+//     reason: String
+//   },
+//   awards: {
+//     sum: Number,
+//     reason: String
+//   },
+//   dateFrom: {
+//     type: Date
+//   },
+//   dateTo: {
+//     type: Date
+//   },
+//   status: {
+//     type: Boolean
+//   },
+//   partner: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'Partners'
+//   },
+//   manager: {
+//     managerName: String 
+//   },
+//   candidate: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'Candidate'
+//   },
+//   totalAmount:{
+//     type: Number
+//   }
+// }, { timestamps: true });
+
+
+export const Invoices = mongoose.models.Invoices || mongoose.model("Invoices", invoicesShema);
+// export const Location = mongoose.models.Location || mongoose.model("Location", locationSchema);
 export const Profession = mongoose.models.Profession || mongoose.model("Profession", professionSchema);
 export const Document = mongoose.models.Document || mongoose.model("Document", dodumentShema);
-export const Langue = mongoose.models.Langue || mongoose.model("Langue", langueShema)
+// export const Langue = mongoose.models.Langue || mongoose.model("Langue", langueShema)
 export const Status = mongoose.models.Status || mongoose.model("Status", statusShema)
 export const Candidate = mongoose.models.Candidate || mongoose.model("Candidate", candidateSchema);
 export const Manager = mongoose.models.Manager || mongoose.model("Manager", managerShema)

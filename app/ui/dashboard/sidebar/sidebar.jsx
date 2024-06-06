@@ -53,7 +53,7 @@ const menuItems = [
       },
       {
         title: "Счёта",
-        path: "/dashboard/employed",
+        path: "/dashboard/invoices",
         icon: <MdAnalytics />,
         disabled: false,
       },

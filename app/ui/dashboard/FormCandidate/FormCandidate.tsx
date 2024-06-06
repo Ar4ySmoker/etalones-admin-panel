@@ -115,7 +115,6 @@ export default function Form({ professions,  manager, partners }) {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // setErrorMessage("");
     console.log('Submitting with documents:', documentEntries);
     console.log('Submitting with PROFESSIONS:', professionEntries);
 

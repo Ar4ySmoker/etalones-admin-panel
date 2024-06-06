@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import WorkCandidateTable from "@/app/ui/dashboard/WorkCandidateTable/WorkCandidateTable";
+import ModalForm from '@/app/ui/dashboard/ModalForm/ModalForm';
 
 async function fetchCandidates(status, managerName) {
   try {
