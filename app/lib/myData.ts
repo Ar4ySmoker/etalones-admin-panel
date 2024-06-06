@@ -1,37 +1,9 @@
 import { LocationField, ProfessionField, LangueField, ManagerField, StatusField, PartnersField } from "./definitions";
-import {  Location, Profession,  Langue, Manager, Status, Partner } from "./models";
+import {  Profession,  Manager, Status, Partner } from "./models";
 import { connectToDB } from "./utils";
 
 
 
-
-export const fetchLocation = async (): Promise<LocationField[]> => {
-    try {
-        await connectToDB();
-        console.log("Connected to the db");
-        const locations = await Location.find({}, 'name').lean();
-        return locations.map(location => ({
-            _id: location._id.toString(),
-            name: location.name
-          }));
-    } catch (err) {
-        console.log(err);
-        throw new Error("Failed to fetch Locations!");
-    }
-};
-export const fetchLangue = async (): Promise<LangueField[]> => {
-    try {
-        await connectToDB();
-        const langue = await Langue.find({}, 'name').lean();
-        return langue.map(langue => ({
-            _id: langue._id.toString(),
-            name: langue.name
-          }));
-    } catch (err) {
-        console.log(err);
-        throw new Error("Failed to fetch Langue!");
-    }
-};
 export const fetchStatus = async (): Promise<StatusField[]> => {
     try {
         await connectToDB();

@@ -17,7 +17,8 @@ function CandidatesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchPhone, setSearchPhone] = useState('');
   const [searchProfession, setSearchProfession] = useState('');
-  const [searchDocument, setSearchDocument] = useState('');  const [currentPage, setCurrentPage] = useState(1);
+  const [searchDocument, setSearchDocument] = useState('');  
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 

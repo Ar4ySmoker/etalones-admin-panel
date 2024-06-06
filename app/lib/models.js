@@ -349,6 +349,21 @@ const invoicesShema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+
+const vacancyShema = new mongoose.Schema({
+  title:{
+    type: String
+  },
+  town:{
+    type: String
+  },
+  workHours:{
+    type: String
+  },
+  workPrice:{
+    type: String
+  }
+})
 // const invoicesShema = new mongoose.Schema({
 //   invoiceNumber: {
 //     type: String
@@ -398,7 +413,7 @@ const invoicesShema = new mongoose.Schema({
 //   }
 // }, { timestamps: true });
 
-
+export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vacancyShema)
 export const Invoices = mongoose.models.Invoices || mongoose.model("Invoices", invoicesShema);
 // export const Location = mongoose.models.Location || mongoose.model("Location", locationSchema);
 export const Profession = mongoose.models.Profession || mongoose.model("Profession", professionSchema);
