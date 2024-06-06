@@ -13,7 +13,8 @@ export default function FormVacancy(){
           title: formData.get('title') || '',
           town: formData.get('town') || '',
           workHours: formData.get('workHours') || '',
-          workPrice: formData.get('workPrice') || ''
+          workPrice: formData.get('workPrice') || '',
+          image: formData.get('image') || ''
         };
     
         try {
@@ -48,8 +49,8 @@ export default function FormVacancy(){
          {/* <TextInput id="dateStart"  placeholder="с июня/ с 10.10.2002" title='Начало работ'/> */}
 
 
-        {/* <FormUpload/> */}
-        <button className="btn btn-success w-full" type="submit">Сохранить кандидата</button>
+        <FormUpload />
+        <button className="btn btn-success w-full" type="submit">Создать вакансию</button>
 
         </form>
         </>
