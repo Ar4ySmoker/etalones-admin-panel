@@ -362,6 +362,9 @@ const vacancyShema = new mongoose.Schema({
   },
   workPrice:{
     type: String
+  },
+  image:{
+    type: String
   }
 })
 // const invoicesShema = new mongoose.Schema({
