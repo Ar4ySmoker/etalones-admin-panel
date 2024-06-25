@@ -410,13 +410,8 @@ type: String
   type:String
 },
   manager:{
-  name:String,
-  phone:String,
-  image:String,
-  viber:String,
-  telegram:String,
-  whatsapp:String,
-},
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Manager'},
 category:{
 type: String
 }

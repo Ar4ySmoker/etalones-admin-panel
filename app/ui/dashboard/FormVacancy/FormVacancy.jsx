@@ -1,218 +1,10 @@
 'use client';
-
-// import { useState } from "react";
-
-// const UploadImage = () => {
-//     const [file, setFile] = useState();
-//     const [title, setTitle] = useState('');
-//     const [salary, setSalary] = useState('');
-//     const [location, setLocation] = useState('');
-//     const [roof_type, setRoof_type] = useState('');
-//     const [auto, setAuto] = useState('');
-//     const [positions_available, setPositions_available] = useState('');
-//     const [homePrice, setHomePrice] = useState('');
-//     const [home_descr, setHome_descr] = useState('');
-//     const [work_descr, setWork_descr] = useState('');
-//     const [grafik, setGrafik] = useState('');
-//     const [documents, setHDocuments] = useState('');
-//     const [managerName, setManagerName] = useState('');
-//     const [managerPhone, setManagerPhone] = useState('');
-//     const [managerImage, setManagerImage] = useState('');
-//     const [managerViber, setManagerViber] = useState('');
-//     const [managerTelegram, setManagerTelegram] = useState('');
-//     const [managerWhatsapp, setManagerWhatsapp] = useState('');
-//     const [category, setCategory] = useState('');
-
-
-
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         if (!file || !title || !salary || !location || 
-//             !roof_type || !auto || !positions_available || !homePrice ||
-//             !home_descr || !work_descr || !grafik || !documents ||
-//             !managerName || !managerPhone || !managerImage || !managerViber ||
-//             !managerTelegram || !managerWhatsapp || !category) {
-//             alert('Please fill in all fields and select a file');
-//             return;
-//         }
-
-//         const data = new FormData();
-//         data.append('file', file);
-//         data.append('title', title);
-//         data.append('salary', salary);
-//         data.append('location', location);
-
-//         data.append('roof_type', roof_type);
-//         data.append('auto', auto);
-//         data.append('positions_available', positions_available);
-//         data.append('homePrice', homePrice);
-//         data.append('home_descr', home_descr);
-//         data.append('work_descr', work_descr);
-//         data.append('grafik', grafik)
-//         data.append('documents', documents)
-//         data.append('manager.name', managerName);
-//         data.append('manager.phone', managerPhone);
-//         data.append('manager.image', managerImage);
-//         data.append('manager.viber', managerViber);
-//         data.append('manager.telegram', managerTelegram);
-//         data.append('manager.whatsapp', managerWhatsapp);
-//         data.append('category', category)
-
-//         try {
-//             let result = await fetch('/api/vacancy', {
-//                 method: "POST",
-//                 body: data
-//             });
-//             result = await result.json();
-//             if (result.success) {
-//                 alert("Successfully Uploaded!!");
-//             } else {
-//                 alert("Failed!!");
-//             }
-//         } catch (error) {
-//             console.log(error);
-//             alert("Failed!!");
-//         }
-//     };
-
-//     return (
-//         <>
-//             <h2>Создать вакансию</h2>
-//             <form onSubmit={handleSubmit}>
-//                 <input
-//                     type='text'
-//                     name='title'
-//                     placeholder='Job Title'
-//                     value={title}
-//                     onChange={(e) => setTitle(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     name='salary'
-//                     placeholder='Salary'
-//                     value={salary}
-//                     onChange={(e) => setSalary(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     name='location'
-//                     placeholder='Location'
-//                     value={location}
-//                     onChange={(e) => setLocation(e.target.value)}
-//                 /><br /><br />
-               
-//                 <input
-//                     type='text'
-//                     placeholder="Пару слов о вакансии"
-//                     name='roof_type'
-//                     onChange={(e) => setRoof_type(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Про транспорт"
-//                     name='auto'
-//                     onChange={(e) => setAuto(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Сколько свободных мест"
-//                     name='positions_available'
-//                     onChange={(e) => setPositions_available(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Стоимость проживания"
-//                     name='homePrice'
-//                     onChange={(e) => setHomePrice(e.target.value)}
-//                 /><br /><br />
-//                 <textarea
-//                 className="textarea textarea-accent w-full "
-//                     placeholder="Описание условий проживания"
-//                     name='home_descr'
-//                     onChange={(e) => setHome_descr(e.target.value)}
-//                 /><br /><br />
-//                 <textarea
-//                 className="textarea textarea-accent w-full "
-//                     type='text'
-//                     placeholder="Развёрнутое описание вакансии"
-//                     name='work_descr'
-//                     onChange={(e) => setWork_descr(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="График работы"
-//                     name='grafik'
-//                     onChange={(e) => setGrafik(e.target.value)}
-//                 /><br /><br />
-//                  <input
-//                     type='text'
-//                     placeholder="Подходящие документы"
-//                     name='documents'
-//                     onChange={(e) => setHDocuments(e.target.value)}
-//                 /><br /><br />
-//                 <h3>Manager Information</h3>
-//                 <input
-//                     type='text'
-//                     placeholder="Имя менеджера"
-//                     name='managerName'
-//                     onChange={(e) => setManagerName(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Телефон менеджера"
-//                     name='managerPhone'
-//                     onChange={(e) => setManagerPhone(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Изображение менеджера"
-//                     name='managerImage'
-//                     onChange={(e) => setManagerImage(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Viber менеджера"
-//                     name='managerViber'
-//                     onChange={(e) => setManagerViber(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Telegram менеджера"
-//                     name='managerTelegram'
-//                     onChange={(e) => setManagerTelegram(e.target.value)}
-//                 /><br /><br />
-//                 <input
-//                     type='text'
-//                     placeholder="Whatsapp менеджера"
-//                     name='managerWhatsapp'
-//                     onChange={(e) => setManagerWhatsapp(e.target.value)}
-//                 /><br /><br />
-//                  <input
-//                     type='text'
-//                     placeholder="Категория"
-//                     name='category'
-//                     onChange={(e) => setCategory(e.target.value)}
-//                 /><br /><br />
-
-
-// <input
-//                     type='file'
-//                     name='file'
-//                     onChange={(e) => setFile(e.target.files?.[0])}
-//                 /><br /><br />
-//                 <button type='submit'>Создать</button>
-//             </form>
-//         </>
-//     );
-// };
-
-// export default UploadImage;
-// UploadImage.js
-
 import { useState } from "react";
+import Image from 'next/image';
+import PreviewVacancy from '@/app/ui/dashboard/FormVacancy/PreviewVacancy'
 
-const UploadImage = () => {
+const FormVacancy = ({manager}) => {
+    console.log(manager)
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState('');
     const [salary, setSalary] = useState('');
@@ -225,19 +17,14 @@ const UploadImage = () => {
     const [work_descr, setWork_descr] = useState('');
     const [grafik, setGrafik] = useState('');
     const [documents, setDocuments] = useState('');
-    const [managerName, setManagerName] = useState('');
-    const [managerPhone, setManagerPhone] = useState('');
-    const [managerImage, setManagerImage] = useState('');
-    const [managerViber, setManagerViber] = useState('');
-    const [managerTelegram, setManagerTelegram] = useState('');
-    const [managerWhatsapp, setManagerWhatsapp] = useState('');
+    const [selectedManager, setSelectedManager] = useState('');
     const [category, setCategory] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!file || !title || !salary || !location || !roof_type || !auto || !positions_available ||
-            !homePrice || !home_descr || !work_descr || !grafik || !documents || !managerName ||
-            !managerPhone || !managerImage || !managerViber || !managerTelegram || !managerWhatsapp || !category) {
+            !homePrice || !home_descr || !work_descr || !grafik || !documents || !selectedManager
+            || !category) {
             alert('Please fill in all fields and select a file');
             return;
         }
@@ -255,12 +42,7 @@ const UploadImage = () => {
         data.append('work_descr', work_descr);
         data.append('grafik', grafik);
         data.append('documents', documents);
-        data.append('managerName', managerName);
-        data.append('managerPhone', managerPhone);
-        data.append('managerImage', managerImage);
-        data.append('managerViber', managerViber);
-        data.append('managerTelegram', managerTelegram);
-        data.append('managerWhatsapp', managerWhatsapp);
+        data.append('manager', selectedManager);
         data.append('category', category);
 
         try {
@@ -279,11 +61,57 @@ const UploadImage = () => {
             alert("Failed to upload");
         }
     };
+    const vacancy = {
+        job_title: title,
+        location,
+        image: file ? URL.createObjectURL(file) : null,
+        positions_available,
+        salary,
+        homePrice,
+        home_descr,
+        work_descr,
+        grafik,
+        documents,
+        category
+    };
 
     return (
         <>
             <h2>Создать вакансию</h2>
+            <div className="grid grid-cols-2 gap-4">
             <form onSubmit={handleSubmit}>
+            <label htmlFor="manager">
+                    <div>Менеджер</div>
+                    <select
+                        className="select w-full max-w-xs"
+                        id="manager"
+                        name="manager"
+                        value={selectedManager}
+                        onChange={(e) => setSelectedManager(e.target.value)}
+                    >
+                        <option disabled value="">Выберите менеджера</option>
+                        {manager.map(m => (
+                            <option key={m._id} value={m._id}>{m.name}</option>
+                        ))}
+                    </select>
+                </label><br /><br />
+                <label htmlFor="category">
+                    <div>Выберите категорию работ</div>
+                    <select
+                        className="select w-md max-w-xs"
+                        id="category"
+                        name="category"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option disabled value="">Выберите категорию</option>
+                        <option value="indor">Внутренняя отделка</option>
+                        <option value="outdoor">Улица/Земляные работы</option>
+                        <option value="krovl">Кровля/Фасады</option>
+                        <option value="mehan">Сварщики/Механики</option>
+
+                    </select>
+                </label><br /><br />
                 <input
                     type='text'
                     name='title'
@@ -335,8 +163,8 @@ const UploadImage = () => {
                     name='home_descr'
                     onChange={(e) => setHome_descr(e.target.value)}
                 /><br /><br />
-                <input
-                    type='text'
+                <textarea
+                
                     placeholder="Развёрнутое описание вакансии"
                     name='work_descr'
                     onChange={(e) => setWork_descr(e.target.value)}
@@ -347,48 +175,13 @@ const UploadImage = () => {
                     name='grafik'
                     onChange={(e) => setGrafik(e.target.value)}
                 /><br /><br />
-                <input
-                    type='text'
+                <textarea
                     placeholder="Подходящие документы"
                     name='documents'
                     onChange={(e) => setDocuments(e.target.value)}
                 /><br /><br />
-                <input
-                    type='text'
-                    placeholder="Имя менеджера"
-                    name='managerName'
-                    onChange={(e) => setManagerName(e.target.value)}
-                /><br /><br />
-                <input
-                    type='text'
-                    placeholder="Телефон менеджера"
-                    name='managerPhone'
-                    onChange={(e) => setManagerPhone(e.target.value)}
-                /><br /><br />
-                <input
-                    type='text'
-                    placeholder="Фото менеджера"
-                    name='managerImage'
-                    onChange={(e) => setManagerImage(e.target.value)}
-                /><br /><br />
-                <input
-                    type='text'
-                    placeholder="Viber менеджера"
-                    name='managerViber'
-                    onChange={(e) => setManagerViber(e.target.value)}
-                /><br /><br />
-                <input
-                    type='text'
-                    placeholder="Telegram менеджера"
-                    name='managerTelegram'
-                    onChange={(e) => setManagerTelegram(e.target.value)}
-                /><br /><br />
-                <input
-                    type='text'
-                    placeholder="Whatsapp менеджера"
-                    name='managerWhatsapp'
-                    onChange={(e) => setManagerWhatsapp(e.target.value)}
-                /><br /><br />
+              
+               
                 <input
                     type='text'
                     placeholder="Категория вакансии"
@@ -402,8 +195,41 @@ const UploadImage = () => {
                 /><br /><br />
                 <button type='submit'>Создать</button>
             </form>
+            <div>
+            <div className="flex flex-wrap justify-center w-full h-max mt-8">
+                <div className="card w-96 glass m-4">
+                    <figure>
+                        {file ? (
+                            <Image
+                                src={URL.createObjectURL(file)}
+                                alt="Uploaded file"
+                                width={400} height={400}
+                            />
+                        ) : (
+                            'No image'
+                        )}
+                    </figure>
+                    <div className="card-body">
+                        <h2 className="card-title font-bold">{title}</h2>
+                        <p className="text-md font-semibold mt-2">📍<i className="bi bi-geo-alt-fill text-red-500"></i> {location}</p>
+                        {roof_type && (
+                            <span className="text-muted text-sm">
+                                ⚙️ <i className="bi bi-dash-lg text-red-700 font-bold">{roof_type}</i>
+                            </span>
+                        )}
+                        <p className="text-sm font-bold">💰 <i className="bi bi-cash ">Зарплата</i>&nbsp; {salary}</p>
+                        <p className="text-sm font-bold">🏠 <i className="bi bi-cash ">Проживание</i>&nbsp; {homePrice}</p>
+                        <p className="text-sm font-bold">🚘 <i className="bi bi-cash ">Транспорт</i>&nbsp; {auto}</p>
+                        <p className="text-sm font-bold">📄 <i className="bi bi-cash ">Документы:</i><br /> {documents}</p>
+                    </div>
+                </div>
+            </div>
+            <PreviewVacancy vacancy={vacancy} />
+
+            </div>
+            </div>
         </>
     );
 };
 
-export default UploadImage;
+export default FormVacancy;
