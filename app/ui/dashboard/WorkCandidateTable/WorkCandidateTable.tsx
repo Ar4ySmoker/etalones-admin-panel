@@ -72,12 +72,12 @@ const WorkCandidateTable = ({ data }) => {
                     ))}
                 </tbody>
             </table>
-            {isModalOpen && selectedCandidate && (
+            {/* {isModalOpen && selectedCandidate && (
                 <ModalForm
                     candidate={selectedCandidate}
                     closeModal={closeModal}
                 />
-            )}
+            )} */}
         </div>
     );
 };

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import BlackListC from '@/app/ui/dashboard/BlackList/BlackListC';
 import BlackListP from '@/app/ui/dashboard/BlackList/BlackListP';
+import GetMongoImage from '@/app/ui/dashboard/GetMongoImage/GetMongoImage'
+import VacancyCard from '@/app/ui/dashboard/VacancyCard/VacancyCard';
 
 async function fetchCandidates(status) {
   try {
@@ -74,8 +76,7 @@ const BlackListPage = () => {
       <BlackListC data={dataBLC} />
       <div>Заказчики</div>
       <BlackListP data={dataBLP} />
-
-
+<VacancyCard/>
     </div>
   );
 };

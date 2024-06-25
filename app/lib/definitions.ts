@@ -34,6 +34,7 @@ export type Candidate = {
   langueName?: string;
   createdAt?: Date | string;
   comments?: Comment[];
+  source?: string;
 };
 
 // export type Candidate = {

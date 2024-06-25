@@ -123,33 +123,34 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             const formData = new FormData(e.target);
 
         const body = {
-          name: formData.get('name') || candidate.name, // Добавляем проверку на пустое значение
-          age: formData.get('age') || candidate.age,
-          ageNum: formData.get('ageNum') || candidate.ageNum,
-          phone: formData.get('phone') || candidate.phone,
+          source:"",
+          name: formData.get('name') || candidate?.name, // Добавляем проверку на пустое значение
+          age: formData.get('age') || candidate?.age,
+          ageNum: formData.get('ageNum') || candidate?.ageNum,
+          phone: formData.get('phone') || candidate?.phone,
           additionalPhones: additionalPhones.length ? additionalPhones.filter(phone => phone.trim() !== '') : candidate.additionalPhones,
           professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
-          locations: combinedLocation || candidate.locatons,
+          locations: combinedLocation || candidate?.locatons,
           documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
           drivePermis: selectedDrive.map(d => d.value).join(', ') || candidate.drivePermis,
-          leaving: formData.get('leaving') || candidate.leaving,
-          dateArrival: formData.get('dateArrival') || candidate.dateArrival,
-          cardNumber: formData.get('cardNumber') || candidate.cardNumber,
+          leaving: formData.get('leaving') || candidate?.leaving,
+          dateArrival: formData.get('dateArrival') || candidate?.dateArrival,
+          cardNumber: formData.get('cardNumber') || candidate?.cardNumber,
           // workHours: formData.get('workHours') || candidate.workHours,
           langue: {
-            name: formData.get('langue') || candidate.langue.name,
-            level: formData.get('langueLvl') || candidate.langue.Lvl },
-          status: formData.get('status') || candidate.status,
-          citizenship: formData.get('citizenship') || candidate.citizenship,
+            name: formData.get('langue') || candidate?.langue?.name,
+            level: formData.get('langueLvl') || candidate?.langue?.Lvl },
+          status: formData.get('status') || candidate?.status,
+          citizenship: formData.get('citizenship') || candidate?.citizenship,
           statusFromPartner:{
-            status: formData.get('statusFromPartner') || candidate.statusFromPartner.status,
-            from: formData.get('from') || candidate.statusFromPartner.from,
-            to:formData.get('to') || candidate.statusFromPartner.to,
-            dismissalDate: formData.get('dismissalDate') || candidate.statusFromPartner.dismissalDate
+            status: formData.get('statusFromPartner') || candidate?.statusFromPartner?.status,
+            from: formData.get('from') || candidate?.statusFromPartner?.from,
+            to:formData.get('to') || candidate?.statusFromPartner?.to,
+            dismissalDate: formData.get('dismissalDate') || candidate?.statusFromPartner?.dismissalDate
           },
-          partners: formData.get('partners') || candidate.partners,
-          manager: formData.get('manager') || candidate.manager,
-          comment: formData.get('comment') || candidate.comment };
+          partners: formData.get('partners') || candidate?.partners,
+          manager: formData.get('manager') || candidate?.manager,
+          comment: formData.get('comment') || candidate?.comment }
         try {
             const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
               // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
@@ -195,7 +196,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     return (
         <>
         <div className="">
-            <h1 className="font-bold py-10 text-2xl">Update Candidate</h1>
+            <h1 className="font-bold py-10 text-2xl">Обновить кандидата</h1>
         </div>
         <form onSubmit={handleSubmit} >
         <div className='grid grid-cols-3'>
@@ -230,7 +231,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
   <div>Телефон</div>
 <input className="input input-bordered input-accent w-full max-w-xs"
          id="phone" name="phone" type="text" placeholder="+373696855446" defaultValue={candidate.phone} />
-                <button type="button" className="btn btn-accent" onClick={handleAdditionalPhone}><strong>+</strong></button>
+                <button type="button" className="btn btn-accent" onClick={addAdditionalPhone}><strong>+</strong></button>
         </label>
         {showAdditionalPhone && (
               <>
@@ -255,7 +256,6 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                 <button type="button" onClick={addAdditionalPhone}>Добавить ещё один доп. телефон</button>
               </>
             )}
-            <button type="button" onClick={handleAdditionalPhone}>Добавить доп. телефон</button>
 
 
           <label htmlFor="locations">
@@ -342,7 +342,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               </label>
               
               <select className="select w-full" id="statusFromPartner" name="statusFromPartner" 
-              defaultValue={candidate.statusFromPartner.status}>
+              defaultValue={candidate?.statusFromPartner?.status}>
                 {statuses.map(status => (
                   <option key={status.value} value={status.value}>{status.label}</option>
                 ))}
@@ -410,7 +410,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           name="manager" id="manager">
          <option disabled selected value={null}>Выберите менеджера</option>
           {managers.map(m => (
-            <option key={m._id} value={m._id}>{m.name}</option>
+            <option key={m._id} value={m._id}>{m?.name}</option>
           ))}
         </select>
         </label>

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { type } from "os";
+import { title } from "process";
 
 const managerShema = new mongoose.Schema({
   name:{
@@ -115,6 +116,15 @@ type: String,
 { timestamps: true })
 
 const candidateSchema = new mongoose.Schema({
+  source:{
+type: String
+  },
+  time:{
+    type: String,  
+    },
+    currentPage:{
+  type: String,
+    },
   name: {
 type: String,
   },
@@ -259,16 +269,7 @@ const commentMngSchema = new mongoose.Schema({
     required: true
   }
 }, { timestamps: true }); 
-// const langueShema = new mongoose.Schema({
-//   type:String
-// })
-// const locationSchema = new mongoose.Schema({
-//   name: {
-// type: String,
-// unique: true,
-//   }
-// }
-// )
+
 const professionSchema = new mongoose.Schema({
   name: {
 type: String,
@@ -363,10 +364,66 @@ const vacancyShema = new mongoose.Schema({
   workPrice:{
     type: String
   },
-  image:{
-    type: String
-  }
+  image: {
+    name: String,
+    data: Buffer,
+    contentType: String
+}
 })
+const vacancyOnServerShema = new mongoose.Schema({
+  image: {
+    name: String,
+    data: Buffer,
+    contentType: String
+},
+  title:{
+  type: String
+},
+  roof_type:{
+  type: String
+},
+  location:{
+  type:String
+},
+  auto:{
+type: String
+},
+  positions_available:{
+  type:String
+},
+  salary:{
+  type:String
+},
+  homePrice:{
+  type:String
+},
+  home_descr:{
+  type:String
+},
+  work_descr:{
+  type:String
+},
+  grafik:{
+  type:String
+},
+  documents:{
+  type:String
+},
+  manager:{
+  name:String,
+  phone:String,
+  image:String,
+  viber:String,
+  telegram:String,
+  whatsapp:String,
+},
+category:{
+type: String
+}
+
+})
+
+
 // const invoicesShema = new mongoose.Schema({
 //   invoiceNumber: {
 //     type: String
@@ -415,13 +472,11 @@ const vacancyShema = new mongoose.Schema({
 //     type: Number
 //   }
 // }, { timestamps: true });
-
+export const VacancyOnServer = mongoose.models.VacancyOnServer || mongoose.model("VacancyOnServer", vacancyOnServerShema)
 export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vacancyShema)
 export const Invoices = mongoose.models.Invoices || mongoose.model("Invoices", invoicesShema);
-// export const Location = mongoose.models.Location || mongoose.model("Location", locationSchema);
 export const Profession = mongoose.models.Profession || mongoose.model("Profession", professionSchema);
 export const Document = mongoose.models.Document || mongoose.model("Document", dodumentShema);
-// export const Langue = mongoose.models.Langue || mongoose.model("Langue", langueShema)
 export const Status = mongoose.models.Status || mongoose.model("Status", statusShema)
 export const Candidate = mongoose.models.Candidate || mongoose.model("Candidate", candidateSchema);
 export const Manager = mongoose.models.Manager || mongoose.model("Manager", managerShema)
