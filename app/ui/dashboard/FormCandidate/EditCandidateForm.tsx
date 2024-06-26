@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Axios from "axios";
 import { MultiSelect } from "react-multi-select-component";
-import TextInput from "../../inputs/TextInput/TextInput";
 
 const drivePermis = [
   { label: "В", value: "B" },
@@ -179,6 +178,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     const handleAdditionalPhone = () => {
       setAdditionalPhone(true);
     };
+    console.log(handleAdditionalPhone)
     const addAdditionalPhone = () => {
       setAdditionalPhones([...additionalPhones, ""]);
     };

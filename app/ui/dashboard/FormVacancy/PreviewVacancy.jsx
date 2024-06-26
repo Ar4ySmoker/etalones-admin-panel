@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import {Viber} from '@/app/ui/svg/viber'
-import {Telegram} from '@/app/ui/svg/telegram'
-import {WhatsApp} from '@/app/ui/svg/whatsapp'
+// import {Viber} from '@/app/ui/svg/viber'
+// import {Telegram} from '@/app/ui/svg/telegram'
+// import {WhatsApp} from '@/app/ui/svg/whatsapp'
 const PreviewVacancy = ({ vacancy }) => {
   const {
     job_title,
@@ -14,12 +14,6 @@ const PreviewVacancy = ({ vacancy }) => {
     work_descr,
     grafik,
     documents,
-    managerImg,
-    contact,
-    viber,
-    telegram,
-    whatsapp,
-    category
   } = vacancy;
 
   const documentsArray = documents ? documents.split(';') : [];

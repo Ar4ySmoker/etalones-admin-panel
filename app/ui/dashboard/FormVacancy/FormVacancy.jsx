@@ -56,6 +56,8 @@ const FormVacancy = ({manager}) => {
             } else {
                 alert("Failed to upload");
             }
+            router.refresh();
+            router.push("/dashboard/vacancy");
         } catch (error) {
             console.error("Error uploading vacancy:", error);
             alert("Failed to upload");
@@ -115,21 +117,21 @@ const FormVacancy = ({manager}) => {
                 <input
                     type='text'
                     name='title'
-                    placeholder='Job Title'
+                    placeholder='Заголовок/ Название вакансии'
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 /><br /><br />
                 <input
                     type='text'
                     name='salary'
-                    placeholder='Salary'
+                    placeholder='Зарплата'
                     value={salary}
                     onChange={(e) => setSalary(e.target.value)}
                 /><br /><br />
                 <input
                     type='text'
                     name='location'
-                    placeholder='Location'
+                    placeholder='Город, страна'
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                 /><br /><br />
@@ -157,37 +159,48 @@ const FormVacancy = ({manager}) => {
                     name='homePrice'
                     onChange={(e) => setHomePrice(e.target.value)}
                 /><br /><br />
-                <input
-                    type='text'
+                <textarea
+                className="textarea textarea-accent md:w-[300px] "
                     placeholder="Описание условий проживания"
                     name='home_descr'
                     onChange={(e) => setHome_descr(e.target.value)}
                 /><br /><br />
                 <textarea
-                
+                                className="textarea textarea-accent md:w-[300px] "
                     placeholder="Развёрнутое описание вакансии"
                     name='work_descr'
                     onChange={(e) => setWork_descr(e.target.value)}
                 /><br /><br />
-                <input
+                <textarea
+                className="textarea textarea-accent  "
                     type='text'
                     placeholder="График работы"
                     name='grafik'
                     onChange={(e) => setGrafik(e.target.value)}
                 /><br /><br />
                 <textarea
+                                className="textarea textarea-accent  "
                     placeholder="Подходящие документы"
                     name='documents'
                     onChange={(e) => setDocuments(e.target.value)}
                 /><br /><br />
               
                
-                <input
+                {/* <input
                     type='text'
                     placeholder="Категория вакансии"
                     name='category'
                     onChange={(e) => setCategory(e.target.value)}
-                /><br /><br />
+                /><br /><br /> */}
+                <select name="category" id="category"
+                onChange={(e) => setCategory(e.target.value)}>
+<option selected hidden disabled>
+            Выберите категорию
+          </option>                    <option value="indor">Внутриняя отделка</option>
+                    <option value="outdor">Улица/Земляные работы</option>
+                    <option value="krovl">Кровля/Фасады</option>
+                    <option value="mehan">Сварка/Механик</option>
+                </select>
                 <input
                     type='file'
                     name='file'

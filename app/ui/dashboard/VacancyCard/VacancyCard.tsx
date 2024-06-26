@@ -1,8 +1,10 @@
+'use client'
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import {Viber} from '@/app/ui/svg/viber'
-import {Telegram} from '@/app/ui/svg/telegram'
-import {WhatsApp} from '@/app/ui/svg/whatsapp'
+// import {Viber} from '@/app/ui/svg/viber'
+// import {Telegram} from '@/app/ui/svg/telegram'
+// import {WhatsApp} from '@/app/ui/svg/whatsapp'
+import Link from 'next/link';
 
 
 function VacancyCard() {
@@ -27,7 +29,7 @@ function VacancyCard() {
 
     return (
 <>
-        <div className="flex flex-wrap justify-center w-full">
+        {/* <div className="flex flex-wrap justify-center w-full">
         {vacancies.map((vacancy) => (
             <div key={vacancy._id} className="card w-96 glass m-4">
                 <figure>
@@ -62,7 +64,7 @@ function VacancyCard() {
                 </div>
             </div>
         ))}
-    </div>
+    </div> */}
 
     
         <div className="overflow-x-auto flex flex-col items-center">
@@ -77,6 +79,8 @@ function VacancyCard() {
                             <th>Salary</th>
                             <th>Location</th>
                             <th>Image</th>
+                            <th>Update</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -87,14 +91,19 @@ function VacancyCard() {
                                 <td>{vacancy.location}</td>
                                 <td>
                                     {vacancy.image ? (
-                                        <img
+                                        <Image
                                         src={`data:${vacancy.image.contentType};base64,${Buffer.from(vacancy.image.data).toString('base64')}`}                                            alt={vacancy.image.name}
-                                            style={{ width: '50px', height: '50px' }}
+                                            width={50} height={50}
                                         />
                                     ) : (
                                         'No image'
                                     )}
                                 </td>
+                                <td> <Link href={`/dashboard/vacancy/edit/${vacancy._id}`}>
+                        <button className="btn btn-sm btn-outline btn-error w-full">
+                          Редактировать
+                        </button>
+                      </Link></td>
                             </tr>
                         ))}
                     </tbody>

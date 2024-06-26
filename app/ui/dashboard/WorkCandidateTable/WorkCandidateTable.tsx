@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import ModalForm from '@/app/ui/dashboard/ModalForm/ModalForm';
+// import ModalForm from '@/app/ui/dashboard/ModalForm/ModalForm';
 
 const WorkCandidateTable = ({ data }) => {
-    const [selectedCandidate, setSelectedCandidate] = useState<any | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [selectedCandidate, setSelectedCandidate] = useState<any | null>(null);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
 
     const fetchCandidateData = async (candidateId: string) => {
         const response = await fetch(`/api/candidates/${candidateId}`);
@@ -14,16 +14,16 @@ const WorkCandidateTable = ({ data }) => {
         return result.candidate;
     };
 
-    const openModal = async (candidateId: string) => {
-        const candidate = await fetchCandidateData(candidateId);
-        setSelectedCandidate(candidate);
-        setIsModalOpen(true);
-    };
+    // const openModal = async (candidateId: string) => {
+    //     const candidate = await fetchCandidateData(candidateId);
+    //     setSelectedCandidate(candidate);
+    //     setIsModalOpen(true);
+    // };
 
-    const closeModal = () => {
-        setSelectedCandidate(null);
-        setIsModalOpen(false);
-    };
+    // const closeModal = () => {
+    //     setSelectedCandidate(null);
+    //     setIsModalOpen(false);
+    // };
 
     return (
         <div className="overflow-x-auto">
@@ -61,12 +61,12 @@ const WorkCandidateTable = ({ data }) => {
                                 <Link href={`/dashboard/candidates/${candidate._id}`}>
                                     <button className="btn btn-sm btn-success w-max">Подробнее</button>
                                 </Link>
-                                <button
+                                {/* <button
                                     className="btn btn-sm btn-warning w-max ml-2"
                                     onClick={() => openModal(candidate._id)}
                                 >
                                     Выставить счёт
-                                </button>
+                                </button> */}
                             </td>
                         </tr>
                     ))}

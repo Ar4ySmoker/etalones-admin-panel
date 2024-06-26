@@ -1,4 +1,4 @@
-import { LocationField, ProfessionField, LangueField, ManagerField, StatusField, PartnersField } from "./definitions";
+import {  ProfessionField, ManagerField, StatusField, PartnersField } from "./definitions";
 import {  Profession,  Manager, Status, Partner } from "./models";
 import { connectToDB } from "./utils";
 
