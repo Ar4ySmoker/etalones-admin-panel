@@ -346,7 +346,6 @@ const invoicesShema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-
 const vacancyShema = new mongoose.Schema({
   title:{
     type: String
