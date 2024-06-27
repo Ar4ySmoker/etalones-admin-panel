@@ -28,6 +28,6 @@ export default async function EditVacancy({ params }) {
     const managers = await allManagers.json();
     console.log("Будем посмотреть0000000000", vacancy)    
     return <EditVacancyForm 
-        id={id} vacancy={vacancy} managers={managers}   
+        vacancy={vacancy} managers={managers}   
     />;
 }
