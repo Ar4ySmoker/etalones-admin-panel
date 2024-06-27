@@ -31,20 +31,28 @@ const PreviewVacancy = ( { vacancy, file } ) => {
           </div>
           <div className='md:p-10'>
           {file ? (
-              <Image
-                src={URL.createObjectURL(file)}
-                width={300}
-                height={300}
-                alt={job_title || 'Uploaded Image'}
-              />
-            ) : (
-              <Image
-                src={`data:${image.contentType};base64,${Buffer.from(image.data).toString('base64')}`}
-                width={300}
-                height={300}
-                alt={job_title || 'Default Image'}
-              />
-            )}
+  <Image
+    src={URL.createObjectURL(file)}
+    width={300}
+    height={300}
+    alt={vacancy.title || 'Uploaded Image'}
+  />
+) : vacancy.image && vacancy.image.data ? (
+  <Image
+    src={`data:${vacancy.image.contentType};base64,${Buffer.from(vacancy.image.data).toString('base64')}`}
+    width={300}
+    height={300}
+    alt={vacancy.title || 'Default Image'}
+  />
+) : (
+  <Image
+    src='/placeholder-image.png' // Замените на путь к вашему placeholder изображению
+    width={300}
+    height={300}
+    alt='No Image'
+  />
+)}
+
           </div>
         </div>
         <div className='flex flex-wrap gap-5'>

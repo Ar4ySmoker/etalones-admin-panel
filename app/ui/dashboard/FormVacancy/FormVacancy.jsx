@@ -2,7 +2,8 @@
 import { useState } from "react";
 import Image from 'next/image';
 import PreviewVacancy from '@/app/ui/dashboard/FormVacancy/PreviewVacancy'
-
+import { useRouter } from "next/navigation";
+import TextInput from "../../inputs/TextInput/TextInput";
 const FormVacancy = ({manager}) => {
     console.log(manager)
     const [file, setFile] = useState(null);
@@ -76,12 +77,17 @@ const FormVacancy = ({manager}) => {
         documents,
         category
     };
-
+const router = useRouter()
     return (
         <>
             <h2>Создать вакансию</h2>
             <div className="grid grid-cols-2 gap-4">
             <form onSubmit={handleSubmit}>
+            <input
+                    type='file'
+                    name='file'
+                    onChange={(e) => setFile(e.target.files?.[0])}
+                />
             <label htmlFor="manager">
                     <div>Менеджер</div>
                     <select
@@ -96,7 +102,7 @@ const FormVacancy = ({manager}) => {
                             <option key={m._id} value={m._id}>{m.name}</option>
                         ))}
                     </select>
-                </label><br /><br />
+                </label>
                 <label htmlFor="category">
                     <div>Выберите категорию работ</div>
                     <select
@@ -113,77 +119,80 @@ const FormVacancy = ({manager}) => {
                         <option value="mehan">Сварщики/Механики</option>
 
                     </select>
-                </label><br /><br />
-                <input
-                    type='text'
-                    name='title'
-                    placeholder='Заголовок/ Название вакансии'
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                /><br /><br />
-                <input
+                </label>
+                <TextInput 
+                placeholder="Каменьшик"
+                title="Заголовок вакансии"
+                defaultValue={vacancy.title} type='text' name='title' onChange={(e) => setTitle(e.target.value)}/>
+                <TextInput 
+                title="Зарплата"
                     type='text'
                     name='salary'
                     placeholder='Зарплата'
                     value={salary}
                     onChange={(e) => setSalary(e.target.value)}
-                /><br /><br />
-                <input
+                />
+                <TextInput 
+                title="Город"
                     type='text'
                     name='location'
                     placeholder='Город, страна'
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                /><br /><br />
-                <input
+                />
+                <TextInput 
+                title="О вакансии коротко"
                     type='text'
                     placeholder="Пару слов о вакансии"
                     name='roof_type'
                     onChange={(e) => setRoof_type(e.target.value)}
-                /><br /><br />
-                <input
+                />
+                <TextInput 
+                title="Транспорт"
                     type='text'
-                    placeholder="Про транспорт"
+                    placeholder="Нужен свой/Беспланто"
                     name='auto'
                     onChange={(e) => setAuto(e.target.value)}
-                /><br /><br />
-                <input
+                />
+                <TextInput 
+                title="Сколько нужно людей"
                     type='text'
                     placeholder="Сколько свободных мест"
                     name='positions_available'
                     onChange={(e) => setPositions_available(e.target.value)}
-                /><br /><br />
-                <input
+                />
+                <TextInput 
+                title="Стоимость проживания"
                     type='text'
-                    placeholder="Стоимость проживания"
+                    placeholder="300 еаро в месяц"
                     name='homePrice'
                     onChange={(e) => setHomePrice(e.target.value)}
                 /><br /><br />
                 <textarea
-                className="textarea textarea-accent md:w-[300px] "
-                    placeholder="Описание условий проживания"
+                className="textarea textarea-accent md:w-[300px] h-[300px] "
+                    placeholder="Описание условий проживания, для переноса текста используйте символ ;"
                     name='home_descr'
                     onChange={(e) => setHome_descr(e.target.value)}
-                /><br /><br />
+                />
                 <textarea
-                                className="textarea textarea-accent md:w-[300px] "
-                    placeholder="Развёрнутое описание вакансии"
+                                className="textarea textarea-accent md:w-[300px] h-[300px] "
+                    placeholder="Развёрнутое описание вакансии, для переноса текста используйте символ ;"
                     name='work_descr'
                     onChange={(e) => setWork_descr(e.target.value)}
-                /><br /><br />
+                />
                 <textarea
-                className="textarea textarea-accent  "
+                className="textarea textarea-accent md:w-[300px] h-[100px] "
                     type='text'
                     placeholder="График работы"
                     name='grafik'
                     onChange={(e) => setGrafik(e.target.value)}
-                /><br /><br />
+                />
                 <textarea
-                                className="textarea textarea-accent  "
+                                className="textarea textarea-accent md:w-[300px] h-[100px] "
                     placeholder="Подходящие документы"
                     name='documents'
                     onChange={(e) => setDocuments(e.target.value)}
-                /><br /><br />
+                />
               
                
                 {/* <input
@@ -201,11 +210,7 @@ const FormVacancy = ({manager}) => {
                     <option value="krovl">Кровля/Фасады</option>
                     <option value="mehan">Сварка/Механик</option>
                 </select>
-                <input
-                    type='file'
-                    name='file'
-                    onChange={(e) => setFile(e.target.files?.[0])}
-                /><br /><br />
+                
                 <button type='submit'>Создать</button>
             </form>
             <div>
@@ -237,7 +242,7 @@ const FormVacancy = ({manager}) => {
                     </div>
                 </div>
             </div>
-            <PreviewVacancy vacancy={vacancy} />
+            <PreviewVacancy vacancy={vacancy}  file={file}/>
 
             </div>
             </div>
