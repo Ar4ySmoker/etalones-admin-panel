@@ -16,7 +16,6 @@ export async function GET(request, { params }) {
   const { id } = params;
   await connectToDB();
   const partner = await Partner.findOne({ _id: id }).populate(['manager',]);
-  console.log("PARTNER", partner); // Добавьте этот лог для отладки
   return NextResponse.json({ partner }, { status: 200 });
 }
 

@@ -1,5 +1,4 @@
 const BlackListP = ({ data }) => {
-    console.log("Полученные данные партнёров:", data); // Добавляем лог для отладки
     if (!data || !Array.isArray(data)) {
       return <div>Нет данных для отображения</div>;
     }

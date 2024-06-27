@@ -7,7 +7,6 @@ export const GET  = async()=>{
   try{
     await connectToDB();
     const partners = await Partner.find();
-    console.log("the partners",Partner)
     return new NextResponse(JSON.stringify(partners), {status:200})
   }
   catch(error){

@@ -40,7 +40,6 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     let country = await Axios.get(
       "https://countriesnow.space/api/v0.1/countries"
     );
-    console.log(country);
     setCountries(country.data.data);
   };
 
@@ -178,7 +177,6 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     const handleAdditionalPhone = () => {
       setAdditionalPhone(true);
     };
-    console.log(handleAdditionalPhone)
     const addAdditionalPhone = () => {
       setAdditionalPhones([...additionalPhones, ""]);
     };

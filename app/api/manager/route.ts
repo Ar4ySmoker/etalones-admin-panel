@@ -6,7 +6,6 @@ export const GET = async() =>{
     try{
 await connectToDB()
 const manager = await Manager.find()
-console.log("manager is test:", manager)
 return new NextResponse(JSON.stringify(manager), {status:200})
 
     }

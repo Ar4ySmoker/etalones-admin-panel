@@ -12,7 +12,6 @@ async function fetchCandidates(status, managerName) {
     }
 
     const data = await response.json();
-    console.log("Отфильтрованные кандидаты", data);
     return data.candidates;
   } catch (error) {
     console.error('Error fetching candidates:', error);

@@ -60,7 +60,6 @@ export const updateCandidate = async (formData) => {
       throw new Error("No matching document found to update");
     }
 
-    console.log("Updated candidate successfully:", result);
     
     return result; // Возвращает успешный результат для дальнейшего использования
   } catch (err) {

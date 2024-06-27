@@ -82,7 +82,6 @@ export const PUT = async (request, { params }) => {
  
 export async function GET(request, { params }) {
     const { id } = params;
-    console.log(`Fetching vacancy with ID: ${id}`); // Лог ID
     await connectToDB();
     try {
         const vacancy = await VacancyOnServer.findById(id).populate('manager');
@@ -90,7 +89,6 @@ export async function GET(request, { params }) {
             console.error('Vacancy not found');
             return NextResponse.json({ message: "Vacancy not found" }, { status: 404 });
         }
-        console.log('Vacancy found:', vacancy); // Лог данных вакансии
         return NextResponse.json({ vacancy }, { status: 200 });
     } catch (error) {
         console.error('Error fetching vacancy:', error); // Лог ошибки

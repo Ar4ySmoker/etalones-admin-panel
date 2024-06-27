@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 // import {Telegram} from '@/app/ui/svg/telegram'
 // import {WhatsApp} from '@/app/ui/svg/whatsapp'
 import Link from 'next/link';
+import { Checkbox } from 'react-daisyui';
 
 
 function VacancyCard() {
@@ -28,64 +29,35 @@ function VacancyCard() {
     }, []);
 
     return (
-<>
-        {/* <div className="flex flex-wrap justify-center w-full">
-        {vacancies.map((vacancy) => (
-            <div key={vacancy._id} className="card w-96 glass m-4">
-                <figure>
-                {vacancy.image ? (
-                                        <Image
-                                        src={`data:${vacancy.image.contentType};base64,${Buffer.from(vacancy.image.data).toString('base64')}`}                                            alt={vacancy.image.name}
-                                           width={400} height={400}
-                                        />
-                                    ) : (
-                                        'No image'
-                                    )}                </figure>
-                <div className="card-body">
-                    <h2 className="card-title font-bold">{vacancy.title}</h2>
-                    <p className="text-md font-semibold mt-2">📍<i className="bi bi-geo-alt-fill text-red-500"></i> {vacancy.location}</p>
-                    {vacancy.roof_type && (
-    <span className="text-muted text-sm">
-      ⚙️ <i className="bi bi-dash-lg text-red-700 font-bold">{vacancy.roof_type}</i>
-    </span>
-  )}                        <p className="text-sm font-bold">💰 <i className="bi bi-cash ">Зарплата</i>&nbsp; {vacancy.salary}</p>
-                    <p className="text-sm font-bold">🏠 <i className="bi bi-cash ">Проживание</i>&nbsp; {vacancy.homePrice}</p>
-                    <p className="text-sm font-bold">🚘 <i className="bi bi-cash ">Транспорт</i>&nbsp; {vacancy.auto}</p>
-                    <p className="text-sm font-bold">📄 <i className="bi bi-cash ">Документы:</i><br /> {vacancy.documents}</p>
-
-                    <div className="card-actions justify-around items-center mt-4">
-                        <a href={vacancy.manager?.viber} target='blank'><Viber width={30} height={30}/></a>
-                        <a href={vacancy.manager?.telegram} target='blank'><Telegram width={30} height={30}/></a>
-                        <a href={vacancy.manager?.whatsapp} target='blank'><WhatsApp width={30} height={30}/></a>
-                        <div className="self-end">
-
-</div>
-                    </div>
-                </div>
-            </div>
-        ))}
-    </div> */}
-
-    
+<>    
         <div className="overflow-x-auto flex flex-col items-center">
-            <h2 className="text-2xl font-bold mb-4">Vacancies</h2>
+            <h2 className="text-2xl font-bold mb-4">Список вакансий на сайте</h2>
             {isLoading ? (
-                <p><span className="loading loading-spinner loading-md"></span> Loading...</p>
+                <p><span className="loading loading-spinner loading-md"></span> Загрузка...</p>
             ) : (
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Salary</th>
-                            <th>Location</th>
-                            <th>Image</th>
-                            <th>Update</th>
-
+                            <th>Владелец</th>
+                            <th>Заголовок</th>
+                            <th>Зарплата</th>
+                            <th>Местоположение</th>
+                            <th>Картинка</th>
+                            <th>Обновить</th>
                         </tr>
                     </thead>
                     <tbody>
                         {vacancies.map((vacancy) => (
                             <tr key={vacancy._id}>
+                                <td className='flex flex-col gap-3'>
+                                    <div className='badge badge-ghost badge-md w-[150px] font-semibold'>{vacancy.manager.name}</div>
+                                    <div className='badge badge-ghost badge-sm w-[150px] flex justify-between'><p>Опубликовано</p><Checkbox/></div>
+                                    <div className='badge badge-ghost badge-sm w-[150px] flex justify-between'>Срочно<Checkbox/></div>
+                                    <div className='badge badge-ghost badge-sm w-[150px] flex justify-between'>Осталось 1 место<Checkbox/></div>
+
+
+
+                                </td>
                                 <td>{vacancy.title}</td>
                                 <td>{vacancy.salary}</td>
                                 <td>{vacancy.location}</td>
@@ -93,14 +65,14 @@ function VacancyCard() {
                                     {vacancy.image ? (
                                         <Image
                                         src={`data:${vacancy.image.contentType};base64,${Buffer.from(vacancy.image.data).toString('base64')}`}                                            alt={vacancy.image.name}
-                                            width={50} height={50}
+                                            width={150} height={150}
                                         />
                                     ) : (
                                         'No image'
                                     )}
                                 </td>
                                 <td> <Link href={`/dashboard/vacancy/edit/${vacancy._id}`}>
-                        <button className="btn btn-sm btn-outline btn-error w-full">
+                        <button className="btn btn-sm btn-outline btn-error w-max">
                           Редактировать
                         </button>
                       </Link></td>

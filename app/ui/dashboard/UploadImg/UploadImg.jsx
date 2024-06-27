@@ -6,7 +6,6 @@ const UploadImage = () => {
     const [file, setFile] = useState();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(file)
         if(!file) {
             alert('Please Select a File');
             return;

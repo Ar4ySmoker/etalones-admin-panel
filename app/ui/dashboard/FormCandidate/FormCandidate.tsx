@@ -47,7 +47,6 @@ export default function Form({ professions,  manager, partners }) {
     let country = await Axios.get(
       "https://countriesnow.space/api/v0.1/countries"
     );
-    console.log(country);
     setCountries(country.data.data);
   };
 
@@ -115,8 +114,7 @@ export default function Form({ professions,  manager, partners }) {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Submitting with documents:', documentEntries);
-    console.log('Submitting with PROFESSIONS:', professionEntries);
+    
 
     const formData = new FormData(event.target);
     const body = {

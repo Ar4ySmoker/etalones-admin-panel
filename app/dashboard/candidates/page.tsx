@@ -187,7 +187,7 @@ function CandidatesPage() {
                     <div className="flex items-center gap-3">
                       <div>
                         <div className="font-bold">
-                          {renderProfessions(candidate.professions)}{" "}
+                          {renderProfessions(candidate.professions)}
                         </div>
                       </div>
                     </div>

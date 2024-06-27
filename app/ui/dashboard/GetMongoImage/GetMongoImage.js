@@ -10,7 +10,6 @@ const GetMongoImage = () => {
             try{
                 const response = await fetch('/api/upload-mongo-image');
                 const result = await response.json();
-                console.log('Fetched images:', result)
                 if(result.success){
                     setImages(result.images);
                 }

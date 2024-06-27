@@ -73,9 +73,8 @@ const router = useRouter()
         <>
             <h2>Изменить вакансию</h2>
             <div >
-                <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-                <div>
-                    <div className="flex flex-wrap justify-center w-full h-max mt-8">
+                <form onSubmit={handleSubmit} >
+                <div className="flex flex-wrap justify-center w-full h-max mt-8">
                         <div className="card w-96 glass m-4">
                             <figure>
                             {file ? (
@@ -119,20 +118,20 @@ const router = useRouter()
                                 <TransparentInput className='font-bold bg-transparent'
                                         defaultValue={vacancy.auto} type='text' name='auto' onChange={(e) => setAuto(e.target.value)}/>
                                  </p>
-                                <p className="text-sm font-bold">📄 <i className="bi bi-cash ">Документы:</i><br />
-                                <TransparentInput className='font-bold bg-transparent'
-                                        defaultValue={vacancy.documents} type='text' name='documents' onChange={(e) => setDocuments(e.target.value)}/>
-                                 </p>
+                                 <p className="text-sm font-bold">📄 <i className="bi bi-cash ">Документы:</i><br /> {documents}</p>
+
                             </div>
                         </div>
                     </div>
-                    <PreviewVacancy vacancy={vacancy}  file={file} />
-                </div>
-                <div>
+                    <div className="divider"></div>
+                <div className="grid grid-cols-2 gap-4">
+                <PreviewVacancy vacancy={vacancy}  file={file} />
+                   
+                <div className="grid items-end">
                     <label htmlFor="manager">
                         <div>Менеджер {vacancy.manager.name}</div>
                         <select
-                            className="select w-full max-w-xs"
+                           className="select select-bordered select-sm w-full max-w-xs"
                             id="manager"
                             name="manager"
                             value={selectedManager}
@@ -143,61 +142,70 @@ const router = useRouter()
                                 <option key={m._id} value={m._id}>{m.name}</option>
                             ))}
                         </select>
-                    </label><br /><br />
-                    <label htmlFor="category">
-                        <div>Выберите категорию работ</div>
-                        <select
-                            className="select w-md max-w-xs"
-                            id="category"
-                            name="category"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                        >
-                            <option disabled>Выберите категорию</option>
-                            <option value="indor">Внутренняя отделка</option>
-                            <option value="outdoor">Улица/Земляные работы</option>
-                            <option value="krovl">Кровля/Фасады</option>
-                            <option value="mehan">Сварщики/Механики</option>
-                        </select>
-                    </label><br /><br /> 
+                    </label>
+                    <input
+                     className="file-input file-input-bordered  w-full max-w-xs"
+                        type='file'
+                        name='file'
+                        onChange={handleFileChange}
+                    />
+                   
                     <TextInput title="Сколько свободных мест" type='text'
                         placeholder="Сколько свободных мест"
                         name='positions_available'
                         value={positions_available}
                         onChange={(e) => setPositions_available(e.target.value)}/>                 
                     
-                    
-                    <textarea
-                        className="textarea textarea-accent md:w-[300px]"
+                    <label htmlFor="">
+                        <div>Описание условий проживания</div>
+                        <textarea
+                        className="textarea textarea-accent md:w-[300px] h-[200px] "
                         placeholder="Описание условий проживания"
                         name='home_descr'
                         value={home_descr}
                         onChange={(e) => setHome_descr(e.target.value)}
-                    /><br /><br />
-                    <textarea
-                        className="textarea textarea-accent md:w-[300px]"
+                    />
+                    </label>
+                    <label htmlFor="">
+<div>Развёрнутое описание вакансии</div>
+<textarea
+                        className="textarea textarea-accent md:w-[300px] h-[200px] "
                         placeholder="Развёрнутое описание вакансии"
                         name='work_descr'
                         value={work_descr}
                         onChange={(e) => setWork_descr(e.target.value)}
-                    /><br /><br />
-                    <textarea
+                    />
+                    </label>
+                    
+                   <label htmlFor="">
+<div>График работы</div>
+<textarea
                         className="textarea textarea-accent w-[300px]"
                         placeholder="График работы"
                         name='grafik'
                         value={grafik}
                         onChange={(e) => setGrafik(e.target.value)}
-                    /><br /><br />
+                    />
+                   </label>
+                   <label htmlFor="">
+                    <div>Документы</div>
+                    <textarea
+                                className="textarea textarea-accent md:w-[300px] h-[100px] "
+                    placeholder={vacancy.documents}
+                    defaultValue={vacancy.documents}
+                    name='documents'
+                    onChange={(e) => setDocuments(e.target.value)}
+                />
+                   </label>
+                   
                     
-                    <input
-                        type='file'
-                        name='file'
-                        onChange={handleFileChange}
-                    /><br /><br />
+                   
                     <button className="btn btn-primary w-full max-w-xs" type="submit">
                         Обновить вакансию
                     </button>
                </div>
+                </div>
+             
                
                 </form>
             </div>

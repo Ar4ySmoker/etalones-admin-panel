@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 // import ModalForm from '@/app/ui/dashboard/ModalForm/ModalForm';
 
@@ -8,11 +8,11 @@ const WorkCandidateTable = ({ data }) => {
     // const [selectedCandidate, setSelectedCandidate] = useState<any | null>(null);
     // const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const fetchCandidateData = async (candidateId: string) => {
-        const response = await fetch(`/api/candidates/${candidateId}`);
-        const result = await response.json();
-        return result.candidate;
-    };
+    // const fetchCandidateData = async (candidateId: string) => {
+    //     const response = await fetch(`/api/candidates/${candidateId}`);
+    //     const result = await response.json();
+    //     return result.candidate;
+    // };
 
     // const openModal = async (candidateId: string) => {
     //     const candidate = await fetchCandidateData(candidateId);

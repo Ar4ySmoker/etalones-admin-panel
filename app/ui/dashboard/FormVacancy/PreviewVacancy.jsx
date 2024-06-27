@@ -6,7 +6,7 @@ const PreviewVacancy = ( { vacancy, file } ) => {
   const {
     job_title,
     location,
-    image,
+    // image,
     positions_available,
     salary,
     homePrice,

@@ -12,7 +12,7 @@ export const GET = async (request) => {
 
     const offset = (page - 1) * limit;
 
-    const partners = await Partner.find().sort({ createdAt: -1 }).skip(offset).limit(limit).populate(['manager', 'candidates']);
+    const partners = await Partner.find().sort({ createdAt: -1 }).skip(offset).limit(limit).populate(['manager', 'candidates', 'professions']);
     const totalPartners = await Partner.countDocuments();
     const totalPages = Math.ceil(totalPartners / limit);
 

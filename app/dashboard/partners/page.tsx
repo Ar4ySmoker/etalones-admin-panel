@@ -14,6 +14,8 @@ import Link from "next/link";
 function PartnersPage() {
   const [partners, setPartners] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchPhone, setSearchPhone] = useState('');
+  const [searchProfession, setSearchProfession] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +25,17 @@ function PartnersPage() {
   const fetchPartners = async (page = 1, term = '') => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/partners?page=${page}&limit=${partnersPerPage}&searchTerm=${term}`);
+      const response = await fetch(`/api/partners/search`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          page,
+          limit: partnersPerPage,
+          searchTerm: term,
+        }),
+      });
       const data = await response.json();
       setPartners(data.partners);
       setCurrentPage(data.page);
@@ -39,23 +51,6 @@ function PartnersPage() {
     fetchPartners(currentPage, searchTerm);
   }, [currentPage, searchTerm]);
 
-  // const handleDeletePartner = async (partnerId) => {
-  //   try {
-  //     const response = await deletePartner(partnerId);
-  //     if (response.ok) {
-  //       alert('Кандидат успешно удален');
-  //       setPartners(partners.filter(part => part._id !== partnerId));
-  //     } else {
-  //       throw new Error('Ошибка при удалении кандидата');
-  //     }
-  //   } catch (error) {
-  //     alert(error.message);
-  //   }
-  // };
-
-
-
-
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value.toLowerCase());
   };
@@ -66,19 +61,7 @@ function PartnersPage() {
 
 
 
-  const renderVacancies = (location) => {
-    if (!location || location.length === 0) {
-      return "нет Вакансий";
-    }
-    // return location.map((loc, index) => (
-    //   <div key={index} className='w-max'>
-    //     <p>{loc.profession} - {loc.numberPeople} чел.</p>
-    //     <small className="badge badge-sm w-full">Город {loc.name}</small>
-    //     <small className="badge badge-sm">Сумма контракта {loc.price}</small>
 
-    //   </div>
-    // ));
-  };
 
   return (
     <div className="overflow-x-auto">
@@ -105,8 +88,7 @@ function PartnersPage() {
                 <th>Имя</th>
                 <th>Телефон</th>
                 <th>Вакансии</th>
-                {/* <th>В городах</th>
-                <th>Сумма контракта</th> */}
+                <th>Комментарий</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -115,7 +97,10 @@ function PartnersPage() {
                 <tr key={partner._id}>
                   <td className='flex flex-col gap-2 items-start'>
                   <div className='badge-md w-max badge-outline font-bold'>Менеджер {partner.manager?.name}</div>
-                  <div className='flex flex-col gap-1'>Статус Заказчика<span className='badge badge-ghost badge-sm w-max'>{partner.status}</span> </div></td>
+                  <div className='flex flex-col gap-1'>Статус Заказчика<span className='badge badge-ghost badge-sm w-max'>{partner.status}</span> </div>
+                  <div className='flex flex-col gap-1'><span className='badge badge-ghost badge-sm w-max'>Жильё {partner.rentPrice}</span> </div>
+                  <div className='flex flex-col gap-1'><span className='badge badge-ghost badge-sm w-max'>Локация {partner.location}</span> </div>
+                  </td>
                   <td className='w-max'>
                     <div className="flex items-start gap-3">
                       <div >
@@ -126,17 +111,20 @@ function PartnersPage() {
                       </div>
                     </div>
                   </td>
-                  <td>{partner.phone}</td>
-                 
+                  <td>{partner.phone}</td> 
                   <td>
                     <div className="flex items-center gap-3">
                       <div>
                         <div className="font-bold">
-                          {renderVacancies(partner.location)}
+                        {partner.professions.map(profession => (
+          <p className='py-1' key={profession._id}>{profession.name}</p>
+        ))}
                         </div>
                       </div>
                     </div>
                   </td>
+                  <td>{partner.comment}</td>
+                
                   <td>
                     <div className={styles.buttons}>
                       <Link href={`/dashboard/partners/edit/${partner._id}`}>
@@ -149,16 +137,10 @@ function PartnersPage() {
                           Подробнее
                         </button>
                       </Link>
-                      {/* <div className={styles.buttons}>
-                        <button
-                          className={`${styles.button} ${styles.view}`}
-                          onClick={() => handleOpenModal(candidate)}
-                        >
-                          Подробнее
-                        </button>
-                      </div> */}
+                     
                     </div>
                   </td>
+                 
                 </tr>
               ))}
             </tbody>

@@ -26,7 +26,6 @@ export default async function EditVacancy({ params }) {
     const { vacancy } = await getVacancyById(id);
     const allManagers = await fetch("http://www.candidat.store/api/manager");
     const managers = await allManagers.json();
-    console.log("Будем посмотреть0000000000", vacancy)    
     return <EditVacancyForm 
         vacancy={vacancy} managers={managers}   
     />;

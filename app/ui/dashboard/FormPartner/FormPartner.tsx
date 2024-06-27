@@ -30,7 +30,6 @@ export default function FormPartner({ professions, manager }) {
     let country = await Axios.get(
       "https://countriesnow.space/api/v0.1/countries"
     );
-    console.log(country);
     setCountries(country.data.data);
   };
 
@@ -121,7 +120,6 @@ export default function FormPartner({ professions, manager }) {
       });
       const result = await response.json();
       if (response.ok) {
-        console.log('partner created:', result);
         router.refresh();
         router.push("/dashboard/partners");
       } else {
@@ -250,12 +248,13 @@ export default function FormPartner({ professions, manager }) {
               <div>Статус</div>
               <select className="select w-full max-w-xs" id="status" name="status">
                 <option disabled selected value={null}>Выберите Статус</option>
-                <option>Не смогли поговорить</option>
-                <option>Думает над предложением</option>
-                <option>Контракт на подписи</option>
-                <option>Ждёт людей</option>
-                <option>Люди на объекте</option>
-                <option>В ЧС</option>
+                <option value={'neo'}>Не смогли поговорить</option>
+                <option value={'dum'}>Думает над предложением</option>
+                <option value={'poz'}>Начнёт работу позже</option>
+                <option value={'pod'}>Контракт на подписи</option>
+                <option value={'jde'}>Ждёт людей</option>
+                <option value={'nao'}>Люди на объекте</option>
+                <option value={'chs'}>В ЧС</option>
               </select>
             </label>
             <label htmlFor="drivePermis">

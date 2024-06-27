@@ -17,7 +17,6 @@ const getPartnerById = async (id) => {
         }
 
         const data = await res.json();
-        console.log("Fetched partner data:", data); // Добавьте этот лог для отладки
         return data;
     } catch (error) {
         console.log(error);

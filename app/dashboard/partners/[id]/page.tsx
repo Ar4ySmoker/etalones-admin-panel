@@ -10,7 +10,6 @@ const getPartnerById = async (id) => {
 
         cache: "no-store",
         });
- console.log('PARTNERS!!!!:::', res)
         if (!res.ok) {
             throw new Error("Failed to fetch partner");
         }

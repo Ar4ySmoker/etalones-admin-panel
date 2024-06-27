@@ -8,14 +8,12 @@ export const POST = async (request: Request) => {
 
     await connectToDB();
 
-    console.log('Received body:', body); // Логирование полученных данных
 
     // Здесь проверьте, корректно ли собраны данные из модального окна и переданы ли они правильно
 
     const newInvoice = new Invoices(body);
     await newInvoice.save();
 
-    console.log('New invoice created:', newInvoice); // Логирование созданного счета
 
     return new NextResponse(
       JSON.stringify({ message: "Invoice is created", invoice: newInvoice }),

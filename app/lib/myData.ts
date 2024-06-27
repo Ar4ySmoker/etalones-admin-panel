@@ -7,7 +7,6 @@ import { connectToDB } from "./utils";
 export const fetchStatus = async (): Promise<StatusField[]> => {
     try {
         await connectToDB();
-        console.log("Connected to the db");
         const status = await Status.find({}, 'name').lean();
         return status.map(status => ({
             _id: status._id.toString(),
@@ -21,7 +20,6 @@ export const fetchStatus = async (): Promise<StatusField[]> => {
 export const fetchManager = async (): Promise<ManagerField[]> => {
     try {
         await connectToDB();
-        console.log("Connected to the db");
         const manager = await Manager.find({}, 'name').lean();
         return manager.map(manager => ({
             _id: manager._id.toString(),
@@ -38,7 +36,6 @@ export const fetchManager = async (): Promise<ManagerField[]> => {
 export const fetchProfession = async (): Promise<ProfessionField[]> => {
     try {
          await connectToDB(); // Добавлен await для гарантии асинхронного подключения
-        console.log("Connected to db Profession");
         const professions = await Profession.find({}, 'name').sort({ name: 1 }).lean();
         return professions.map(profession => ({
             _id: profession._id.toString(), // Преобразование _id в строку
@@ -54,7 +51,6 @@ export const fetchProfession = async (): Promise<ProfessionField[]> => {
 export const fetchPartners = async (): Promise<PartnersField[]> => {
     try {
          await connectToDB(); // Добавлен await для гарантии асинхронного подключения
-        console.log("Connected to db Profession");
         const partners = await Partner.find({}, 'name companyName').lean();
         return partners.map(partner => ({
             _id: partner._id.toString(), // Преобразование _id в строку

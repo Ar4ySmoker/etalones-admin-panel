@@ -4,8 +4,7 @@ import Image from 'next/image';
 import PreviewVacancy from '@/app/ui/dashboard/FormVacancy/PreviewVacancy'
 import { useRouter } from "next/navigation";
 import TextInput from "../../inputs/TextInput/TextInput";
-const FormVacancy = ({manager}) => {
-    console.log(manager)
+const FormVacancy = ({manager, professions}) => {
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState('');
     const [salary, setSalary] = useState('');
@@ -25,7 +24,7 @@ const FormVacancy = ({manager}) => {
         e.preventDefault();
         if (!file || !title || !salary || !location || !roof_type || !auto || !positions_available ||
             !homePrice || !home_descr || !work_descr || !grafik || !documents || !selectedManager
-            || !category) {
+            ) {
             alert('Please fill in all fields and select a file');
             return;
         }
@@ -53,16 +52,22 @@ const FormVacancy = ({manager}) => {
             });
             result = await result.json();
             if (result.success) {
-                alert("Successfully Uploaded!!");
+                alert("Вакансия добавлена!!");
             } else {
-                alert("Failed to upload");
+                alert("Ошибка при загрузке");
             }
             router.refresh();
             router.push("/dashboard/vacancy");
         } catch (error) {
-            console.error("Error uploading vacancy:", error);
+            console.error("Ошибка при обновлении страницы:", error);
             alert("Failed to upload");
         }
+    };
+
+    const handleProfessionChange = (e) => {
+        const selectedProfession = professions.find(prof => prof.name === e.target.value);
+        setTitle(selectedProfession.name);
+        setCategory(selectedProfession.category);
     };
     const vacancy = {
         job_title: title,
@@ -84,6 +89,7 @@ const router = useRouter()
             <div className="grid grid-cols-2 gap-4">
             <form onSubmit={handleSubmit}>
             <input
+            className="file-input file-input-bordered  w-full max-w-xs"
                     type='file'
                     name='file'
                     onChange={(e) => setFile(e.target.files?.[0])}
@@ -91,7 +97,7 @@ const router = useRouter()
             <label htmlFor="manager">
                     <div>Менеджер</div>
                     <select
-                        className="select w-full max-w-xs"
+                        className="select select-bordered select-sm w-full max-w-xs"
                         id="manager"
                         name="manager"
                         value={selectedManager}
@@ -103,10 +109,10 @@ const router = useRouter()
                         ))}
                     </select>
                 </label>
-                <label htmlFor="category">
+                {/* <label htmlFor="category">
                     <div>Выберите категорию работ</div>
                     <select
-                        className="select w-md max-w-xs"
+                        className="select select-bordered select-sm w-full max-w-xs"
                         id="category"
                         name="category"
                         value={category}
@@ -119,13 +125,20 @@ const router = useRouter()
                         <option value="mehan">Сварщики/Механики</option>
 
                     </select>
+                </label> */}
+                <label htmlFor="title">
+                    <div>Заголовок</div>
+                    <select className="select select-bordered select-sm w-full max-w-xs" name="" id=""
+                onChange={handleProfessionChange}>
+                {professions.map(profession => (
+          <option key={profession._id} value={profession.name}>{profession.name}</option>
+        ))}
+                </select>
+
                 </label>
+                
                 <TextInput 
-                placeholder="Каменьшик"
-                title="Заголовок вакансии"
-                defaultValue={vacancy.title} type='text' name='title' onChange={(e) => setTitle(e.target.value)}/>
-                <TextInput 
-                title="Зарплата"
+                title="Зарплата €/час - €/м2 - €/мес"
                     type='text'
                     name='salary'
                     placeholder='Зарплата'
@@ -162,7 +175,7 @@ const router = useRouter()
                     onChange={(e) => setPositions_available(e.target.value)}
                 />
                 <TextInput 
-                title="Стоимость проживания"
+                title="Стоимость проживания €/сутки - €/мес - €/комуналка"
                     type='text'
                     placeholder="300 еаро в месяц"
                     name='homePrice'
@@ -194,24 +207,7 @@ const router = useRouter()
                     onChange={(e) => setDocuments(e.target.value)}
                 />
               
-               
-                {/* <input
-                    type='text'
-                    placeholder="Категория вакансии"
-                    name='category'
-                    onChange={(e) => setCategory(e.target.value)}
-                /><br /><br /> */}
-                <select name="category" id="category"
-                onChange={(e) => setCategory(e.target.value)}>
-<option selected hidden disabled>
-            Выберите категорию
-          </option>                    <option value="indor">Внутриняя отделка</option>
-                    <option value="outdor">Улица/Земляные работы</option>
-                    <option value="krovl">Кровля/Фасады</option>
-                    <option value="mehan">Сварка/Механик</option>
-                </select>
-                
-                <button type='submit'>Создать</button>
+                <button className="btn btn-success" type='submit'>Создать</button>
             </form>
             <div>
             <div className="flex flex-wrap justify-center w-full h-max mt-8">

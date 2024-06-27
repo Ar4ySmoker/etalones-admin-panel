@@ -11,10 +11,7 @@ export const GET = async (request: NextRequest) => {
     const managerName = searchParams.get('managerName');
     const source = searchParams.get('source');
 
-    console.log('Received request with parameters:');
-    console.log('Status:', status);
-    console.log('ManagerName:', managerName);
-    console.log('Source:', source);
+
 
     // Определение типа для объекта запроса
     type QueryType = {
@@ -32,7 +29,6 @@ export const GET = async (request: NextRequest) => {
       .populate('manager')
       .populate('partners');
 
-    console.log('Candidates fetched:', candidates);
 
     const response = { candidates };
 
