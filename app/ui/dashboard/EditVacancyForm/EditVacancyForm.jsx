@@ -156,6 +156,7 @@ const router = useRouter()
                         value={positions_available}
                         onChange={(e) => setPositions_available(e.target.value)}/>                 
                     
+                    
                     <label htmlFor="">
                         <div>Описание условий проживания</div>
                         <textarea
