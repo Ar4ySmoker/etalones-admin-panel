@@ -65,7 +65,6 @@ const FormVacancy = ({ vacancy, managers }) => {
         }
     };
 
-
     
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
