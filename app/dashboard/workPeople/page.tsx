@@ -4,8 +4,8 @@ import WorkCandidateTable from "@/app/ui/dashboard/WorkCandidateTable/WorkCandid
 
 async function fetchCandidates(status, managerName) {
   try {
-    // const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}&managerName=${managerName}`);
-    const response = await fetch(`http://localhost:3000/api/filtredCandidates?status=${status}&managerName=${managerName}`);
+    const response = await fetch(`https://www.candidat.store/api/filtredCandidates?status=${status}&managerName=${managerName}`);
+    // const response = await fetch(`http://localhost:3000/api/filtredCandidates?status=${status}&managerName=${managerName}`);
  
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
