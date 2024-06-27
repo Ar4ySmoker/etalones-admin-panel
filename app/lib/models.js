@@ -318,7 +318,175 @@ const statusShema = new mongoose.Schema({
     type: String
   }
 })
-export const Location = mongoose.models.Location || mongoose.model("Location", locationSchema);
+const invoicesShema = new mongoose.Schema({
+  invoiceNumber: {
+    type: String
+  },
+  bet: {
+    type: Number
+  },
+  hours: {
+    type: Number
+  },
+  avans: {
+    type: Number
+  },
+  homePrice: {
+    type: Number
+  },
+  fines: {
+    sum: Number,
+    reason: String
+  },
+  awards: {
+    sum: Number,
+    reason: String
+  },
+  dateFrom: {
+    type: Date
+  },
+  dateTo: {
+    type: Date
+  },
+  status: {
+    type: Boolean
+  },
+  partners: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Partners'
+  },
+  manager: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Manager'
+  },
+  candidate: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Candidate'
+  },
+  totalAmount: {
+    type: Number
+  }
+}, { timestamps: true });
+
+const vacancyShema = new mongoose.Schema({
+  title:{
+    type: String
+  },
+  town:{
+    type: String
+  },
+  workHours:{
+    type: String
+  },
+  workPrice:{
+    type: String
+  },
+  image: {
+    name: String,
+    data: Buffer,
+    contentType: String
+}
+})
+const vacancyOnServerShema = new mongoose.Schema({
+  image: {
+    name: String,
+    data: Buffer,
+    contentType: String
+},
+  title:{
+  type: String
+},
+  roof_type:{
+  type: String
+},
+  location:{
+  type:String
+},
+  auto:{
+type: String
+},
+  positions_available:{
+  type:String
+},
+  salary:{
+  type:String
+},
+  homePrice:{
+  type:String
+},
+  home_descr:{
+  type:String
+},
+  work_descr:{
+  type:String
+},
+  grafik:{
+  type:String
+},
+  documents:{
+  type:String
+},
+  manager:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Manager'},
+category:{
+type: String
+}
+
+})
+
+
+// const invoicesShema = new mongoose.Schema({
+//   invoiceNumber: {
+//     type: String
+//   },
+//   bet: {
+//     type: Number
+//   },
+//   hours: {
+//     type: Number
+//   },
+//   avans: {
+//     type: Number
+//   },
+//   homePrice: {
+//     type: Number
+//   },
+//   fines: {
+//     sum: Number,
+//     reason: String
+//   },
+//   awards: {
+//     sum: Number,
+//     reason: String
+//   },
+//   dateFrom: {
+//     type: Date
+//   },
+//   dateTo: {
+//     type: Date
+//   },
+//   status: {
+//     type: Boolean
+//   },
+//   partner: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'Partners'
+//   },
+//   manager: {
+//     managerName: String 
+//   },
+//   candidate: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'Candidate'
+//   },
+//   totalAmount:{
+//     type: Number
+//   }
+// }, { timestamps: true });
+export const VacancyOnServer = mongoose.models.VacancyOnServer || mongoose.model("VacancyOnServer", vacancyOnServerShema)
+export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vacancyShema)
+export const Invoices = mongoose.models.Invoices || mongoose.model("Invoices", invoicesShema);
 export const Profession = mongoose.models.Profession || mongoose.model("Profession", professionSchema);
 export const Document = mongoose.models.Document || mongoose.model("Document", dodumentShema);
 export const Langue = mongoose.models.Langue || mongoose.model("Langue", langueShema)
