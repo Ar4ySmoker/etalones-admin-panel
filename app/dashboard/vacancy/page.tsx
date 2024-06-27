@@ -7,6 +7,7 @@ export default async function VacanciesPage(){
 
     return(
         <>
+        
         <Link className='btn btn-success ' href={"/dashboard/vacancy/add"}>Добавить вакансию</Link>
         <VacancyCard/>
 
