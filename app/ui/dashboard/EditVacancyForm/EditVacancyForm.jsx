@@ -192,16 +192,21 @@ const FormVacancy = ({ vacancy, managers }) => {
                     <div className="flex flex-wrap justify-center w-full h-max mt-8">
                         <div className="card w-96 glass m-4">
                             <figure>
-                                {vacancy.image ? (
-                                    <Image
-                                        src={`data:${vacancy.image.contentType};base64,${Buffer.from(vacancy.image.data).toString('base64')}`}
-                                        alt="Uploaded file"
-                                        width={400}
-                                        height={400}
-                                    />
-                                ) : (
-                                    'No image'
-                                )}
+                            {file ? (
+            <Image
+                src={URL.createObjectURL(file)}
+                alt="Uploaded file"
+                width={400}
+                height={400}
+            />
+        ) : (
+            <Image
+                src={`data:${vacancy.image.contentType};base64,${Buffer.from(vacancy.image.data).toString('base64')}`}
+                alt={vacancy.image.name}
+                width={400}
+                height={400}
+            />
+        )}
                             </figure>
                             <div className="card-body">
                                 <TransparentInput className='font-bold bg-transparent'
@@ -221,7 +226,7 @@ const FormVacancy = ({ vacancy, managers }) => {
                             </div>
                         </div>
                     </div>
-                    <PreviewVacancy vacancy={vacancy} />
+                    <PreviewVacancy vacancy={vacancy}  file={file} />
                 </div>
             </div>
         </>

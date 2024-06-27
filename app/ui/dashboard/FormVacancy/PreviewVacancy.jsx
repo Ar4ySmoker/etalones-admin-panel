@@ -2,7 +2,7 @@ import Image from 'next/image';
 // import {Viber} from '@/app/ui/svg/viber'
 // import {Telegram} from '@/app/ui/svg/telegram'
 // import {WhatsApp} from '@/app/ui/svg/whatsapp'
-const PreviewVacancy = ({ vacancy }) => {
+const PreviewVacancy = ( { vacancy, file } ) => {
   const {
     job_title,
     location,
@@ -30,7 +30,21 @@ const PreviewVacancy = ({ vacancy }) => {
             <h3 className='text-xl text-red-800'>📍 Местоположение: <strong>{location}</strong></h3>
           </div>
           <div className='md:p-10'>
-            <Image src={image || '/default-image.png'} width={300} height={300} alt={job_title || "noImage"} />
+          {file ? (
+              <Image
+                src={URL.createObjectURL(file)}
+                width={300}
+                height={300}
+                alt={job_title || 'Uploaded Image'}
+              />
+            ) : (
+              <Image
+                src={`data:${image.contentType};base64,${Buffer.from(image.data).toString('base64')}`}
+                width={300}
+                height={300}
+                alt={job_title || 'Default Image'}
+              />
+            )}
           </div>
         </div>
         <div className='flex flex-wrap gap-5'>
