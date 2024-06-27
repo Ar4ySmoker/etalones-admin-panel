@@ -10,7 +10,6 @@ import { NextResponse } from "next/server";
 export const PUT = async (request, { params }) => {
     try {
         await connectToDB();
-
         const id = params.id;
 
         const data = await request.formData();
