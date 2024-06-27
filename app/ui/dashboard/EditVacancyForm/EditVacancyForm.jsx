@@ -64,7 +64,6 @@ const FormVacancy = ({ vacancy, managers }) => {
             alert('Не удалось обновить вакансию');
         }
     };
-
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
