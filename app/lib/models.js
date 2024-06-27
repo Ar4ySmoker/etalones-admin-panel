@@ -281,13 +281,8 @@ const commentMngSchema = new mongoose.Schema({
 const langueShema = new mongoose.Schema({
   type:String
 })
-const locationSchema = new mongoose.Schema({
-  name: {
-type: String,
-unique: true,
-  }
-}
-)
+
+
 const professionSchema = new mongoose.Schema({
   name: {
 type: String,
