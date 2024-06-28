@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 
 const managerShema = new mongoose.Schema({
+  image: {
+    name: String,
+    data: Buffer,
+    contentType: String
+},
   name:{
     type: String,
   },
@@ -9,6 +15,15 @@ const managerShema = new mongoose.Schema({
     type:String,
     unique: true,
   },
+  telegram:{
+type:String
+  },
+  viber:{
+  type:String
+      },
+  whatsapp:{
+ type:String
+          },
   candidates:[{
     
     type: mongoose.Schema.Types.ObjectId,

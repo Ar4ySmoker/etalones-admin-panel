@@ -5,7 +5,6 @@
 
 import { connectToDB } from '@/app/lib/utils';
 import { VacancyOnServer } from '@/app/lib/models';
-
 import { NextResponse } from "next/server";
 export const PUT = async (request, { params }) => {
     try {
