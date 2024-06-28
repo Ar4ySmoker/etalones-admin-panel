@@ -27,12 +27,12 @@ type: String,
   phone:{
 type: String,
 unique:true,
-required: false
-  },
+sparse: true,
+ },
   email:{
 type: String,
 unique: true,
-required: false
+sparse: true,
   },
   site:{
 type: String
@@ -133,7 +133,7 @@ type: String,
   },
   phone:{
     type: String,
-    required: true,
+    sparse: true,
     unique: true,
   },
   additionalPhones:[{
