@@ -14,8 +14,6 @@ import Link from "next/link";
 function PartnersPage() {
   const [partners, setPartners] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchPhone, setSearchPhone] = useState('');
-  const [searchProfession, setSearchProfession] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);

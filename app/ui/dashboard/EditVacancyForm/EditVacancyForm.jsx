@@ -20,7 +20,6 @@ const FormVacancy = ({ vacancy, managers }) => {
     const [grafik, setGrafik] = useState(vacancy.grafik || '');
     const [documents, setDocuments] = useState(vacancy.documents || '');
     const [selectedManager, setSelectedManager] = useState(vacancy.manager ? vacancy.manager._id : '');
-    const [category, setCategory] = useState(vacancy.category || '');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,7 +38,6 @@ const FormVacancy = ({ vacancy, managers }) => {
         formData.append('grafik', grafik);
         formData.append('documents', documents);
         formData.append('manager', selectedManager);
-        formData.append('category', category);
 
         try {
             const response = await fetch(`/api/vacancy/${vacancy._id}`, {

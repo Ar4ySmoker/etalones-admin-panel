@@ -27,35 +27,55 @@ export const PUT = async (request, { params }) => {
         const manager = data.get('manager');
         const category = data.get('category');
 
-        if (!file || !title || !salary || !location || !roof_type || !auto || !positions_available ||
+        if ( !title || !salary || !location || !roof_type || !auto || !positions_available ||
             !homePrice || !home_descr || !work_descr || !grafik || !documents || !manager || !category) {
             return new NextResponse(JSON.stringify({ success: false, message: "All fields are required" }), { status: 400 });
         }
+        let updatedVacancy;
 
-        const bufferData = await file.arrayBuffer();
-        const buffer = Buffer.from(bufferData);
+        if (file) {
+            // Если выбран файл, обновляем и изображение
+            const bufferData = await file.arrayBuffer();
+            const buffer = Buffer.from(bufferData);
 
-        const updatedVacancy = {
-            title,
-            salary,
-            location,
-            roof_type,
-            auto,
-            positions_available,
-            homePrice,
-            home_descr,
-            work_descr,
-            grafik,
-            documents,
-            manager,
-            category,
-            image: {
-                name: file.name,
-                data: buffer,
-                contentType: file.type
-            }
-        };
-
+       updatedVacancy = {
+                title,
+                salary,
+                location,
+                roof_type,
+                auto,
+                positions_available,
+                homePrice,
+                home_descr,
+                work_descr,
+                grafik,
+                documents,
+                manager,
+                category,
+                image: {
+                    name: file.name,
+                    data: buffer,
+                    contentType: file.type
+                }
+            };
+        } else {
+            // Если файл не выбран, обновляем без изображения
+            updatedVacancy = {
+                title,
+                salary,
+                location,
+                roof_type,
+                auto,
+                positions_available,
+                homePrice,
+                home_descr,
+                work_descr,
+                grafik,
+                documents,
+                manager,
+                category
+            };
+        }
         const result = await VacancyOnServer.findByIdAndUpdate(id, updatedVacancy, { new: true });
 
         if (!result) {
@@ -70,13 +90,7 @@ export const PUT = async (request, { params }) => {
     }
 };
 
-// export async function PUT(request, { params }) {
-//     const { id } = params;
-//     const body = await request.json();
-//     await connectToDB();
-//     await VacancyOnServer.findByIdAndUpdate(id, body);
-//     return NextResponse.json({ message: "Vacancy updated" }, { status: 200 });
-// }
+
  
 export async function GET(request, { params }) {
     const { id } = params;

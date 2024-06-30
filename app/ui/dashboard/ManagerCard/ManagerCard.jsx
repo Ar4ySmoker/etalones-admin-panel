@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useState, useEffect } from 'react';
 // import {Viber} from '@/app/ui/svg/viber'
 // import {Telegram} from '@/app/ui/svg/telegram'

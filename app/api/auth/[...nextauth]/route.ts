@@ -1,12 +1,11 @@
 //app\api\auth\[...nextauth]\route.ts
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import { Account, User as AuthUser } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import {User} from "@/app/lib/models";
 import {connectToDB} from "@/app/lib/utils";
- 
-export const authOptions: any = {
+ const authOptions: AuthOptions = {
     // Configure one or more authentication providers
     secret: process.env.NEXTAUTH_SECRET,
     providers: [
@@ -45,5 +44,5 @@ export const authOptions: any = {
     },
 };
  
-export const handler = NextAuth(authOptions);
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

@@ -1,7 +1,6 @@
 'use client';
 import { useState } from "react";
-import Image from 'next/image';
-import PreviewVacancy from '@/app/ui/dashboard/FormVacancy/PreviewVacancy'
+
 import { useRouter } from "next/navigation";
 import TextInput from "../../inputs/TextInput/TextInput";
 const FormManager = () => {

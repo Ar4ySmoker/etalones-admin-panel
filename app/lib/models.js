@@ -446,55 +446,6 @@ type: String
 
 })
 
-
-// const invoicesShema = new mongoose.Schema({
-//   invoiceNumber: {
-//     type: String
-//   },
-//   bet: {
-//     type: Number
-//   },
-//   hours: {
-//     type: Number
-//   },
-//   avans: {
-//     type: Number
-//   },
-//   homePrice: {
-//     type: Number
-//   },
-//   fines: {
-//     sum: Number,
-//     reason: String
-//   },
-//   awards: {
-//     sum: Number,
-//     reason: String
-//   },
-//   dateFrom: {
-//     type: Date
-//   },
-//   dateTo: {
-//     type: Date
-//   },
-//   status: {
-//     type: Boolean
-//   },
-//   partner: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'Partners'
-//   },
-//   manager: {
-//     managerName: String 
-//   },
-//   candidate: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'Candidate'
-//   },
-//   totalAmount:{
-//     type: Number
-//   }
-// }, { timestamps: true });
 export const User =  mongoose.models.User || mongoose.model("User", userSchema);
 export const VacancyOnServer = mongoose.models.VacancyOnServer || mongoose.model("VacancyOnServer", vacancyOnServerShema)
 export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vacancyShema)

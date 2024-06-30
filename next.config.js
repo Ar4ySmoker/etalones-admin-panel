@@ -20,6 +20,14 @@ const nextConfig = {
       },
     ],
   },
+  async middleware() {
+    return [
+      {
+        source: "/((?!api|_next|static|public|favicon.ico).*)",
+        destination: "/api/auth/middleware",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
