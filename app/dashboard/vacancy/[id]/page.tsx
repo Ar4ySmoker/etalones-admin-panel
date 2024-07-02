@@ -5,12 +5,12 @@ import EditVacancyForm from "@/app/ui/dashboard/EditVacancyForm/EditVacancyForm"
  
 const getVacancyById = async (id) => {
     try {
-        // const res = await fetch(`http://localhost:3000/api/vacancy/${id}`, {
-        //     cache: "no-store",
-        // });
-        const res = await fetch(`https://www.candidat.store/api/vacancy/${id}`, {
+        const res = await fetch(`http://localhost:3000/api/vacancy/${id}`, {
             cache: "no-store",
         });
+        // const res = await fetch(`https://www.candidat.store/api/vacancy/${id}`, {
+        //     cache: "no-store",
+        // });
  
         if (!res.ok) {
             throw new Error("Failed to fetch vacancy");

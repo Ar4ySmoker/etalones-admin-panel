@@ -193,10 +193,17 @@ function CandidatesPage() {
                     </div>
                   </td>
                   <td><div className='flex flex-col'>
-                  <p>{candidate.updatedAt?.substring(0, 10)}</p>
+                  <p className='w-max'>{candidate.updatedAt?.substring(0, 10)}</p>
                   <span className="badge badge-sm">{formatTime(candidate.updatedAt)}</span>
                   </div></td>
-                  <td>{renderDocuments(candidate.documents)}</td>
+                  <td>
+                    <div className="badge badge-sm w-max py-3">
+                      <p>Гражданство <span className='font-bold'>{candidate.citizenship}</span></p>
+                      </div>
+                    <div className='text-center'>
+                      {renderDocuments(candidate.documents)}
+                      </div>
+                      </td>
                   <td>
                     <div className={styles.buttons}>
                       <Link href={`/dashboard/candidates/edit/${candidate._id}`}>
