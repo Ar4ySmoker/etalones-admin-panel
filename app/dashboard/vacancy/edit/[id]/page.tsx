@@ -36,6 +36,7 @@ export default async function EditVacancy({ params }) {
     const allManagers = await fetch("http://www.candidat.store/api/manager");
     const managers = await allManagers.json();   
     const professions = await fetchProfession();
+    console.log("PROFESSIONS!!!",professions)
 
 
     return (

@@ -40,7 +40,7 @@ export const fetchProfession = async (): Promise<ProfessionField[]> => {
         return professions.map(profession => ({
             _id: profession._id.toString(), // Преобразование _id в строку
             name: profession.name,
-            description: profession.description // Убедитесь, что поле description существует в модели
+            category: profession.category // Убедитесь, что поле description существует в модели
           }));
     } catch (err) {
         console.log(err);

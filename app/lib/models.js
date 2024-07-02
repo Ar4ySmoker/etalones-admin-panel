@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 
 const userSchema = new mongoose.Schema(
@@ -303,6 +304,9 @@ const professionSchema = new mongoose.Schema({
   name: {
 type: String,
 unique: true,
+  },
+  category:{
+    type: String,
   },
   experience: {
     type: String
