@@ -305,12 +305,9 @@ const professionSchema = new mongoose.Schema({
 type: String,
 unique: true,
   },
-  category:{
+  category: {
     type: String,
   },
-  experience: {
-    type: String
-  }
 }
 )
 const dodumentShema = new mongoose.Schema({

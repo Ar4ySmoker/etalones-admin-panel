@@ -36,12 +36,21 @@ export const fetchManager = async (): Promise<ManagerField[]> => {
 export const fetchProfession = async (): Promise<ProfessionField[]> => {
     try {
          await connectToDB(); // Добавлен await для гарантии асинхронного подключения
-        const professions = await Profession.find({}, 'name').sort({ name: 1 }).lean();
-        return professions.map(profession => ({
-            _id: profession._id.toString(), // Преобразование _id в строку
-            name: profession.name,
-            category: profession.category // Убедитесь, что поле description существует в модели
-          }));
+         const professions = await Profession.find({}, 'name category') // Получаем профессии с полями name и category
+         .sort({ name: 1 }) // Сортируем по name в алфавитном порядке
+         .lean(); // Преобразуем результат в простой объект JavaScript
+     
+     console.log("Professions from DB:", professions); // Выводим в консоль полученные профессии
+     
+     // Преобразуем список профессий в новый формат
+     const formattedProfessions = professions.map(profession => ({
+         _id: profession._id.toString(), // Преобразуем _id в строку
+         name: profession.name, // Оставляем поле name как есть
+         category: profession.category // Оставляем поле category как есть
+     }));
+     
+     return formattedProfessions; // Возвращаем преобразованный список профессий
+     
     } catch (err) {
         console.log(err);
         throw new Error("Failed to fetch Profession!");

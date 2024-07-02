@@ -110,6 +110,7 @@ const FormVacancy = ({ vacancy, managers, professions }) => {
                             </figure>
                             <div className="card-body">
                                 <select className="select select-bordered select-sm w-full max-w-xs"
+                                defaultValue={vacancy.title}
                                     onChange={handleProfessionChange}>
                                     {professions.map(profession => (
                                         <option key={profession._id} value={profession.name}>{profession.name}</option>

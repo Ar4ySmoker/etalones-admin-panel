@@ -27,10 +27,7 @@ export const PUT = async (request, { params }) => {
         const manager = data.get('manager');
         const category = data.get('category');
 
-        if ( !title || !salary || !location || !roof_type || !auto || !positions_available ||
-            !homePrice || !home_descr || !work_descr || !grafik || !documents || !manager || !category) {
-            return new NextResponse(JSON.stringify({ success: false, message: "All fields are required" }), { status: 400 });
-        }
+      
         let updatedVacancy;
 
         if (file) {

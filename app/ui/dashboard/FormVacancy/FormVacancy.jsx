@@ -22,12 +22,7 @@ const FormVacancy = ({manager, professions}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!file || !title || !salary || !location || !roof_type || !auto || !positions_available ||
-            !homePrice || !home_descr || !work_descr || !grafik || !documents || !selectedManager
-            ) {
-            alert('Please fill in all fields and select a file');
-            return;
-        }
+       
 
         const data = new FormData();
         data.append('file', file);
