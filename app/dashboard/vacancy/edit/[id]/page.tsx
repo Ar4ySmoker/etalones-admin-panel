@@ -1,3 +1,4 @@
+import { fetchProfession } from "@/app/lib/myData";
 import EditVacancyForm from "@/app/ui/dashboard/EditVacancyForm/EditVacancyForm";
 
 const getVacancyById = async (id) => {
@@ -34,9 +35,12 @@ export default async function EditVacancy({ params }) {
     const { vacancy } = data;
     const allManagers = await fetch("http://www.candidat.store/api/manager");
     const managers = await allManagers.json();   
+    const professions = await fetchProfession();
+
 
     return (
         <EditVacancyForm 
+        professions={professions}
             vacancy={vacancy} 
             managers={managers}
         />

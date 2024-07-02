@@ -6,7 +6,7 @@ import TransparentInput from "../../inputs/TransparentInput/TransparentInput";
 import { useRouter } from "next/navigation";
 import TextInput from "../../inputs/TextInput/TextInput";
 
-const FormVacancy = ({ vacancy, managers }) => {
+const FormVacancy = ({ vacancy, managers, professions }) => {
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState(vacancy.title || '');
     const [salary, setSalary] = useState(vacancy.salary || '');
@@ -20,6 +20,8 @@ const FormVacancy = ({ vacancy, managers }) => {
     const [grafik, setGrafik] = useState(vacancy.grafik || '');
     const [documents, setDocuments] = useState(vacancy.documents || '');
     const [selectedManager, setSelectedManager] = useState(vacancy.manager ? vacancy.manager._id : '');
+    const [category, setCategory] = useState(vacancy.manager.category || '');
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -63,7 +65,11 @@ const FormVacancy = ({ vacancy, managers }) => {
         }
     };
 
-    
+    const handleProfessionChange = (e) => {
+        const selectedProfession = professions.find(prof => prof.name === e.target.value);
+        setTitle(selectedProfession.name);
+        setCategory(selectedProfession.category);
+    };
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
@@ -93,8 +99,14 @@ const router = useRouter()
         )}
                             </figure>
                             <div className="card-body">
-                                <TransparentInput className='font-bold bg-transparent'
-                                    defaultValue={vacancy.title} type='text' name='title' onChange={(e) => setTitle(e.target.value)}/>
+                            <select className="select select-bordered select-sm w-full max-w-xs" name="" id=""
+                onChange={handleProfessionChange}>
+                {professions.map(profession => (
+          <option key={profession._id} value={profession.name}>{profession.name}</option>
+        ))}
+                </select>
+                                {/* <TransparentInput className='font-bold bg-transparent'
+                                    defaultValue={vacancy.title} type='text' name='title' onChange={(e) => setTitle(e.target.value)}/> */}
                                 <p className="text-md font-semibold mt-2 w-max">📍<i className="bi bi-geo-alt-fill text-red-500"></i>
                                     <TransparentInput className='font-bold bg-transparent'
                                         defaultValue={vacancy.location} type='text' name='location' onChange={(e) => setLocation(e.target.value)}/></p>
