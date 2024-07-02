@@ -1,4 +1,4 @@
-import { fetchProfession } from "@/app/lib/myData";
+import { fetchManager, fetchProfession } from "@/app/lib/myData";
 import EditVacancyForm from "@/app/ui/dashboard/EditVacancyForm/EditVacancyForm";
 
 const getVacancyById = async (id) => {
@@ -33,8 +33,8 @@ export default async function EditVacancy({ params }) {
     }
 
     const { vacancy } = data;
-    const allManagers = await fetch("http://www.candidat.store/api/manager");
-    const managers = await allManagers.json();   
+    const managers = await fetchManager();
+
     const professions = await fetchProfession();
     console.log("PROFESSIONS!!!",professions)
 
