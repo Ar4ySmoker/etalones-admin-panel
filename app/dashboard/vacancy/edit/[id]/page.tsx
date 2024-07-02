@@ -2,8 +2,8 @@ import { fetchProfession } from "@/app/lib/myData";
 import EditVacancyForm from "@/app/ui/dashboard/EditVacancyForm/EditVacancyForm";
 
 const getVacancyById = async (id) => {
-    const url = `http://localhost:3000/api/vacancy/${id}`;
-    // const url = `https://www.candidat.store/api/vacancy/${id}`;
+    // const url = `http://localhost:3000/api/vacancy/${id}`;
+    const url = `https://www.candidat.store/api/vacancy/${id}`;
 
     try {
         const res = await fetch(url, {
