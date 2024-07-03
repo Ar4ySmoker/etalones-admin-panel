@@ -1,12 +1,12 @@
-'use client'
-import { useSession, signIn } from "next-auth/react";
-import Link from "next/link"
+"use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-
-const Form = () =>{
-    const router = useRouter();
+import { useSession } from "next-auth/react";
+ 
+const Register = () => {
     const [error, setError] = useState("");
+    const router = useRouter();
     const { data: session, status: sessionStatus } = useSession();
  
     useEffect(() => {
@@ -21,8 +21,9 @@ const Form = () =>{
     };
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        const email = e.target[0].value;
-        const password = e.target[1].value;
+        const name = e.target[0].value;
+        const email = e.target[1].value;
+        const password = e.target[2].value;
  
         if (!isValidEmail(email)) {
             setError("Email is invalid");
@@ -34,24 +35,38 @@ const Form = () =>{
             return;
         }
  
-        const res = await signIn("credentials", {
-            redirect: false,
-            email,
-            password,
-        });
- 
-        if (res?.error) {
-            setError("Invalid email or password");
-            if (res?.url) router.replace("/dashboard");
-        } else {
-            setError("");
+        try {
+            const res = await fetch("/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password,
+                }),
+            });
+            if (res.status === 400) {
+                setError("This email is already registered");
+            }
+            if (res.status === 200) {
+                setError("");
+                router.push("/login");
+            }
+        } catch (error) {
+            setError("Error, try again");
+            console.log(error);
         }
     };
-    return(
-        <div>
-            <div>
-                <h1>register</h1>
-                <div className="justify-center mt-16">
+ 
+    if (sessionStatus === "loading") {
+        return <h1>Loading...</h1>;
+    }
+ 
+    return (
+        sessionStatus !== "authenticated" && (
+            <div className="justify-center mt-16">
                 <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-lg">
                     <h1 className="text-3xl font-semibold text-center text-purple-700">Register</h1>
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -91,15 +106,8 @@ const Form = () =>{
                     </Link>
                 </div>
             </div>
-            <Link
-                    className="block text-center text-blue-500 hover:underline mt-2"
-                    href="/register"
-                 >
-                Register Here
-                </Link>
-            </div>
-        </div>
-    )
-}
-
-export default Form
+        )
+    );
+};
+ 
+export default Register;
