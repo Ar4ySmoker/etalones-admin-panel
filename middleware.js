@@ -3,7 +3,7 @@ import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
   pages: {
-    signIn: '/register', // путь к странице входа
+    signIn: '/login', // путь к странице входа
   },
 });
 

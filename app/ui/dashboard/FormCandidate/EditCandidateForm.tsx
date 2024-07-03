@@ -228,7 +228,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             <label htmlFor="phone">
   <div>Телефон</div>
 <input className="input input-bordered input-accent w-full max-w-xs"
-         id="phone" name="phone" type="text" placeholder="+373696855446" defaultValue={candidate.phone} />
+         id="phone" name="phone" type="text" placeholder="+373696855446" defaultValue={candidate?.phone} />
                 <button type="button" className="btn btn-accent" onClick={addAdditionalPhone}><strong>+</strong></button>
         </label>
         {showAdditionalPhone && (
