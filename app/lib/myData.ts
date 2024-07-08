@@ -19,19 +19,21 @@ export const fetchStatus = async (): Promise<StatusField[]> => {
 };
 export const fetchManager = async (): Promise<ManagerField[]> => {
     try {
-        await connectToDB();
-        const manager = await Manager.find({}, 'name').lean();
-        return manager.map(manager => ({
-            _id: manager._id.toString(),
-            name: manager.name,
-            phone: manager.phone
-          }));
+      await connectToDB();
+      const managers = await Manager.find({}, 'name phone telegram viber whatsapp').lean();
+      return managers.map(manager => ({
+        _id: manager._id.toString(),
+        name: manager.name,
+        phone: manager.phone,
+        telegram: manager.telegram,
+        viber: manager.viber,
+        whatsapp: manager.whatsapp,
+      }));
     } catch (err) {
-        console.log(err);
-        throw new Error("Failed to fetch Langue!");
+      console.log(err);
+      throw new Error("Failed to fetch managers!");
     }
-};
-
+  };
 
 export const fetchProfession = async (): Promise<ProfessionField[]> => {
     try {

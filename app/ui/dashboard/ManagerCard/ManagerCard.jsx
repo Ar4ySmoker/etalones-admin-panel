@@ -1,86 +1,90 @@
 'use client'
-// import Image from 'next/image';
 import { useState, useEffect } from 'react';
-// import {Viber} from '@/app/ui/svg/viber'
-// import {Telegram} from '@/app/ui/svg/telegram'
-// import {WhatsApp} from '@/app/ui/svg/whatsapp'
 import Link from 'next/link';
-import { Checkbox } from 'react-daisyui';
-
+import Image from 'next/image';
 
 function ManagerCard() {
-    const [manager, setManager] = useState([]);
+    const [managers, setManagers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchManager = async () => {
+    useEffect(() => {
+        fetchManagers();
+    }, []);
+    
+    const fetchManagers = async () => {
         try {
-            // const response = await fetch('http://localhost:3000/api/manager');
-            const response = await fetch('https://www.candidat.store/api/vacancy');
-
+            const response = await fetch('http://localhost:3000/api/manager');
             const data = await response.json();
-            setManager(data);
-            setIsLoading(false);
+            
+            console.log("Fetched managers:", data);
+
+            // Извлекаем массив managers из полученного объекта
+            const extractedManagers = data.managers;
+
+            if (Array.isArray(extractedManagers)) {
+                setManagers(extractedManagers);
+                setIsLoading(false);
+            } else {
+                console.error("Data.managers is not an array:", data);
+                setIsLoading(false);
+            }
         } catch (error) {
-            console.error("Error fetching manager:", error);
+            console.error("Error fetching managers:", error);
             setIsLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchManager();
-    }, []);
+    
 
     return (
-<>    
-        <div className="overflow-x-auto flex flex-col items-center">
-            <h2 className="text-2xl font-bold mb-4">Список менеджеров</h2>
-            {isLoading ? (
-                <p><span className="loading loading-spinner loading-md"></span> Загрузка...</p>
-            ) : (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Владелец</th>
-                            <th>Заголовок</th>
-                            <th>Зарплата</th>
-                            <th>Местоположение</th>
-                            <th>Картинка</th>
-                            <th>Обновить</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {manager.map((manager) => (
-                            <tr key={manager._id}>
-                                <td className='flex flex-col gap-3'>
-                                    <div className='badge badge-ghost badge-md w-[150px] font-semibold'>{manager.name}</div>
-                                </td>
-                                <td>{manager.phone}</td>
-                                <td>{manager.telegram}</td>
-                                <td>{manager.viber}</td>
-                                <td>{manager.whatsapp}</td>
-
-                           
-                                {/* <td>
-                                    {vacancy.image ? (
+        <>
+            <div className="overflow-x-auto flex flex-col items-center">
+                <h2 className="text-2xl font-bold mb-4">Список менеджеров</h2>
+                {isLoading ? (
+                    <p><span className="loading loading-spinner loading-md"></span> Загрузка...</p>
+                ) : (
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Владелец</th>
+                                <th>Телефон</th>
+                                <th>Telegram</th>
+                                <th>Viber</th>
+                                <th>WhatsApp</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {managers.map((manager) => (
+                                <tr key={manager._id}>
+                                    <td>
+                                    {manager.image ? (
                                         <Image
-                                        src={`data:${manager.image.contentType};base64,${Buffer.from(vacancy.image.data).toString('base64')}`}                                            alt={vacancy.image.name}
+                                        src={`data:${manager.image.contentType};base64,${Buffer.from(manager.image.data).toString('base64')}`}
+                                        alt={manager.image.name}
                                             width={150} height={150}
                                         />
                                     ) : (
                                         'No image'
                                     )}
-                                </td> */}
-                                <td> <Link href={`/dashboard/managers/edit/${manager._id}`}>
-                        <button className="btn btn-sm btn-outline btn-error w-max">
-                          Редактировать
-                        </button>
-                      </Link></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
-        </div>
+                                </td>
+                                    <td>{manager.name}</td>
+                                    <td>{manager.phone}</td>
+                                    <td>{manager.telegram}</td>
+                                    <td>{manager.viber}</td>
+                                    <td>{manager.whatsapp}</td>
+                                    <td>
+                                        <Link href={`/dashboard/managers/edit/${manager._id}`}>
+                                            <p className="btn btn-sm btn-outline btn-error w-max">
+                                                Редактировать
+                                            </p>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
         </>
     );
 }
