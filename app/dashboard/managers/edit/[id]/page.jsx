@@ -5,12 +5,12 @@ import EditManagerForm from "@/app/ui/dashboard/EditManagerForm/EditManagerForm"
  
 const getManagerById = async (id) => {
     try {
-        const res = await fetch(`http://localhost:3000/api/manager/${id}`, {
-            cache: "no-store",
-        });
-        // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+        // const res = await fetch(`http://localhost:3000/api/manager/${id}`, {
         //     cache: "no-store",
         // });
+        const res = await fetch(`https://www.candidat.store/api/manager/${id}`, {
+            cache: "no-store",
+        });
  
         if (!res.ok) {
             throw new Error("Failed to fetch managers");
