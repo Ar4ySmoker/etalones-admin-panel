@@ -439,6 +439,18 @@ type: String
   documents:{
   type:String
 },
+published:{
+type: Boolean,
+
+},
+urgently:{
+  type: Boolean,
+ 
+  },
+last:{
+type:Boolean,
+
+},
   manager:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Manager'},

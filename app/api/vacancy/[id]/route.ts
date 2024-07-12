@@ -1,8 +1,3 @@
-// import { connectToDB } from '@/app/lib/utils';
-// import { VacancyOnServer } from '@/app/lib/models';
-// import { NextResponse } from "next/server";
-
-
 import { connectToDB } from '@/app/lib/utils';
 import { VacancyOnServer } from '@/app/lib/models';
 import { NextResponse } from "next/server";
