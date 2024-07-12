@@ -10,7 +10,9 @@ function VacancyCard() {
 
     const fetchVacancies = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/vacancy');
+            // const response = await fetch('http://localhost:3000/api/vacancy');
+            const response = await fetch('https://www.candidat.store/api/vacancy');
+
             const data = await response.json();
             setVacancies(data);
             setIsLoading(false);
@@ -26,7 +28,9 @@ function VacancyCard() {
 
     const handleCheckboxChange = async (vacancy, field, value) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/checkboxVacancy/${vacancy._id}`, {
+            // const response = await fetch(`http://localhost:3000/api/checkboxVacancy/${vacancy._id}`, {
+                const response = await fetch(`https://www.candidat.store/api/checkboxVacancy/${vacancy._id}`, {
+
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
