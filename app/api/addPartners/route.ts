@@ -39,29 +39,3 @@ export const POST = async (request: Request) => {
     );
   }
 };
-
-// export const POST = async (request: Request) => {
-//   try {
-//     const body = await request.json();
-
-//     await connectToDB();
-//     const newCandidate = new Candidate(body);
-//     await newCandidate.save();
-    
-
-//     return new NextResponse(
-//       JSON.stringify({ message: "Candidate is created", candidate: newCandidate }),
-//       { status: 201 }
-//     );
-//   } catch (error) {
-//     return new NextResponse(
-//       JSON.stringify({
-//         message: "Error in creating user",
-//         error,
-//       }),
-//       {
-//         status: 500,
-//       }
-//     );
-//   }
-// };

@@ -14,7 +14,7 @@ const TextInput: React.FC<TextInputProps> = ({ id, title, placeholder, ...rest }
     <label htmlFor={id}>
       {title && <div>{title}</div>}
       <input 
-       className='input input-sm input-bordered input-accent w-full max-w-xs'
+       className='input input-bordered input-success input-xs w-full max-w-xs my-1'
        type="text" id={id} name={id}
        placeholder={placeholder}
        {...rest}/>

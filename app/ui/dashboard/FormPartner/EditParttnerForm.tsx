@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Axios from "axios";
 import { MultiSelect } from "react-multi-select-component";
+import TextInput from "../../inputs/TextInput/TextInput";
 
 const drivePermis = [
     { label: "В", value: "B" },
@@ -21,8 +22,9 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
   let [combinedLocation, setCombinedLocation] = useState("");  
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  // const [contract, setContract] = useState({ typeC: "", sum: ""});
-
+  const [contract, setContract] = useState({ typeC: "", sum: ""});
+  const [fileContract, setFileContract] = useState(null);
+  const [fileFirma, setFileFirma] = useState(null);
 
 
   const handleLangueChange = (field, value) => {
@@ -105,7 +107,12 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
             const formData = new FormData(e.target);
-
+            if (fileContract) {
+              formData.append("fileContract", fileContract);
+          }
+          if (fileFirma) {
+              formData.append("fileFirma", fileFirma);
+          }
             const body = {
                 name: formData.get('name') || partner.name,
                 phone: formData.get('phone') || partner.phone,
@@ -123,6 +130,8 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
                 contract: {
                   typeC: formData.get('typeC') || partner.contract?.typeC,
                   sum: formData.get('sum') || partner.contract?.sum,
+                  salaryWorker: formData.get('salaryWorker') || partner.contract?.salaryWorker,
+
                 },
                 status: formData.get('status') || partner.status,
                 drivePermis: selectedDrive.map(d => d.value).join(', ') || partner.drivePermis,
@@ -169,26 +178,12 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
                     ))}
                   </select>
                 </label>
-                <label htmlFor="name">
-                  <div>Имя</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="name" name="name" type="text" placeholder={partner?.name} defaultValue={partner?.name} />
-                </label>
-                <label htmlFor="phone">
-                  <div>Телефон</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="phone" name="phone" type="text" defaultValue={partner?.phone} required />
-                </label>
-                <label htmlFor="companyName">
-                  <div>Название фирмы</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="companyName" name="companyName" type="text" defaultValue={partner?.companyName} placeholder="Название фирмы" />
-                </label>
-                <label htmlFor="numberDE">
-                  <div>Номер DE</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="numberDE" name="numberDE" type="text" defaultValue={partner?.numberDE} placeholder="154544641" />
-                </label>
+                <TextInput id='name' title='Имя' placeholder={partner?.name} defaultValue={partner?.name}/>
+                <TextInput id='phone' title='Телефон' defaultValue={partner?.phone}/>
+                <TextInput id='companyName' title='Название фирмы' defaultValue={partner?.companyName}/>
+                <TextInput id='numberDE' title='Номер DE' defaultValue={partner?.numberDE}/>
+
+                
                 <label htmlFor="locations">
   <div>Местоположение - {partner?.location}</div>
          <div>
@@ -223,32 +218,14 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
     <input type="hidden" name="locations" id='locations' value={combinedLocation} />
 
         </label>
-                <label htmlFor="email">
-                  <div>Почта</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="email" name="email" type="text" defaultValue={partner?.email} placeholder="example@mail.ru" />
-                </label>
-                <label htmlFor="rentPrice">
-              <div>Цена проживания</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="rentPrice" name="rentPrice" type="text" defaultValue={partner?.rentPrice} />
-            </label>
-            <label htmlFor="avans">
-              <div>Когда может дать аванс</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="avans" name="avans" type="text" defaultValue={partner?.avans} />
-            </label>
-            <label htmlFor="workwear">
-              <div>Спецодежда</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="workwear" name="workwear" type="text" defaultValue={partner?.workwear} />
-            </label>
-                <label htmlFor="site">
-                  <div>Сайт</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs"
-                    id="site" name="site" type="text" defaultValue={partner?.site} placeholder="www.partner.com" />
-                </label>
-                <label htmlFor="contract" className='bg-slate-200 my-3'>
+        <TextInput id='email' title='Почта' defaultValue={partner?.email}/>
+        <TextInput id='rentPrice' title='Цена проживания' defaultValue={partner?.rentPrice}/>
+        <TextInput id='avans' title='Когда может дать аванс' defaultValue={partner?.avans}/>
+        <TextInput id='workwear' title='Спецодежда' defaultValue={partner?.workwear}/>
+        <TextInput id='site' title='Сайт' defaultValue={partner?.site}/>
+
+                
+                <label htmlFor="contract" className=' my-3'>
               <div>Контракт</div>
               <div >
                 <div>Тип контракта</div>
@@ -265,12 +242,11 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
   <option>От объёма</option>
   <option>Налог</option>
 </select>
-
               </div>
+<TextInput id='sum' title='Стоимость контарка' defaultValue={partner?.contract?.sum}/>
+<TextInput id='salaryWorker' title='Зарплата работника' defaultValue={partner?.contract?.salaryWorker}/>
               <div>
-                <div>Стоимость контарка</div>
-                <input className="input input-bordered input-accent w-full max-w-xs"
-                id="sum" name="sum" type="text" defaultValue={partner?.contract?.sum} /> </div>
+             </div>
 
             </label>
                 <label htmlFor="status">
@@ -297,14 +273,11 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
                     />
                   </div>
                 </label>
-                <label htmlFor="leaving">
-                  <div>Готов принимать людей с:</div>
-                  <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' defaultValue={formatDate(partner?.leaving)} />
-                </label>
-                <label htmlFor="workHours">
-                  <div>Даёт часы отработки {partner?.workHours}</div>
-                  <input className="accent w-full max-w-xs" type="text" id='workHours' name='workHours'  defaultValue={partner?.workHours} />
-                </label>
+                <TextInput id='leaving' type="date" title='Готов принимать людей с:' defaultValue={formatDate(partner?.leaving)}/>
+                <TextInput id='workHours' title='Даёт часы отработки' placeholder='200 часов в месяц' defaultValue={partner?.workHours}/>
+
+              
+               
                 <label className='flex gap-1 items-end' htmlFor="langue">
               <div className='flex flex-col justify-between h-full'>
                 <div>Знание языка</div>

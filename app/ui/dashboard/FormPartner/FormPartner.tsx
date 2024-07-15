@@ -3,6 +3,7 @@ import React, {  useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { MultiSelect } from "react-multi-select-component";
 import  Axios  from 'axios';
+import TextInput from '../../inputs/TextInput/TextInput';
 // import Axios from "axios";
 
 const drivePermis = [
@@ -22,6 +23,8 @@ export default function FormPartner({ professions, manager }) {
   const [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
   const [contract, setContract] = useState({ typeC: "", sum: ""});
+  const [fileContract, setFileContract] = useState(null);
+  const [fileFirma, setFileFirma] = useState(null);
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -37,7 +40,7 @@ export default function FormPartner({ professions, manager }) {
     const Cities = countries.find((c) => c.country === country);
     setCities(Cities.cities);
     setSingleCountry(country); 
-    setSingleCity(""); // Сбрасываем выбранный город при изменении страны
+    setSingleCity(""); 
   };
 
   const handleCityChange = (e) => {
@@ -101,6 +104,8 @@ export default function FormPartner({ professions, manager }) {
       contract: {
         typeC: formData.get('typeC') || '',
         sum: formData.get('sum') || '',
+        salaryWorker: formData.get('salaryWorker') || '',
+
       },
       status: formData.get('status') || '',
       drivePermis: selectedDrive.map(d => d.value).join(', '),
@@ -135,43 +140,46 @@ export default function FormPartner({ professions, manager }) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className='grid grid-cols-2'>
+        <label htmlFor="File">
+<div>Загрузите файл контракта</div>
+        <input
+            className="file-input file-input-bordered  w-full max-w-xs"
+                    type='file'
+                    name='fileContract'
+                    onChange={(e) => setFileContract(e.target.files?.[0])}
+                />
+        </label>
+        <label htmlFor="firma">
+<div>Загрузите файл с данными фирмы</div>
+        <input
+            className="file-input file-input-bordered  w-full max-w-xs"
+                    type='file'
+                    name='fileFirma'
+                    onChange={(e) => setFileFirma(e.target.files?.[0])}
+                />
+        </label>
+        <div className='grid grid-cols-2 font-light text-sm'>
           <div className='grid justify-start items-stretch content-space-evenly '>
           <label htmlFor="manager">
               <div>Менеджер</div>
-              <select className="select w-full max-w-xs" id="manager" name="manager">
+              <select className="select select-xs w-full select-success max-w-xs" id="manager" name="manager">
                 <option disabled selected value={null}>Выберите менеджера</option>
                 {manager.map(m => (
                   <option key={m._id} value={m._id}>{m.name}</option>
                 ))}
               </select>
             </label>
-            <label htmlFor="name">
-              <div>Имя</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="name" name="name" type="text" placeholder="Сергей" required />
-            </label>
-            <label htmlFor="phone">
-              <div>Телефон</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="phone" name="phone" type="text" placeholder="+373696855446" required />
-            </label>
-            <label htmlFor="companyName">
-              <div>Название фирмы</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="companyName" name="companyName" type="text" placeholder="Название фирмы" />
-            </label>
-            <label htmlFor="numberDE">
-              <div>Номер DE</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="numberDE" name="numberDE" type="text" placeholder="154544641" />
-            </label>
+            <TextInput id='name' title='Имя' placeholder='Сергей'/>
+            <TextInput id='phone' title='Телефон' placeholder='373696855446'/>
+            <TextInput id='companyName' title='Название фирмы' placeholder='Название фирмы'/>
+            <TextInput id='numberDE' title='Номер DE' placeholder='154544641'/>
+
             <label htmlFor="locations">
   <div>Местоположение - {combinedLocation}</div>
          <div>
           <div className='flex gap-1'>
           {countries && (
-        <select className="select w-full max-w-xs" onChange={(e) => fetchCities(e.target.value)} >
+        <select className="select select-xs select-success w-full max-w-xs" onChange={(e) => fetchCities(e.target.value)} >
           <option selected hidden disabled>
             Выберите страну
           </option>
@@ -184,7 +192,7 @@ export default function FormPartner({ professions, manager }) {
       )}
 
       {Cities.length > 0 && (
-        <select className="select w-full max-w-xs" onChange={handleCityChange} value={singleCity}>
+        <select className="select select-xs select-success w-full max-w-xs" onChange={handleCityChange} value={singleCity}>
           <option selected hidden disabled>
             Выберите город
           </option>
@@ -200,36 +208,16 @@ export default function FormPartner({ professions, manager }) {
     <input type="hidden" name="locations" id='locations' value={combinedLocation} />
 
         </label>
-            <label htmlFor="email">
-              <div>Почта</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="email" name="email" type="text" placeholder="example@mail.ru" />
-            </label>
-            <label htmlFor="rentPrice">
-              <div>Цена проживания</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="rentPrice" name="rentPrice" type="text" placeholder="300 евро в месяц" />
-            </label>
-            <label htmlFor="avans">
-              <div>Когда может дать аванс</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="avans" name="avans" type="text" placeholder="100 евро после первой недели" />
-            </label>
-            <label htmlFor="workwear">
-              <div>Спецодежда</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="workwear" name="workwear" type="text" placeholder="Выдаёт после первой недели" />
-            </label>
-            <label htmlFor="site">
-              <div>Сайт</div>
-              <input className="input input-bordered input-accent w-full max-w-xs"
-                id="site" name="site" type="text" placeholder="www.partner.com" />
-            </label>
-            <label htmlFor="contract" className='bg-slate-200 my-3'>
+        <TextInput id='email' title='Почта' placeholder='example@mail.ru'/>
+        <TextInput id='rentPrice' title='Цена проживания' placeholder='300 евро в месяц'/>
+        <TextInput id='avans' title='Когда может дать аванс' placeholder='100 евро после первой недели'/>
+        <TextInput id='workwear' title='Спецодежда' placeholder='Выдаёт после первой недели'/>
+        <TextInput id='site' title='Сайт' placeholder='www.partner.com'/>
+            <label htmlFor="contract" className='my-3'>
               <div>Контракт</div>
-              <div >
+              <div>
                 <div>Тип контракта</div>
-                <select className="select w-full max-w-xs" id="typeC" name="typeC" value={contract.typeC} onChange={(e) => handleContractChange('typeC', e.target.value)}>
+                <select className="select select-xs select-success w-full max-w-xs" id="typeC" name="typeC" value={contract.typeC} onChange={(e) => handleContractChange('typeC', e.target.value)}>
   <option disabled selected value={null}>Выберите тип контракта</option>
   <option>Не можем договорится</option>
   <option>Почасовый</option>
@@ -239,14 +227,15 @@ export default function FormPartner({ professions, manager }) {
 
               </div>
               <div>
-                <div>Стоимость контарка</div>
-                <input className="input input-bordered input-accent w-full max-w-xs"
-                id="sum" name="sum" type="text" placeholder="20 euro" /> </div>
+              <TextInput id='sum' title='Стоимость контарка' placeholder='20 euro'/>
+              <TextInput id='salaryWorker' title='Зарплата работника' placeholder='12 евро в час'/>
+
+              </div>
 
             </label>
             <label htmlFor="status">
               <div>Статус</div>
-              <select className="select w-full max-w-xs" id="status" name="status">
+              <select className="select select-xs select-success w-full max-w-xs" id="status" name="status">
                 <option disabled selected value={null}>Выберите Статус</option>
                 <option value={'neo'}>Не смогли поговорить</option>
                 <option value={'dum'}>Думает над предложением</option>
@@ -261,6 +250,7 @@ export default function FormPartner({ professions, manager }) {
               <div>
                 <h3>Требуется В/У кат.</h3>
                 <MultiSelect
+                className=' w-full max-w-xs'
                   options={drivePermis}
                   value={selectedDrive}
                   onChange={setSelectedDrive}
@@ -268,18 +258,13 @@ export default function FormPartner({ professions, manager }) {
                 />
               </div>
             </label>
-            <label htmlFor="leaving">
-              <div>Готов принимать людей с:</div>
-              <input className="accent w-full max-w-xs" type="date" id='leaving' name='leaving' />
-            </label>
-            <label htmlFor="workHours">
-              <div>Даёт часы отработки</div>
-              <input className="accent w-full max-w-xs" type="text" id='workHours' name='workHours' />
-            </label>
+            <TextInput id='leaving' type="date" title='Готов принимать людей с:'/>
+            <TextInput id='workHours' title='Даёт часы отработки' placeholder='200 часов в месяц'/>
+ 
             <label className='flex gap-1 items-end' htmlFor="langue">
               <div className='flex flex-col justify-between h-full'>
                 <div>Знание языка</div>
-                <select className="select w-full max-w-xs" id="langue" name="langue">
+                <select className="select select-xs select-success w-full max-w-xs" id="langue" name="langue">
                   <option disabled selected value={null}>Знание языка</option>
                   <option>Не знает языков</option>
                   <option>Английский</option>
@@ -289,7 +274,7 @@ export default function FormPartner({ professions, manager }) {
               </div>
               <div className='flex flex-col justify-between  h-full'>
                 <div>Уровень</div>
-                <select className="select w-full max-w-xs" id="level" name="level" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+                <select className="select select-xs select-success w-full max-w-xs" id="level" name="level" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
                   <option disabled selected value={null}>Уровень знание языка</option>
                   <option>Уровень А1</option>
                   <option>Уровень А2</option>
@@ -309,7 +294,7 @@ export default function FormPartner({ professions, manager }) {
         {professionEntries.map((prof, index) => (
   <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
     <label htmlFor="profession">
-      <select className="select w-full max-w-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
+      <select className="select select-xs select-success w-full max-w-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
       <option value={null} disabled selected>Выберите профессию</option>
       <option>Нет профессии</option>
         {professions.map(profession => (
@@ -319,7 +304,7 @@ export default function FormPartner({ professions, manager }) {
     </label>
     <label htmlFor="experience">
       <div>Опыт работы</div>
-      <select className="select select-accent w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
+      <select className="select select-xs select-success w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
         <option value={null} disabled selected >Опыт работы</option>
         <option >Без опыта</option>
         <option >Меньше года</option>

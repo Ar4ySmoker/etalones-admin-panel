@@ -52,6 +52,7 @@ type:String
 })
 
 const partnerShema = new mongoose.Schema({
+
   professions: [{
     name:  String,
     experience: String,    
@@ -107,6 +108,7 @@ required: false
   contract:{
 typeC: String,
 sum: String,
+salaryWorker: String,
   },
   documents:[{
     type: mongoose.Schema.Types.ObjectId,
@@ -312,18 +314,11 @@ unique: true,
 }
 )
 const dodumentShema = new mongoose.Schema({
-  name:{
-    type: String,
-    unique: true,
-  },
-  dateExp:{
-    type: String,
-  
-  },
-  numberDoc: {
-    type: String,
-   
-  }
+  file: {
+    name: String,
+    data: Buffer,
+    contentType: String
+}
 })
 
 const statusShema = new mongoose.Schema({
