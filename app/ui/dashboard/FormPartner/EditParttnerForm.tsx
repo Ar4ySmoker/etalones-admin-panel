@@ -143,8 +143,8 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
                 comment: formData.get('comment') || partner.comment
               };
         try {
-            const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
-              // const res = await fetch(`http://localhost:3000/api/partners/${id}`, {
+            // const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
+              const res = await fetch(`http://localhost:3000/api/partners/${id}`, {
   
                 method: "PUT",
                 headers: {
@@ -167,6 +167,24 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
     return (
         <div>
           <form onSubmit={handleSubmit}>
+          <label htmlFor="file">
+<div>Загрузите файл контракта</div>
+        <input
+            className="file-input file-input-bordered  w-full max-w-xs"
+                    type='file'
+                    name='fileContract'
+                    onChange={(e) => setFileContract(e.target.files?.[0])}
+                />
+        </label>
+        <label htmlFor="firma">
+<div>Загрузите файл с данными фирмы</div>
+        <input
+            className="file-input file-input-bordered  w-full max-w-xs"
+                    type='file'
+                    name='fileFirma'
+                    onChange={(e) => setFileFirma(e.target.files?.[0])}
+                />
+        </label>
             <div className='grid grid-cols-2'>
               <div className='grid justify-start items-stretch content-space-evenly '>
               <label htmlFor="manager">

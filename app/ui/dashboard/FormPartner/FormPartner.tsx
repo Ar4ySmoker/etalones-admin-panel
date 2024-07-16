@@ -140,7 +140,7 @@ export default function FormPartner({ professions, manager }) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="File">
+        <label htmlFor="file">
 <div>Загрузите файл контракта</div>
         <input
             className="file-input file-input-bordered  w-full max-w-xs"
