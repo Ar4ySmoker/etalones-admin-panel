@@ -31,7 +31,15 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     const [showDismissalDate, setShowDismissalDate] = useState(false);
     const [showAdditionalPhone, setAdditionalPhone] = useState(true);
     const [additionalPhones, setAdditionalPhones] = useState(candidate.additionalPhones || [""]);
+    const [age, setAge] = useState('');
 
+    useEffect(() => {
+      if (candidate?.age) {
+        const birthDate = new Date(candidate.age);
+        const formattedDate = birthDate.toISOString().split('T')[0];
+        setAge(formattedDate);
+      }
+    }, [candidate]);
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -212,7 +220,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                   <div>Дата рождения</div>
                   <input className="input input-bordered input-accent w-full max-w-xs" 
                   id="age" name="age" type="date"
-                  placeholder={candidate?.age} defaultValue={candidate?.age}   />
+                  placeholder={candidate?.age} defaultValue={age}  />
                 </label>
                 <label htmlFor="ageNum">
                   <div>Возраст</div>
@@ -221,9 +229,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                   placeholder={candidate?.ageNum} defaultValue={candidate?.ageNum} />
                 </label>
               </div>
-              <div >
-              {candidate?.age ? new Date(candidate?.age).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
-              </div>
+              
             </label>
             <label htmlFor="phone">
   <div>Телефон</div>
@@ -293,7 +299,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label className='flex gap-1 items-end' htmlFor="langue">
           <div className='flex flex-col justify-between h-full'>
           <div>Знание языка</div>
-          <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={candidate?.langue}>
+          <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={candidate?.langue?.name}>
           <option disabled selected value={null}>Знание языка</option>
         <option>Не знает языков</option>
         <option >Английский</option>
@@ -303,7 +309,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Уровень</div>
-          <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+          <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" defaultValue={candidate?.langue?.level} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
           <option disabled selected value={null}>Уровень знание языка</option>
         <option >Уровень А1</option>
         <option >Уровень А2</option>
@@ -425,7 +431,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
 
       </div>
-     <div>{renderProfessions(candidate?.professions)}</div>
+     {/* <div>{renderProfessions(candidate?.professions)}</div> */}
         {professionEntries.map((prof, index) => (
   <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
     <label htmlFor="profession">
@@ -532,7 +538,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
          defaultValue={candidate?.comment}/>
         </label>
             <button className="btn btn-primary w-full max-w-xs">
-                Update Candidate
+               Обновить кандидата
             </button>
         </form>
         </>

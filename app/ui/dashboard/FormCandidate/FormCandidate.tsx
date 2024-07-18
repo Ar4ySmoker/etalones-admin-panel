@@ -21,6 +21,8 @@ const statuses = [
 ]
 
 export default function Form({ professions,  manager, partners }) {
+  const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   let [countries, setCountries] = useState([]);
   let [singleCountry, setSingleCountry] = useState("");
   let [Cities, setCities] = useState([]);
@@ -33,6 +35,30 @@ export default function Form({ professions,  manager, partners }) {
   const [showDismissalDate, setShowDismissalDate] = useState(false);
   const [showAdditionalPhone, setAdditionalPhone] = useState(false);
   const [additionalPhones, setAdditionalPhones] = useState([""]);
+  const [ageNum, setAgeNum] = useState('');
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDifference = today.getMonth() - birthDateObj.getMonth();
+
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDateObj.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
+
+  const handleBirthDateChange = (event) => {
+    const birthDate = event.target.value;
+    if (birthDate) {
+      const calculatedAge = calculateAge(birthDate);
+      setAgeNum(calculatedAge.toString());
+    } else {
+      setAgeNum('');
+    }
+  };
 
 
   // const handleStatusFromPartnerChange = (field, value) => {
@@ -112,9 +138,41 @@ export default function Form({ professions,  manager, partners }) {
     const newEntries = professionEntries.filter((_, i) => i !== index);
     setProfessionEntries(newEntries);
   };
+
+  const handlePhoneBlur = async () => {
+    if (!phone) {
+      setPhoneError('Введите номер телефона');
+      return;
+    }
+  
+    try {
+      const response = await fetch('/api/checkPhone', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone }),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        setPhoneError(''); // Номер доступен
+      } else if (response.status === 400) {
+        setPhoneError(result.message); // Номер занят
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      setPhoneError('Произошла ошибка при проверке номера телефона');
+    }
+  };
+  
+  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+    if (phoneError) {
+      console.error('Ошибка: ' + phoneError);
+      return;
+    }
 
     const formData = new FormData(event.target);
     const body = {
@@ -194,12 +252,34 @@ export default function Form({ professions,  manager, partners }) {
       <form onSubmit={handleSubmit}  >
         <div className='grid grid-cols-3'>
         <div className='grid justify-start items-stretch content-space-evenly '>
-        <label htmlFor="name">
-          <div>Имя</div>
-        <input className="input input-bordered input-accent w-full max-w-xs"
- id="name" name="name" type="text" placeholder="Сергей" required />
-        </label>
+        <TextInput id='name' title='Имя'/>
         <label htmlFor="age">
+        <div>Возраст</div>
+        <div className="flex gap-1">
+          <label htmlFor="age">
+            <div>Дата рождения</div>
+            <input
+              className="input input-bordered input-success input-xs w-full max-w-xs"
+              id="age"
+              name="age"
+              type="date"
+              onChange={handleBirthDateChange}
+            />
+          </label>
+          <label htmlFor="ageNum">
+            <div>Возраст</div>
+            <input
+              className="input input-bordered input-success input-xs w-full max-w-xs"
+              id="ageNum"
+              name="ageNum"
+              type="text"
+              value={ageNum}
+              readOnly
+            />
+          </label>
+        </div>
+      </label>
+        {/* <label htmlFor="age">
               <div>Возраст</div>
               <div className='flex gap-1'>
                 <label htmlFor="age">
@@ -212,12 +292,28 @@ export default function Form({ professions,  manager, partners }) {
                   <input className="input input-bordered input-accent w-full max-w-xs" id="ageNum" name="ageNum" type="text"   />
                 </label>
               </div>
-            </label>
+            </label> */}
         <label htmlFor="phone">
   <div>Телефон</div>
-<input className="input input-bordered input-accent w-full max-w-xs"
-         id="phone" name="phone" type="text" placeholder="+373696855446" required />
+<input className="input input-bordered input-xs input-success w-full max-w-xs"
+         id="phone" name="phone" type="text"  onChange={(e) => setPhone(e.target.value)} 
+         onBlur={handlePhoneBlur} 
+         placeholder="Phone" required />
                 <button type="button" className="btn btn-accent" onClick={handleAdditionalPhone}><strong>+</strong></button>
+         {phoneError && <div role="alert" className="alert alert-error">
+  {/* <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="h-6 w-6 shrink-0 stroke-current">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+  </svg> */}
+  <span>{phoneError}</span>
+</div>}
         </label>
         {showAdditionalPhone && (
                   <div>
@@ -244,7 +340,7 @@ export default function Form({ professions,  manager, partners }) {
          <div>
           <div className='flex gap-1'>
           {countries && (
-        <select className="select w-full max-w-xs" onChange={(e) => fetchCities(e.target.value)} >
+        <select className="select w-full max-w-xs select-success select-xs" onChange={(e) => fetchCities(e.target.value)} >
           <option selected hidden disabled>
             Выберите страну
           </option>
@@ -257,7 +353,7 @@ export default function Form({ professions,  manager, partners }) {
       )}
 
       {Cities.length > 0 && (
-        <select className="select w-full max-w-xs" onChange={handleCityChange} value={singleCity}>
+        <select className="select w-full max-w-xs select-success select-xs" onChange={handleCityChange} value={singleCity}>
           <option selected hidden disabled>
             Выберите город
           </option>
@@ -277,7 +373,7 @@ export default function Form({ professions,  manager, partners }) {
           <div className='flex flex-col justify-between h-full'>
           <div>Знание языка</div>
           
-          <select className="select w-full max-w-xs" id="langue" name="langue" >
+          <select className="select w-full max-w-xs select-success select-xs" id="langue" name="langue" >
           <option disabled selected value={null}>Знание языка</option>
         <option>Не знает языков</option>
         <option >Английский</option>
@@ -288,7 +384,7 @@ export default function Form({ professions,  manager, partners }) {
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Уровень</div>
-          <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+          <select className="select w-full max-w-xs select-success select-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
           <option disabled selected value={null}>Уровень знание языка</option>
         <option >Уровень А1</option>
         <option >Уровень А2</option>
@@ -298,8 +394,8 @@ export default function Form({ professions,  manager, partners }) {
           </div>
         </label>
         <label htmlFor="status">
-            <div>Статус</div>
-          <select className="select w-full " id="status" name="status" >
+            <div>Статус работника на момент диалога</div>
+          <select className="select w-full select-success select-xs" id="status" name="status" >
           <option disabled selected value={null}>Выберите Статус</option>
           <option>Не обработан</option>
           <option>Не подходят документы</option>
@@ -315,7 +411,7 @@ export default function Form({ professions,  manager, partners }) {
         <label htmlFor="statusFromPartner">
               <div>Статус от партнера</div>
               <label htmlFor="partners">
-              <select className="select w-full max-w-xs"  
+              <select className="select w-full max-w-xs select-success select-xs"  
           id="partners" name="partners" >
          <option disabled selected value={null}>Выберите заказчика</option>
           {partners.map(p => (
@@ -324,21 +420,17 @@ export default function Form({ professions,  manager, partners }) {
               </select>
               </label>
               
-              <select className="select w-full" id="statusFromPartner" name="statusFromPartner" >
+              <select className="select w-full select-success select-xs" id="statusFromPartner" name="statusFromPartner" >
                 {statuses.map(status => (
                   <option key={status.value} value={status.value}>{status.label}</option>
                 ))}
               </select>
               <div className='flex gap-1 items-center justify-between'>
-                <p>С</p>
-              <input className="input input-bordered input-accent w-full max-w-xs" 
-           type="date" id="from" name="from" />
+               
+                <TextInput id='from' title='С' type="date"/>
+                <TextInput id='to' title='До' type="date"/>
                 </div>
-                <div className='flex gap-1 items-center justify-between'>
-                <p>До</p>
-              <input className="input input-bordered input-accent w-full max-w-xs" 
-            type="date"  id='to' name='to' />
-                </div>
+                
             </label>
            <div>
              
@@ -371,18 +463,10 @@ export default function Form({ professions,  manager, partners }) {
       />
     </div>
         </label>
-        <div>
-        <label htmlFor="leaving">
-              <div>Готов выехать</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
-            type="date"  id='leaving' name='leaving' />
-            </label>
-            <label htmlFor="dateArrival">
-              <div>Приехал на объект</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
-            type="date"  id='dateArrival' name='dateArrival' />
-            </label>
-        </div>
+     
+          <TextInput id='leaving' title='Готов выехать' type="date"/>
+          <TextInput id='dateArrival' title='Приехал на объект' type="date"/>
+       
        
             {/* <label htmlFor="workHours">
               <div>Желаемые часы отработки</div>
@@ -390,18 +474,15 @@ export default function Form({ professions,  manager, partners }) {
             </label>     */}
         <label htmlFor="manager">
           <div>Менеджер</div>
-        <select className="select w-full max-w-xs" id="manager" name="manager">
+        <select className="select w-full select-success select-xs max-w-xs" id="manager" name="manager">
          <option disabled selected value={null}>Выберите менеджера</option>
           {manager.map(m => (
             <option key={m._id} value={m._id}>{m.name}</option>
           ))}
         </select>
         </label>
-        <label htmlFor="cardNumber" className=" w-full max-w-xs">
-          <div>Номер счёта</div>
-        <input className="input input-bordered input-accent w-full max-w-xs"
-         id="cardNumber" name="cardNumber" type="text" placeholder="Номер счёта" />
-        </label>
+        <TextInput id='cardNumber' title='Номер счёта'/>
+        
         </div>
         <div className='grid justify-center items-stretch content-space-evenly '>
         <label htmlFor="professions">
@@ -413,7 +494,7 @@ export default function Form({ professions,  manager, partners }) {
         {professionEntries.map((prof, index) => (
   <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
     <label htmlFor="profession">
-      <select className="select w-full max-w-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
+      <select className="select w-full max-w-xs select-success select-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
       <option value={null} disabled selected>Выберите профессию</option>
       <option>Нет профессии</option>
         {professions.map(profession => (
@@ -423,7 +504,7 @@ export default function Form({ professions,  manager, partners }) {
     </label>
     <label htmlFor="experience">
       <div>Опыт работы</div>
-      <select className="select select-accent w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
+      <select className="select w-full max-w-xs select-success select-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
         <option value={null} disabled selected >Опыт работы</option>
         <option >Без опыта</option>
         <option >Меньше года</option>
@@ -441,7 +522,7 @@ export default function Form({ professions,  manager, partners }) {
         <div>
           <label htmlFor="citizenship">
             <div>Гражданство</div>
-          <select className="select w-full max-w-xs" id="citizenship" name="citizenship" >
+          <select className="select w-full max-w-xs select-success select-xs" id="citizenship" name="citizenship" >
           <option disabled selected value={null}>Укажите гражданство</option>
           <option>Евросоюза</option>
           <option>Молдовы</option>
@@ -464,7 +545,7 @@ export default function Form({ professions,  manager, partners }) {
           <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
             <label htmlFor="nameDocument">
               <div>Название документа</div>
-            <select  className="select w-full max-w-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
+            <select  className="select w-full max-w-xs select-success select-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
              <option  value={null}>Выберите документ</option>
               <option value="Виза">Виза</option>
               <option value="Песель">Песель</option>
