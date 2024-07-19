@@ -152,6 +152,21 @@ type: String,
 { timestamps: true })
 
 const candidateSchema = new mongoose.Schema({
+  bank:{
+    type: String
+  },
+  swift:{
+    type: String
+  },
+  bet:{
+    type: String
+  },
+  hours:{
+    type: String
+  },
+  homePrice:{
+    type: String
+  },
   source:{
 type: String
   },

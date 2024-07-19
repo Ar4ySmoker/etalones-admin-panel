@@ -176,6 +176,12 @@ export default function Form({ professions,  manager, partners }) {
 
     const formData = new FormData(event.target);
     const body = {
+      bank: formData.get('bank') || '',
+      swift: formData.get('swift') || '',
+      bet: formData.get('bet') || '',
+      hours: formData.get('hours') || '',
+      homePrice: formData.get('homePrice') || '',
+      
       name: formData.get('name') || '', 
       age: formData.get('age') || '',
       ageNum: formData.get('ageNum') || '',
@@ -482,6 +488,11 @@ export default function Form({ professions,  manager, partners }) {
         </select>
         </label>
         <TextInput id='cardNumber' title='Номер счёта'/>
+        <TextInput id='banck' title='Банк'/>
+        <TextInput id='swift' title='Swift'/>
+        <TextInput id='bet' title='Ставка'/>
+        <TextInput id='hours' title='Часы отработки'/>
+        <TextInput id='homePrice' title='Стоимость проживания'/>
         
         </div>
         <div className='grid justify-center items-stretch content-space-evenly '>

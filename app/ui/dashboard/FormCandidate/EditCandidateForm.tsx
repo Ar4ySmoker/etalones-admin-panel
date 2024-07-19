@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Axios from "axios";
 import { MultiSelect } from "react-multi-select-component";
+import TextInput from "../../inputs/TextInput/TextInput";
 
 const drivePermis = [
   { label: "В", value: "B" },
@@ -130,6 +131,11 @@ export default function EditCandidateForm({ id, candidate, managers, professions
 
         const body = {
           source:"",
+          bank: formData.get('bank') || candidate?.bank,
+        swift: formData.get('swift') || candidate?.swift,
+        bet: formData.get('bet') || candidate?.bet,
+        hours: formData.get('hours') || candidate?.hours,
+        homePrice: formData.get('homePrice') || candidate?.homeprice,
           name: formData.get('name') || candidate?.name, // Добавляем проверку на пустое значение
           age: formData.get('age') || candidate?.age,
           ageNum: formData.get('ageNum') || candidate?.ageNum,
@@ -208,34 +214,22 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <form onSubmit={handleSubmit} >
         <div className='grid grid-cols-3'>
           <div className='grid justify-start items-stretch content-space-evenly '>
-          <label htmlFor="name">
-          <div>Имя</div>
-        <input className="input input-bordered input-accent w-full max-w-xs"
- id="name" name="name" type="text" placeholder={candidate?.name} defaultValue={candidate?.name}
- required />
-          </label>
-          <label htmlFor="age">
+          <TextInput id='name' title='Имя' defaultValue={candidate?.name}/>
+          
+
+          
              
-              <div className='flex gap-1'>
-                <label htmlFor="age">
-                  <div>Дата рождения</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs" 
-                  id="age" name="age" type="date"
-                  placeholder={candidate?.age} defaultValue={age}  />
-                </label>
-                <label htmlFor="ageNum">
-                  <div>Возраст</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs" 
-                  id="ageNum" name="ageNum" type="text" 
-                  placeholder={candidate?.ageNum} defaultValue={candidate?.ageNum} />
-                </label>
+              <div className='flex gap-1 text-center'>
+                
+              <TextInput id='age' title='Дата рождения' defaultValue={age} type="date"/>
+              <TextInput id="ageNum" title="Возраст" defaultValue={candidate?.ageNum}/>
+                
               </div>
               
-            </label>
+            
             <label htmlFor="phone">
   <div>Телефон</div>
-<input className="input input-bordered input-accent w-full max-w-xs"
-         id="phone" name="phone" type="text" placeholder="+373696855446" defaultValue={candidate?.phone} />
+  <TextInput id="phone" title="Телефон" defaultValue={candidate?.phone}/>
                 <button type="button" className="btn btn-accent" onClick={addAdditionalPhone}><strong>+</strong></button>
         </label>
         {showAdditionalPhone && (
@@ -245,7 +239,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                     <label htmlFor={`additionalPhone${index}`}>
                       <div>Доп. Телефон {index + 1}</div>
                       <input
-                        className="input input-bordered input-accent w-full max-w-xs"
+                        className="input input-bordered input-success input-xs w-full max-w-xs"
                         id={`additionalPhone${index}`}
                         name={`additionalPhone${index}`}
                         type="phone"
@@ -258,7 +252,6 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                     <button type="button" onClick={() => removeAdditionalPhone(index)}>Удалить</button>
                   </div>
                 ))}
-                <button type="button" onClick={addAdditionalPhone}>Добавить ещё один доп. телефон</button>
               </>
             )}
 
@@ -268,7 +261,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
          <div>
           <div className='flex gap-1'>
           {countries && (
-        <select className="select w-full max-w-xs" defaultValue={candidate?.location}  onChange={(e) => fetchCities(e.target.value)} >
+        <select className="select w-full select-success select-xs max-w-xs" defaultValue={candidate?.location}  onChange={(e) => fetchCities(e.target.value)} >
           <option selected hidden disabled>
             Выберите страну
           </option>
@@ -281,7 +274,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       )}
 
       {Cities.length > 0 && (
-        <select className="select w-full max-w-xs" onChange={handleCityChange} value={singleCity}>
+        <select className="select w-full select-success select-xs max-w-xs" onChange={handleCityChange} value={singleCity}>
           <option selected hidden disabled>
             Выберите город
           </option>
@@ -300,7 +293,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label className='flex gap-1 items-end' htmlFor="langue">
           <div className='flex flex-col justify-between h-full'>
           <div>Знание языка</div>
-          <select className="select w-full max-w-xs" id="langue" name="langue" defaultValue={candidate?.langue?.name}>
+          <select className="select w-full select-success select-xs max-w-xs" id="langue" name="langue" defaultValue={candidate?.langue?.name}>
           <option disabled selected value={null}>Знание языка</option>
         <option>Не знает языков</option>
         <option >Английский</option>
@@ -310,7 +303,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           </div>
           <div className='flex flex-col justify-between  h-full'>
           <div>Уровень</div>
-          <select className="select w-full max-w-xs" id="langueLvl" name="langueLvl" defaultValue={candidate?.langue?.level} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+          <select className="sselect w-full select-success select-xs max-w-xs" id="langueLvl" name="langueLvl" defaultValue={candidate?.langue?.level} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
           <option disabled selected value={null}>Уровень знание языка</option>
         <option >Уровень А1</option>
         <option >Уровень А2</option>
@@ -319,7 +312,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </label>
         <label htmlFor="status">
             <div>Статус</div>
-          <select className="select w-full max-w-xs" id="status" name="status"
+          <select className="select w-full select-success select-xs max-w-xs" id="status" name="status"
             defaultValue={candidate?.status}>
           <option disabled selected value={null}>Выберите Статус</option>
           <option>Не обработан</option>
@@ -336,7 +329,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <label htmlFor="statusFromPartner">
               <div>Статус от партнера</div>
               <label htmlFor="partners">
-              <select className="select w-full max-w-xs"
+              <select className="select w-full select-success select-xs max-w-xs"
               defaultValue={candidate?.partners?._id}  
           id="partners" name="partners" >
          <option disabled  value={null}>Выберите заказчика</option>
@@ -354,13 +347,13 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               </select>
               <div className='flex gap-1 items-center justify-between'>
                 <p>С</p>
-              <input className="input input-bordered input-accent w-full max-w-xs" 
+              <input className="input input-bordered input-success input-xs w-full max-w-xs" 
            type="date" id="from" name="from" 
            value={candidate?.statusFromPartner?.from}/>
                 </div>
                 <div className='flex gap-1 items-center justify-between'>
                 <p>До</p>
-              <input className="input input-bordered input-accent w-full max-w-xs" 
+              <input className="input input-bordered input-success input-xs w-full max-w-xs" 
             type="date"  id='to' name='to' 
             value={candidate?.statusFromPartner?.to}/>
                 </div>
@@ -377,7 +370,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             <label htmlFor="dismissalDate">
               <div>Дата увольнения</div>
               <input
-                className="input input-bordered input-accent w-full max-w-xs"
+                className="input input-bordered input-success input-xs w-full max-w-xs"
                 id="dismissalDate"
                 name="dismissalDate"
                 type="date"
@@ -399,18 +392,18 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </label>
         <label htmlFor="leaving">
         <div>Готов выехать<br />{candidate?.leaving ? candidate?.leaving.slice(0, 10) : ''}</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
+            <input className="input input-bordered input-success input-xs w-full max-w-xs" 
             type="date"  id='leaving' name='leaving' />
             </label>
             <label htmlFor="dateArrival">
               <div>Приехал на объект<br />{candidate?.dateArrival ? candidate?.dateArrival.slice(0, 10) : ''}</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
+            <input className="input input-bordered input-success input-xs w-full max-w-xs" 
             type="date"  id='dateArrival' name='dateArrival' />
             </label>
         </div>
         <label htmlFor="manager">
           <div>Менеджер</div>
-        <select className="select w-full max-w-xs"  
+        <select className="select w-full select-success select-xs max-w-xs"  
           defaultValue={candidate?.manager?._id}
           name="manager" id="manager">
          <option disabled selected value={null}>Выберите менеджера</option>
@@ -419,11 +412,14 @@ export default function EditCandidateForm({ id, candidate, managers, professions
           ))}
         </select>
         </label>
-        <label htmlFor="cardNumber" className=" w-full max-w-xs">
-          <div>Номер счёта</div>
-        <input className="input input-bordered input-accent w-full max-w-xs"
-         id="cardNumber" name="cardNumber" type="text" placeholder="Номер счёта" defaultValue={candidate?.cardNumber} />
-        </label>
+      
+        <TextInput id='cardNumber' title='Номер счёта' defaultValue={candidate?.cardNumber}/>
+        <TextInput id='banck' title='Банк' defaultValue={candidate?.bank}/>
+        <TextInput id='swift' title='Swift' defaultValue={candidate?.swift}/>
+        <TextInput id='bet' title='Ставка' defaultValue={candidate?.bet}/>
+        <TextInput id='hours' title='Часы отработки' defaultValue={candidate?.hours}/>
+        <TextInput id='homePrice' title='Стоимость проживания' defaultValue={candidate?.homePrice}/>
+        
           </div>
           <div className='grid justify-start items-stretch content-space-evenly '>
         <label htmlFor="professions">
@@ -436,7 +432,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         {professionEntries.map((prof, index) => (
   <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
     <label htmlFor="profession">
-      <select className="select w-full max-w-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
+      <select className="select w-full select-success select-xs max-w-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
       <option value={null} disabled selected>Выберите профессию</option>
       <option>Нет профессии</option>
         {professions.map(profession => (
@@ -446,7 +442,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     </label>
     <label htmlFor="experience">
       <div>Опыт работы</div>
-      <select className="select select-accent w-full max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
+      <select className="select w-full select-success select-xs max-w-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
         <option disabled selected value={null}>Опыт работы</option>
         <option >Без опыта</option>
         <option >Меньше года</option>
@@ -465,7 +461,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         <div>
         <label htmlFor="citizenship">
             <div>Гражданство</div>
-          <select className="select w-full max-w-xs"
+          <select className="select w-full select-success select-xs max-w-xs"
            id="citizenship" name="citizenship"
            defaultValue={candidate?.citizenship} >
           <option disabled selected value={null}>Укажите гражданство</option>
@@ -509,20 +505,20 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             <div className='flex gap-1'>
             <label htmlFor="dateOfIssue">
               <div>Дата выдачи</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
+            <input className="input input-bordered input-success input-xs w-full max-w-xs" 
             type="date" 
             value={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
             </label>
             <label htmlFor="documDate">
               <div>До какого числа</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
+            <input className="input input-bordered input-success input-xs w-full max-w-xs" 
             type="date" 
             value={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
             </label>
             </div>
             <label htmlFor="nunberDoc">
               <div>Номер документа</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" type="text" 
+            <input className="input input-bordered input-success input-xs w-full max-w-xs" type="text" 
             value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
             </label>
             <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
