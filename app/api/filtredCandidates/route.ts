@@ -8,27 +8,27 @@ export const GET = async (request: NextRequest) => {
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-    const managerName = searchParams.get('managerName');
-    const source = searchParams.get('source');
+    const managerName = searchParams.get('managerName'); // Changed to match the query param in the URL
 
-
+    console.log('Received request with parameters:');
+    console.log('Status:', status);
+    console.log('ManagerName:', managerName);
 
     // Определение типа для объекта запроса
     type QueryType = {
       status?: string;
       manager?: string;
-      source?: string;
     };
 
     const query: QueryType = {};
     if (status) query.status = status;
-    if (managerName) query.manager = managerName;
-    if (source) query.source = source;
+    if (managerName) query.manager = managerName; // Adjusted to use manager ID correctly
 
     const candidates = await Candidate.find(query)
-      .populate('manager')
-      .populate('partners');
+    .populate('manager')
+    .populate('partners');
 
+    console.log('Candidates fetched:', candidates);
 
     const response = { candidates };
 

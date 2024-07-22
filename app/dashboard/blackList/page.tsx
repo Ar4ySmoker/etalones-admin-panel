@@ -13,6 +13,7 @@ async function fetchCandidates(status) {
     }
 
     const data = await response.json();
+    console.log("Отфильтрованные кандидаты", data);
     return data.candidates;
   } catch (error) {
     console.error('Error fetching candidates:', error);
@@ -29,6 +30,7 @@ async function fetchPartners(status) {
       }
   
       const data = await response.json();
+      console.log("Отфильтрованные партнёы", data);
       return data.partners;
     } catch (error) {
       console.error('Error fetching partners:', error);
@@ -49,7 +51,8 @@ const BlackListPage = () => {
           fetchCandidates('В ЧС'),
           fetchPartners('В ЧС')
         ]);
-     
+        console.log("Кандидаты из ЧС:", candidatesBLС); // Добавляем лог для отладки
+        console.log("Партнёры из ЧС:", partnersBLС); // Добавляем лог для отладки
         setDataBLC(candidatesBLС);
         setDataBLP(partnersBLС);
       } catch (error) {
@@ -71,6 +74,8 @@ const BlackListPage = () => {
       <BlackListC data={dataBLC} />
       <div>Заказчики</div>
       <BlackListP data={dataBLP} />
+
+
     </div>
   );
 };

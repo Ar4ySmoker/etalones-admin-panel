@@ -36,7 +36,7 @@ const menuItems = [
       },
       {
         title: "Вакансии",
-        path: "/dashboard/vacancy",
+        path: "/dashboard/vacancies",
         icon: <MdShoppingBag />,
         disabled: false,
       },
@@ -53,7 +53,7 @@ const menuItems = [
       },
       {
         title: "Счёта",
-        path: "/dashboard/invoices",
+        path: "/dashboard/employed",
         icon: <MdAnalytics />,
         disabled: false,
       },

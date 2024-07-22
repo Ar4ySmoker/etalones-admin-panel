@@ -9,7 +9,9 @@ export const GET = async (request: NextRequest) => {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
 
-  
+    console.log('Received request with parameters:');
+    console.log('Status:', status);
+
     // Определение типа для объекта запроса
     type QueryType = {
       status?: string;
@@ -21,6 +23,7 @@ export const GET = async (request: NextRequest) => {
 
     const candidates = await Candidate.find(query)
 
+    console.log('Candidates fetched:', candidates);
 
     const response = { candidates };
 

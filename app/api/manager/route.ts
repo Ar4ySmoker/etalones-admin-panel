@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/app/lib/utils';
 import { Manager } from '@/app/lib/models';
 
-export const GET = async (request: NextRequest) => {
-  try {
-    await connectToDB();
+export const GET = async() =>{
+    try{
+await connectToDB()
+const manager = await Manager.find()
+console.log("manager is test:", manager)
+return new NextResponse(JSON.stringify(manager), {status:200})
 
     const managers = await Manager.find({})
       .sort({ createdAt: -1 });

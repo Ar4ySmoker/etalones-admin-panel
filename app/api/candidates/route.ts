@@ -10,7 +10,9 @@ export const GET = async (request: NextRequest) => {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '5', 10);
 
-  
+    console.log('Received request with parameters:');
+    console.log('Page:', page);
+    console.log('Limit:', limit);
 
     const offset = (page - 1) * limit;
 

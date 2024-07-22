@@ -1,26 +1,5 @@
 import mongoose from "mongoose";
-import { type } from "os";
 
-
-const userSchema = new mongoose.Schema(
-  {
-    username: { type: String, unique: true, required: true },
-      name: {
-          type: String,
-          required: true,
-      },
-      email: {
-          type: String,
-          unique: true, // Уникальный индекс для email
-          required: true,
-      },
-      password: {
-          type: String,
-          required: false,
-      },
-  },
-  { timestamps: true }
-);
 
 const managerShema = new mongoose.Schema({
   image: {
@@ -152,21 +131,6 @@ type: String,
 { timestamps: true })
 
 const candidateSchema = new mongoose.Schema({
-  bank:{
-    type: String
-  },
-  swift:{
-    type: String
-  },
-  bet:{
-    type: String
-  },
-  hours:{
-    type: String
-  },
-  homePrice:{
-    type: String
-  },
   source:{
 type: String
   },
@@ -280,10 +244,6 @@ required: false
     cardNumber:{
       type: String,
         },
-  }],
-  invoices:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Invoices',
   }]
 
 },
@@ -291,6 +251,7 @@ required: false
 )
 
 candidateSchema.pre('save', async function(next) {
+  console.log('Pre-save hook triggered for candidate:', this);
   if (this.isModified('partners') || this.isNew) {
     const Partner = mongoose.model('Partner');
     const Candidate = mongoose.model('Candidate');
@@ -298,17 +259,43 @@ candidateSchema.pre('save', async function(next) {
     if (!this.isNew) {
       const oldCandidate = await Candidate.findById(this._id).lean();
       if (oldCandidate && oldCandidate.partners && oldCandidate.partners.toString() !== this.partners.toString()) {
+        console.log('Removing candidate from old partner:', oldCandidate.partners);
         await Partner.findByIdAndUpdate(oldCandidate.partners, { $pull: { candidates: this._id } });
       }
     }
 
     if (this.partners) {
+      console.log('Adding candidate to new partner:', this.partners);
       await Partner.findByIdAndUpdate(this.partners, { $addToSet: { candidates: this._id } });
     }
   }
   next();
 });
 
+// candidateSchema.pre('save', async function(next) {
+//   if (this.isModified('partners') || this.isNew) {
+//     const Partner = mongoose.model('Partner');
+//     const Candidate = mongoose.model('Candidate');
+    
+//     // Удаляем кандидата из старого партнёра, если он существует и изменился
+//     if (!this.isNew) {
+//       const oldCandidate = await Candidate.findById(this._id).lean(); // Используем lean() для получения простого объекта
+//       if (oldCandidate && oldCandidate.partners && oldCandidate.partners.toString() !== this.partners.toString()) {
+//         await Partner.findByIdAndUpdate(oldCandidate.partners, {
+//           $pull: { candidates: this._id }
+//         });
+//       }
+//     }
+
+//     // Добавляем кандидата к новому партнёру
+//     if (this.partners) {
+//       await Partner.findByIdAndUpdate(this.partners, {
+//         $addToSet: { candidates: this._id }
+//       });
+//     }
+//   }
+//   next();
+// });
 
 
 const commentMngSchema = new mongoose.Schema({
@@ -317,6 +304,10 @@ const commentMngSchema = new mongoose.Schema({
     required: true
   }
 }, { timestamps: true }); 
+const langueShema = new mongoose.Schema({
+  type:String
+})
+
 
 const professionSchema = new mongoose.Schema({
   name: {
@@ -499,6 +490,7 @@ export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vaca
 export const Invoices = mongoose.models.Invoices || mongoose.model("Invoices", invoicesShema);
 export const Profession = mongoose.models.Profession || mongoose.model("Profession", professionSchema);
 export const Document = mongoose.models.Document || mongoose.model("Document", dodumentShema);
+export const Langue = mongoose.models.Langue || mongoose.model("Langue", langueShema)
 export const Status = mongoose.models.Status || mongoose.model("Status", statusShema)
 export const Candidate = mongoose.models.Candidate || mongoose.model("Candidate", candidateSchema);
 export const Manager = mongoose.models.Manager || mongoose.model("Manager", managerShema)

@@ -32,6 +32,7 @@ export default function FormPartner({ professions, manager }) {
     let country = await Axios.get(
       "https://countriesnow.space/api/v0.1/countries"
     );
+    console.log(country);
     setCountries(country.data.data);
   };
 
@@ -82,39 +83,59 @@ export default function FormPartner({ professions, manager }) {
     setProfessionEntries(newEntries);
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const body = {
+      name: formData.get('name') || '',
+      phone: formData.get('phone') || '',
+      professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
+      email: formData.get('email') || '',
+      site: formData.get('site') || '',
+      rentPrice: formData.get('rentPrice') || '',
+      avans: formData.get('avans') || '',
+      workwear: formData.get('workwear') || '',
+      workHours: formData.get('workHours') || '',
+      companyName: formData.get('companyName') || '',
+      location: combinedLocation,
+      numberDE: formData.get('numberDE') || 0,     
+      manager: formData.get('manager') || null,
+      contract: {
+        typeC: formData.get('typeC') || '',
+        sum: formData.get('sum') || '',
+        salaryWorker: formData.get('salaryWorker') || '',
+
+      },
+      status: formData.get('status') || '',
+      drivePermis: selectedDrive.map(d => d.value).join(', '),
+      leaving: formData.get('leaving') || '',
+      langue: {
+        name: formData.get('langue') || '',
+        level: formData.get('level') || ''
+      },
+      comment: formData.get('comment') || ''
+    };
+
+    try {
+      const response = await fetch('/api/addPartners', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const result = await response.json();
+      if (response.ok) {
+        router.refresh();
+        router.push("/dashboard/partners");
+      } else {
+        console.error('Failed to create partners:', result);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
   // const handleSubmit = async (event) => {
   //   event.preventDefault();
-
-  //   const formData = new FormData(event.target);
-  //   const body = {
-  //     name: formData.get('name') || '',
-  //     phone: formData.get('phone') || '',
-  //     professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
-  //     email: formData.get('email') || '',
-  //     site: formData.get('site') || '',
-  //     rentPrice: formData.get('rentPrice') || '',
-  //     avans: formData.get('avans') || '',
-  //     workwear: formData.get('workwear') || '',
-  //     workHours: formData.get('workHours') || '',
-  //     companyName: formData.get('companyName') || '',
-  //     location: combinedLocation,
-  //     numberDE: formData.get('numberDE') || 0,     
-  //     manager: formData.get('manager') || null,
-  //     contract: {
-  //       typeC: formData.get('typeC') || '',
-  //       sum: formData.get('sum') || '',
-  //       salaryWorker: formData.get('salaryWorker') || '',
-
-  //     },
-  //     status: formData.get('status') || '',
-  //     drivePermis: selectedDrive.map(d => d.value).join(', '),
-  //     leaving: formData.get('leaving') || '',
-  //     langue: {
-  //       name: formData.get('langue') || '',
-  //       level: formData.get('level') || ''
-  //     },
-  //     comment: formData.get('comment') || ''
-  //   };
 
   //   try {
   //     const response = await fetch('/api/addPartners', {
@@ -124,73 +145,16 @@ export default function FormPartner({ professions, manager }) {
   //     });
   //     const result = await response.json();
   //     if (response.ok) {
+  //       console.log('partner created:', result);
   //       router.refresh();
   //       router.push("/dashboard/partners");
   //     } else {
-  //       console.error('Failed to create partners:', result);
+  //       console.error('Failed to create partners:', response.data);
   //     }
   //   } catch (error) {
   //     console.error('Network error:', error);
   //   }
   // };
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      // Загрузка файла контракта
-      let fileFormData = new FormData();
-      fileFormData.append('file', fileContract);
-      const fileResponse = await Axios.post('/api/uploadDocument', fileFormData); // Замените на ваш реальный API endpoint
-
-      if (!fileResponse.data.success) {
-        console.error('Failed to upload document:', fileResponse.data.error);
-        return;
-      }
-
-      const fileId = fileResponse.data.document._id; // Получаем ID сохраненного документа
-
-      const formData = new FormData(event.target);
-      const body = {
-        name: formData.get('name') || '',
-        phone: formData.get('phone') || '',
-        professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
-        email: formData.get('email') || '',
-        site: formData.get('site') || '',
-        rentPrice: formData.get('rentPrice') || '',
-        avans: formData.get('avans') || '',
-        workwear: formData.get('workwear') || '',
-        workHours: formData.get('workHours') || '',
-        companyName: formData.get('companyName') || '',
-        location: combinedLocation,
-        numberDE: formData.get('numberDE') || 0,
-        manager: formData.get('manager') || null,
-        contract: {
-          typeC: formData.get('typeC') || '',
-          sum: formData.get('sum') || '',
-          salaryWorker: formData.get('salaryWorker') || '',
-        },
-        status: formData.get('status') || '',
-        drivePermis: selectedDrive.map(d => d.value).join(', '),
-        leaving: formData.get('leaving') || '',
-        langue: {
-          name: formData.get('langue') || '',
-          level: formData.get('level') || ''
-        },
-        comment: formData.get('comment') || '',
-        documents: [fileId] // Передаем только ID нового добавленного файла
-      };
-
-      const response = await Axios.post('/api/addPartners', body);
-      if (response.status === 201) {
-        router.refresh();
-        router.push("/dashboard/partners");
-      } else {
-        console.error('Failed to create partners:', response.data);
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-    }
-  };
   const router = useRouter();
 
   return (
@@ -285,13 +249,12 @@ export default function FormPartner({ professions, manager }) {
               <div>Статус</div>
               <select className="select select-xs select-success w-full max-w-xs" id="status" name="status">
                 <option disabled selected value={null}>Выберите Статус</option>
-                <option value={'neo'}>Не смогли поговорить</option>
-                <option value={'dum'}>Думает над предложением</option>
-                <option value={'poz'}>Начнёт работу позже</option>
-                <option value={'pod'}>Контракт на подписи</option>
-                <option value={'jde'}>Ждёт людей</option>
-                <option value={'nao'}>Люди на объекте</option>
-                <option value={'chs'}>В ЧС</option>
+                <option>Не смогли поговорить</option>
+                <option>Думает над предложением</option>
+                <option>Контракт на подписи</option>
+                <option>Ждёт людей</option>
+                <option>Люди на объекте</option>
+                <option>В ЧС</option>
               </select>
             </label>
             <label htmlFor="drivePermis">

@@ -1,4 +1,6 @@
 const BlackListC = ({ data }) => {
+  console.log("Полученные данные :", data); // Добавляем лог для отладки
+
     return (
       <div className="overflow-x-auto">
         <table className="table table-xs">

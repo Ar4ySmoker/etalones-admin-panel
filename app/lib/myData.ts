@@ -1,12 +1,28 @@
-import {  ProfessionField, ManagerField, StatusField, PartnersField } from "./definitions";
-import {  Profession,  Manager, Status, Partner } from "./models";
+import {  ProfessionField, LangueField, ManagerField, StatusField, PartnersField } from "./definitions";
+import {  Profession,  Langue, Manager, Status, Partner } from "./models";
 import { connectToDB } from "./utils";
 
 
 
+
+
+export const fetchLangue = async (): Promise<LangueField[]> => {
+    try {
+        await connectToDB();
+        const langue = await Langue.find({}, 'name').lean();
+        return langue.map(langue => ({
+            _id: langue._id.toString(),
+            name: langue.name
+          }));
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch Langue!");
+    }
+};
 export const fetchStatus = async (): Promise<StatusField[]> => {
     try {
         await connectToDB();
+        console.log("Connected to the db");
         const status = await Status.find({}, 'name').lean();
         return status.map(status => ({
             _id: status._id.toString(),
@@ -19,16 +35,14 @@ export const fetchStatus = async (): Promise<StatusField[]> => {
 };
 export const fetchManager = async (): Promise<ManagerField[]> => {
     try {
-      await connectToDB();
-      const managers = await Manager.find({}, 'name phone telegram viber whatsapp').lean();
-      return managers.map(manager => ({
-        _id: manager._id.toString(),
-        name: manager.name,
-        phone: manager.phone,
-        telegram: manager.telegram,
-        viber: manager.viber,
-        whatsapp: manager.whatsapp,
-      }));
+        await connectToDB();
+        console.log("Connected to the db");
+        const manager = await Manager.find({}, 'name').lean();
+        return manager.map(manager => ({
+            _id: manager._id.toString(),
+            name: manager.name,
+            phone: manager.phone
+          }));
     } catch (err) {
       console.log(err);
       throw new Error("Failed to fetch managers!");
@@ -38,21 +52,13 @@ export const fetchManager = async (): Promise<ManagerField[]> => {
 export const fetchProfession = async (): Promise<ProfessionField[]> => {
     try {
          await connectToDB(); // Добавлен await для гарантии асинхронного подключения
-         const professions = await Profession.find({}, 'name category') // Получаем профессии с полями name и category
-         .sort({ name: 1 }) // Сортируем по name в алфавитном порядке
-         .lean(); // Преобразуем результат в простой объект JavaScript
-     
-     console.log("Professions from DB:", professions); // Выводим в консоль полученные профессии
-     
-     // Преобразуем список профессий в новый формат
-     const formattedProfessions = professions.map(profession => ({
-         _id: profession._id.toString(), // Преобразуем _id в строку
-         name: profession.name, // Оставляем поле name как есть
-         category: profession.category // Оставляем поле category как есть
-     }));
-     
-     return formattedProfessions; // Возвращаем преобразованный список профессий
-     
+        console.log("Connected to db Profession");
+        const professions = await Profession.find({}, 'name').sort({ name: 1 }).lean();
+        return professions.map(profession => ({
+            _id: profession._id.toString(), // Преобразование _id в строку
+            name: profession.name,
+            description: profession.description // Убедитесь, что поле description существует в модели
+          }));
     } catch (err) {
         console.log(err);
         throw new Error("Failed to fetch Profession!");
@@ -62,6 +68,7 @@ export const fetchProfession = async (): Promise<ProfessionField[]> => {
 export const fetchPartners = async (): Promise<PartnersField[]> => {
     try {
          await connectToDB(); // Добавлен await для гарантии асинхронного подключения
+        console.log("Connected to db Profession");
         const partners = await Partner.find({}, 'name companyName').lean();
         return partners.map(partner => ({
             _id: partner._id.toString(), // Преобразование _id в строку

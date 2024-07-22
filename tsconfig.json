@@ -33,7 +33,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/ui/dashboard/FormCandidate/FormCandidate.jsx", "app/api/upload-mongo-image/route.js", "app/ui/dashboard/FormVacancy/FormVacancy.jsx", "app/dashboard/vacancy/add/page.jsx",  ],
+, "app/ui/dashboard/FormCandidate/FormCandidate.jsx",  ],
   "exclude": [
     "node_modules"
   ]

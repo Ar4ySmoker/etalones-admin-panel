@@ -34,6 +34,7 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
     let country = await Axios.get(
       "https://countriesnow.space/api/v0.1/countries"
     );
+    console.log(country);
     setCountries(country.data.data);
   };
 
