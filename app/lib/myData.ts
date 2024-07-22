@@ -30,6 +30,7 @@ export const fetchStatus = async (): Promise<StatusField[]> => {
           }));
     } catch (err) {
         console.log(err);
+
         throw new Error("Failed to fetch status!");
     }
 };
@@ -49,21 +50,21 @@ export const fetchManager = async (): Promise<ManagerField[]> => {
     }
   };
 
-export const fetchProfession = async (): Promise<ProfessionField[]> => {
-    try {
-         await connectToDB(); // Добавлен await для гарантии асинхронного подключения
-        console.log("Connected to db Profession");
-        const professions = await Profession.find({}, 'name').sort({ name: 1 }).lean();
-        return professions.map(profession => ({
-            _id: profession._id.toString(), // Преобразование _id в строку
-            name: profession.name,
-            description: profession.description // Убедитесь, что поле description существует в модели
-          }));
-    } catch (err) {
-        console.log(err);
-        throw new Error("Failed to fetch Profession!");
-    }
-};
+// export const fetchProfession = async (): Promise<ProfessionField[]> => {
+//     try {
+//          await connectToDB(); // Добавлен await для гарантии асинхронного подключения
+//         console.log("Connected to db Profession");
+//         const professions = await Profession.find({}, 'name').sort({ name: 1 }).lean();
+//         return professions.map(profession => ({
+//             _id: profession._id.toString(), // Преобразование _id в строку
+//             name: profession.name,
+//             description: profession.description // Убедитесь, что поле description существует в модели
+//           }));
+//     } catch (err) {
+//         console.log(err);
+//         throw new Error("Failed to fetch Profession!");
+//     }
+// };
 
 export const fetchPartners = async (): Promise<PartnersField[]> => {
     try {
