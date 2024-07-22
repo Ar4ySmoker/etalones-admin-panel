@@ -469,7 +469,30 @@ type: String
 }
 
 })
+const applicationSchema = new mongoose.Schema({
+  candidateId: { type: mongoose.Schema.Types.ObjectId, ref: 'Candidate', required: true },
+  status: { type: String, required: true },
+  managerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  history: [
+    {
+      status: { type: String, required: true },
+      updatedAt: { type: Date, default: Date.now },
+    },
+  ],
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+});
 
+// Middleware для обновления поля updatedAt и добавления записи в history при изменении статуса
+applicationSchema.pre('save', function(next) {
+  if (this.isModified('status')) {
+    this.history.push({ status: this.status, updatedAt: new Date() });
+    this.updatedAt = new Date();
+  }
+  next();
+});
+
+export const Application = mongoose.models.Application || mongoose.model('Application', applicationSchema);
 export const User =  mongoose.models.User || mongoose.model("User", userSchema);
 export const VacancyOnServer = mongoose.models.VacancyOnServer || mongoose.model("VacancyOnServer", vacancyOnServerShema)
 export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vacancyShema)
