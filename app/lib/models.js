@@ -1,5 +1,24 @@
 import mongoose from "mongoose";
 
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, unique: true, required: true },
+      name: {
+          type: String,
+          required: true,
+      },
+      email: {
+          type: String,
+          unique: true, // Уникальный индекс для email
+          required: true,
+      },
+      password: {
+          type: String,
+          required: false,
+      },
+  },
+  { timestamps: true }
+);
 
 const managerShema = new mongoose.Schema({
   image: {
@@ -513,7 +532,7 @@ const newsSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 export const News = mongoose.models.News || mongoose.model("News", newsSchema);
-// export const User =  mongoose.models.User || mongoose.model("User", userSchema);
+export const User =  mongoose.models.User || mongoose.model("User", userSchema);
 export const VacancyOnServer = mongoose.models.VacancyOnServer || mongoose.model("VacancyOnServer", vacancyOnServerShema);
 export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vacancyShema)
 export const Invoices = mongoose.models.Invoices || mongoose.model("Invoices", invoicesShema);
