@@ -513,7 +513,7 @@ const newsSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 export const News = mongoose.models.News || mongoose.model("News", newsSchema);
-export const User =  mongoose.models.User || mongoose.model("User", userSchema);
+// export const User =  mongoose.models.User || mongoose.model("User", userSchema);
 export const VacancyOnServer = mongoose.models.VacancyOnServer || mongoose.model("VacancyOnServer", vacancyOnServerShema);
 export const Vacancy = mongoose.models.Vacancy || mongoose.model("Vacancy", vacancyShema)
 export const Invoices = mongoose.models.Invoices || mongoose.model("Invoices", invoicesShema);
