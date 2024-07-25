@@ -34,9 +34,20 @@ const menuItems = [
         icon: <MdAttachMoney />,
         disabled: false,
       },
+    ],
+  },
+  {
+    title: "Данные на сайте",
+    list: [
       {
         title: "Вакансии",
         path: "/dashboard/vacancies",
+        icon: <MdShoppingBag />,
+        disabled: false,
+      },
+      {
+        title: "Новости",
+        path: "/dashboard/news",
         icon: <MdShoppingBag />,
         disabled: false,
       },
