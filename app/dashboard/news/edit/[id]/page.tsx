@@ -1,8 +1,8 @@
 import EditNewsForm from "@/app/ui/dashboard/EditNewsForm/EditNewsForm";
 
 const getNewsById = async (id) => {
-    // const url = `http://localhost:3000/api/news/${id}`;
-    const url = `https://www.candidat.store/api/news/${id}`;
+    const url = `http://localhost:3001/api/news/${id}`;
+    // const url = `https://www.candidat.store/api/news/${id}`;
 
     try {
         const res = await fetch(url, {

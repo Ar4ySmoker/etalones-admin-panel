@@ -144,7 +144,7 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
               };
         try {
             const res = await fetch(`https://www.candidat.store/api/partners/${id}`, {
-              // const res = await fetch(`http://localhost:3000/api/partners/${id}`, {
+              // const res = await fetch(`http://localhost:3001/api/partners/${id}`, {
   
                 method: "PUT",
                 headers: {
@@ -176,20 +176,12 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
                     onChange={(e) => setFileContract(e.target.files?.[0])}
                 />
         </label>
-        <label htmlFor="firma">
-<div>Загрузите файл с данными фирмы</div>
-        <input
-            className="file-input file-input-bordered  w-full max-w-xs"
-                    type='file'
-                    name='fileFirma'
-                    onChange={(e) => setFileFirma(e.target.files?.[0])}
-                />
-        </label>
+
             <div className='grid grid-cols-2'>
               <div className='grid justify-start items-stretch content-space-evenly '>
               <label htmlFor="manager">
                   <div>Менеджер</div>
-                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager._id}>
+                  <select className="select w-full max-w-xs" id="manager" name="manager" defaultValue={partner?.manager?._id}>
                     <option disabled selected value={null}>Выберите менеджера</option>
                     {managers.map(m => (
                       <option key={m._id} value={m._id}>{m.name}</option>

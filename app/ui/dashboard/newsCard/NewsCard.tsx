@@ -49,13 +49,9 @@ function NewsCard() {
                                 <h2 className="card-title font-bold">{newsItem.title}</h2>
                                 <p className="text-sm font-semibold mt-2">Источник: {newsItem.source}</p>
                                 <p className="text-sm font-semibold mt-2">Категория: {newsItem.category}</p>
-                                <p className="text-sm">{newsItem.description}</p>
-                                {newsItem.content && newsItem.content.map((section, index) => (
-                                    <div key={index} className="mt-2">
-                                        <h3 className="text-md font-semibold">{section.title}</h3>
-                                        <p>{section.content}</p>
-                                    </div>
-                                ))}
+                                <p className="text-sm">
+                                {newsItem.description.length > 100 ? `${newsItem.description.substring(0, 100)}...` : newsItem.description}
+                                </p>
                                 <Link href={`/dashboard/news/edit/${newsItem._id}`}>
                                     <button className="btn btn-sm btn-outline btn-error w-max mt-4">
                                         Редактировать

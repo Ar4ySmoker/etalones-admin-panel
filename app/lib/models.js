@@ -92,7 +92,8 @@ type: String
   numberDE:{
 type: String,
 unique: true,
-required: false
+required: false,
+sparse: true,
   },
   location:{
     type: String,

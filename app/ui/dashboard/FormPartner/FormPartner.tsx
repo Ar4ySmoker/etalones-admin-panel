@@ -23,8 +23,7 @@ export default function FormPartner({ professions, manager }) {
   const [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
   const [contract, setContract] = useState({ typeC: "", sum: ""});
-  const [fileContract, setFileContract] = useState(null);
-  const [fileFirma, setFileFirma] = useState(null);
+  // const [fileContract, setFileContract] = useState(null);
 
   const handleLangueChange = (field, value) => {
     setLangue(prevLangue => ({ ...prevLangue, [field]: value }));
@@ -83,6 +82,57 @@ export default function FormPartner({ professions, manager }) {
     setProfessionEntries(newEntries);
   };
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+
+  //   const formData = new FormData(event.target);
+  //   const body = {
+  //     name: formData.get('name') || '',
+  //     phone: formData.get('phone') || '',
+  //     professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
+  //     email: formData.get('email') || '',
+  //     site: formData.get('site') || '',
+  //     rentPrice: formData.get('rentPrice') || '',
+  //     avans: formData.get('avans') || '',
+  //     workwear: formData.get('workwear') || '',
+  //     workHours: formData.get('workHours') || '',
+  //     companyName: formData.get('companyName') || '',
+  //     location: combinedLocation,
+  //     numberDE: formData.get('numberDE') || 0,     
+  //     manager: formData.get('manager') || null,
+  //     contract: {
+  //       typeC: formData.get('typeC') || '',
+  //       sum: formData.get('sum') || '',
+  //       salaryWorker: formData.get('salaryWorker') || '',
+
+  //     },
+  //     status: formData.get('status') || '',
+  //     drivePermis: selectedDrive.map(d => d.value).join(', '),
+  //     leaving: formData.get('leaving') || '',
+  //     langue: {
+  //       name: formData.get('langue') || '',
+  //       level: formData.get('level') || ''
+  //     },
+  //     comment: formData.get('comment') || ''
+  //   };
+
+  //   try {
+  //     const response = await fetch('/api/addPartners', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(body)
+  //     });
+  //     const result = await response.json();
+  //     if (response.ok) {
+  //       router.refresh();
+  //       router.push("/dashboard/partners");
+  //     } else {
+  //       console.error('Failed to create partners:', result);
+  //     }
+  //   } catch (error) {
+  //     console.error('Network error:', error);
+  //   }
+  // };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -91,7 +141,7 @@ export default function FormPartner({ professions, manager }) {
       name: formData.get('name') || '',
       phone: formData.get('phone') || '',
       professions: professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== ''),
-      email: formData.get('email') || '',
+      email: formData.get('email') || null,
       site: formData.get('site') || '',
       rentPrice: formData.get('rentPrice') || '',
       avans: formData.get('avans') || '',
@@ -99,13 +149,12 @@ export default function FormPartner({ professions, manager }) {
       workHours: formData.get('workHours') || '',
       companyName: formData.get('companyName') || '',
       location: combinedLocation,
-      numberDE: formData.get('numberDE') || 0,     
+      numberDE: formData.get('numberDE') || null,
       manager: formData.get('manager') || null,
       contract: {
         typeC: formData.get('typeC') || '',
         sum: formData.get('sum') || '',
         salaryWorker: formData.get('salaryWorker') || '',
-
       },
       status: formData.get('status') || '',
       drivePermis: selectedDrive.map(d => d.value).join(', '),
@@ -116,6 +165,12 @@ export default function FormPartner({ professions, manager }) {
       },
       comment: formData.get('comment') || ''
     };
+
+    // if (fileContract) {
+    //   body.fileContract = fileContract;
+    // }
+
+
 
     try {
       const response = await fetch('/api/addPartners', {
@@ -134,13 +189,12 @@ export default function FormPartner({ professions, manager }) {
       console.error('Network error:', error);
     }
   };
-
   const router = useRouter();
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="file">
+        {/* <label htmlFor="file">
 <div>Загрузите файл контракта</div>
         <input
             className="file-input file-input-bordered  w-full max-w-xs"
@@ -148,16 +202,8 @@ export default function FormPartner({ professions, manager }) {
                     name='fileContract'
                     onChange={(e) => setFileContract(e.target.files?.[0])}
                 />
-        </label>
-        <label htmlFor="firma">
-<div>Загрузите файл с данными фирмы</div>
-        <input
-            className="file-input file-input-bordered  w-full max-w-xs"
-                    type='file'
-                    name='fileFirma'
-                    onChange={(e) => setFileFirma(e.target.files?.[0])}
-                />
-        </label>
+        </label> */}
+        
         <div className='grid grid-cols-2 font-light text-sm'>
           <div className='grid justify-start items-stretch content-space-evenly '>
           <label htmlFor="manager">
@@ -323,7 +369,7 @@ export default function FormPartner({ professions, manager }) {
           <textarea className="textarea textarea-accent w-full "
             id="comment" name="comment" placeholder="Комментарий" />
         </label>
-        <button className="btn btn-success w-full" type="submit">Сохранить кандидата</button>
+        <button className="btn btn-success w-full" type="submit">Сохранить Партнёра</button>
       </form>
     </div>
   );
