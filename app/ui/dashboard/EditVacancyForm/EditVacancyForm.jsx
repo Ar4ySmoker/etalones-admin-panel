@@ -147,7 +147,7 @@ const FormVacancy = ({ vacancy, managers, professions }) => {
                         <PreviewVacancy vacancy={vacancy} file={file} />
                         <div className="grid items-end">
                             <label htmlFor="manager">
-                                <div>Менеджер {vacancy.manager.name}</div>
+                                <div>Менеджер {vacancy.manager?.name}</div>
                                 <select
                                     className="select select-bordered select-sm w-full max-w-xs"
                                     id="manager"

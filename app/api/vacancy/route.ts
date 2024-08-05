@@ -1,14 +1,46 @@
-import { NextResponse } from 'next/server';
+import {NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/app/lib/utils';
 import { VacancyOnServer } from '@/app/lib/models';
 
-export const GET = async () => {
+// export const GET = async () => {
+//     try {
+//         await connectToDB();
+//         const vacancies = await VacancyOnServer.find().populate('manager');
+//         return new NextResponse(JSON.stringify(vacancies), { status: 200 });
+//     } catch (error) {
+//         return new NextResponse("error in fetching " + error, { status: 500 });
+//     }
+// };
+interface IVacancy {
+    _id: string;
+    title: string;
+    description: string;
+    published: boolean;
+    createdAt: Date;
+    manager: {
+        name: string;
+        email: string;
+    };
+}
+export const GET = async (req: NextRequest): Promise<NextResponse> => {
     try {
         await connectToDB();
-        const vacancies = await VacancyOnServer.find().populate('manager');
+        console.log('mongo is connected');
+
+        // Получаем параметры запроса
+        const url = new URL(req.url);
+        const page = parseInt(url.searchParams.get('page') || '1', 10);
+        const limit = parseInt(url.searchParams.get('limit') || '3', 10); // Количество вакансий для загрузки за один раз
+
+        const vacancies: IVacancy[] = await VacancyOnServer.find({ published: true })
+            .populate('manager')
+            // .sort({ createdAt: -1 }) 
+            .skip((page - 1) * limit) // Пропускаем предыдущие вакансии
+            .limit(limit); // Ограничиваем количество загружаемых вакансий
+
         return new NextResponse(JSON.stringify(vacancies), { status: 200 });
     } catch (error) {
-        return new NextResponse("error in fetching " + error, { status: 500 });
+        return new NextResponse(`error in fetching: ${error}`, { status: 500 });
     }
 };
 
