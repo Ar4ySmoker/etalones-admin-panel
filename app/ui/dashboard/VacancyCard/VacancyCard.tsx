@@ -132,21 +132,38 @@
 
 
 'use client';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Checkbox } from 'react-daisyui';
 
+interface IVacancy {
+    _id: string;
+    title: string;
+    salary: string;
+    location: string;
+    published: boolean;
+    urgently: boolean;
+    last: boolean;
+    image?: {
+        contentType: string;
+        data: Buffer;
+        name: string;
+    };
+    manager?: {
+        name: string;
+    };
+}
+
 function VacancyCard() {
-    const [vacancies, setVacancies] = useState([]);
+    const [vacancies, setVacancies] = useState<IVacancy[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [page, setPage] = useState(1); // Добавлено состояние для страницы
+    const [page, setPage] = useState(1);
 
     const fetchVacancies = async () => {
         try {
             // const response = await fetch(`http://localhost:3000/api/vacancy?page=${page}&limit=1`);
             const response = await fetch(`https://www.candidat.store/api/vacancy?page=${page}&limit=1`);
-
             const data = await response.json();
             setVacancies(prevVacancies => [...prevVacancies, ...data]);
             setIsLoading(false);
@@ -158,10 +175,10 @@ function VacancyCard() {
 
     useEffect(() => {
         fetchVacancies();
-    }, [page]); // Теперь fetchVacancies вызывается при изменении page
+    }, [page]);
 
     const observer = useRef<IntersectionObserver | null>(null);
-    const lastVacancyElementRef = useRef<HTMLTableRowElement | null>(null); // Изменено на HTMLTableRowElement
+    const lastVacancyElementRef = useRef<HTMLTableRowElement | null>(null);
 
     useEffect(() => {
         if (observer.current) observer.current.disconnect();
@@ -175,7 +192,7 @@ function VacancyCard() {
         }
     }, [lastVacancyElementRef.current]);
 
-    const handleCheckboxChange = async (vacancy, field, value) => {
+    const handleCheckboxChange = async (vacancy: IVacancy, field: keyof IVacancy, value: boolean) => {
         try {
             const response = await fetch(`https://www.candidat.store/api/checkboxVacancy/${vacancy._id}`, {
                 method: 'PUT',
@@ -189,7 +206,6 @@ function VacancyCard() {
                 throw new Error('Failed to update vacancy');
             }
 
-            const updatedVacancy = await response.json();
             setVacancies(prevVacancies =>
                 prevVacancies.map(v => (v._id === vacancy._id ? { ...v, [field]: value } : v))
             );
@@ -201,7 +217,7 @@ function VacancyCard() {
     return (
         <div className="overflow-x-auto flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-4">Список вакансий на сайте</h2>
-            {isLoading ? (
+            {isLoading && vacancies.length === 0 ? (
                 <p><span className="loading loading-spinner loading-md"></span> Загрузка...</p>
             ) : (
                 <table className="table">
@@ -217,7 +233,10 @@ function VacancyCard() {
                     </thead>
                     <tbody>
                         {vacancies.map((vacancy, index) => (
-                            <tr key={vacancy._id} ref={index === vacancies.length - 1 ? lastVacancyElementRef as React.Ref<HTMLTableRowElement> : null}>
+                            <tr
+                                key={vacancy._id}
+                                ref={index === vacancies.length - 1 ? lastVacancyElementRef : null}
+                            >
                                 <td className='flex flex-col gap-3'>
                                     <div className='badge badge-ghost badge-md w-[150px] font-semibold'>{vacancy.manager?.name}</div>
                                     <div className='badge badge-ghost badge-sm w-[150px] flex justify-between'>
@@ -268,6 +287,9 @@ function VacancyCard() {
                         ))}
                     </tbody>
                 </table>
+            )}
+            {isLoading && vacancies.length > 0 && (
+                <p><span className="loading loading-spinner loading-md"></span> Загрузка...</p>
             )}
         </div>
     );
