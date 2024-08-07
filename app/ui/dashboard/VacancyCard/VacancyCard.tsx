@@ -182,15 +182,23 @@ function VacancyCard() {
 
     useEffect(() => {
         if (observer.current) observer.current.disconnect();
+    
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting) {
+                console.log("Last element intersected, loading more vacancies...");
                 setPage(prevPage => prevPage + 1);
             }
         });
+    
         if (lastVacancyElementRef.current) {
             observer.current.observe(lastVacancyElementRef.current);
         }
+    
+        return () => {
+            if (observer.current) observer.current.disconnect();
+        };
     }, [lastVacancyElementRef.current]);
+    
 
     const handleCheckboxChange = async (vacancy: IVacancy, field: keyof IVacancy, value: boolean) => {
         try {
