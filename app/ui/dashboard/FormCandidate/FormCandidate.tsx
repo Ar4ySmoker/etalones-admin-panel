@@ -203,7 +203,11 @@ export default function Form({ professions,  manager, partners }) {
       },
       partners:formData.get('partners') || null,
       manager: formData.get('manager') || null,
-      comment: formData.get('comment') || ''
+      // comment: formData.get('comment') || ''
+      comment: formData.get('comment') ? [{
+        text: formData.get('comment'),
+        date: new Date()
+      }] : []
     };
     
 

@@ -9,10 +9,21 @@ const Navbar = () => {
     return (
         <div className="navbar bg-base-100">
             <div className="flex-1">
-                <a className="btn btn-ghost text-xl">Etalones S&B</a>
+                <Link href="/dashboard" className="btn btn-ghost text-xl">Etalones S&B</Link>
                 <Link href="/dashboard">
                     Главная
                 </Link>
+            </div>
+            <div>
+
+            <div className="indicator mx-10">
+  <span className="indicator-item badge badge-primary">new</span>
+  <div className="bg-base-300 rounded-md grid w-32 place-items-center"><Link  href="/dashboard/tasks">
+                    Задачи
+                </Link></div>
+</div>
+                
+
             </div>
             <div className="flex-none">
                 {!session ? (

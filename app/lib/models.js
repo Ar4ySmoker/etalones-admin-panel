@@ -153,15 +153,18 @@ type: String,
 { timestamps: true })
 
 const candidateSchema = new mongoose.Schema({
+  tasks: [{
+    text: {
+      type: String
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }],
   source:{
 type: String
   },
-  time:{
-    type: String,  
-    },
-    currentPage:{
-  type: String,
-    },
   name: {
 type: String,
   },
@@ -230,8 +233,17 @@ required: false
   status:{
    type: String
   },
-  comment:[{
-    type: String
+  // comment:[{
+  //   type: String
+  // }],
+  comment: [{
+    text: {
+      type: String
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
   }],
   commentMng: [{
     type: mongoose.Schema.Types.ObjectId,

@@ -1,6 +1,8 @@
 import React from 'react';
 
 export default function CandidateDetails({ candidate }) {
+  console.log('Candidate data:', candidate);
+
   const renderProfessions = (professions) => {
     if (!professions || professions.length === 0) {
       return "нет профессий";
@@ -23,7 +25,18 @@ export default function CandidateDetails({ candidate }) {
       </div>
     ));
   };
-
+  const renderComments = (comments) => {
+    if (!comments || comments.length === 0) {
+      return "Пусто...";
+    }
+    return (
+      <ul className="h-[100px] overflow-y-auto">
+        {comments.map((c, index) => (
+          <li key={index}>{c.text} - {new Date(c.date).toLocaleString()}</li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
     <>
@@ -58,8 +71,14 @@ export default function CandidateDetails({ candidate }) {
             <div>Менеджер: {candidate.manager?.name}</div>
             <div>Номер счёта: {candidate.cardNumber ? candidate.cardNumber : "нет номера счёта"}</div>
             <div>Документы: {renderDocuments(candidate.documents)}</div>
-            <div>Комментарий: {candidate.comment ? candidate.comment : "Пусто..."}</div>
-
+            {/* <div>Старый Комментарий: {candidate?.comment}</div> */}
+            <h3>Существующие комментарии</h3>
+            {/* {renderComments(candidate.comment)} */}
+            <ul className=" overflow-y-auto">
+        {candidate?.comment.map((c, index) => (
+          <li key={index}>{c.text} - {new Date(c.date).toLocaleString()}</li>
+        ))}
+      </ul>
           </div>
         </div>
       </div>

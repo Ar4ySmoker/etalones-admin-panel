@@ -124,62 +124,124 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     setDocumentEntries(newEntries);
   };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-            const formData = new FormData(e.target);
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //         const formData = new FormData(e.target);
 
-        const body = {
-          source:"",
-          name: formData.get('name') || candidate?.name, // Добавляем проверку на пустое значение
-          age: formData.get('age') || candidate?.age,
-          ageNum: formData.get('ageNum') || candidate?.ageNum,
-          phone: formData.get('phone') || candidate?.phone,
-          additionalPhones: additionalPhones.length ? additionalPhones.filter(phone => phone.trim() !== '') : candidate.additionalPhones,
-          professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
-          locations: combinedLocation || candidate?.locatons,
-          documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
-          drivePermis: selectedDrive.map(d => d.value).join(', ') || candidate.drivePermis,
-          leaving: formData.get('leaving') || candidate?.leaving,
-          dateArrival: formData.get('dateArrival') || candidate?.dateArrival,
-          cardNumber: formData.get('cardNumber') || candidate?.cardNumber,
-          // workHours: formData.get('workHours') || candidate.workHours,
-          langue: {
-            name: formData.get('langue') || candidate?.langue?.name,
-            level: formData.get('langueLvl') || candidate?.langue?.Lvl },
-          status: formData.get('status') || candidate?.status,
-          citizenship: formData.get('citizenship') || candidate?.citizenship,
-          statusFromPartner:{
-            status: formData.get('statusFromPartner') || candidate?.statusFromPartner?.status,
-            from: formData.get('from') || candidate?.statusFromPartner?.from,
-            to:formData.get('to') || candidate?.statusFromPartner?.to,
-            dismissalDate: formData.get('dismissalDate') || candidate?.statusFromPartner?.dismissalDate
-          },
-          partners: formData.get('partners') || candidate?.partners,
-          manager: formData.get('manager') || candidate?.manager,
-          comment: formData.get('comment') || candidate?.comment }
+    //     const body = {
+    //       source:"",
+    //       name: formData.get('name') || candidate?.name, // Добавляем проверку на пустое значение
+    //       age: formData.get('age') || candidate?.age,
+    //       ageNum: formData.get('ageNum') || candidate?.ageNum,
+    //       phone: formData.get('phone') || candidate?.phone,
+    //       additionalPhones: additionalPhones.length ? additionalPhones.filter(phone => phone.trim() !== '') : candidate.additionalPhones,
+    //       professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
+    //       locations: combinedLocation || candidate?.locatons,
+    //       documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
+    //       drivePermis: selectedDrive.map(d => d.value).join(', ') || candidate.drivePermis,
+    //       leaving: formData.get('leaving') || candidate?.leaving,
+    //       dateArrival: formData.get('dateArrival') || candidate?.dateArrival,
+    //       cardNumber: formData.get('cardNumber') || candidate?.cardNumber,
+    //       // workHours: formData.get('workHours') || candidate.workHours,
+    //       langue: {
+    //         name: formData.get('langue') || candidate?.langue?.name,
+    //         level: formData.get('langueLvl') || candidate?.langue?.Lvl },
+    //       status: formData.get('status') || candidate?.status,
+    //       citizenship: formData.get('citizenship') || candidate?.citizenship,
+    //       statusFromPartner:{
+    //         status: formData.get('statusFromPartner') || candidate?.statusFromPartner?.status,
+    //         from: formData.get('from') || candidate?.statusFromPartner?.from,
+    //         to:formData.get('to') || candidate?.statusFromPartner?.to,
+    //         dismissalDate: formData.get('dismissalDate') || candidate?.statusFromPartner?.dismissalDate
+    //       },
+    //       partners: formData.get('partners') || candidate?.partners,
+    //       manager: formData.get('manager') || candidate?.manager,
+    //       comment: formData.get('comment') || candidate?.comment }
         
-          try {
-            // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
-              const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+    //       try {
+    //         // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+    //           const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
 
-            method: "PUT",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify(body),
-            });
+    //         method: "PUT",
+    //             headers: {
+    //                 "Content-type": "application/json",
+    //             },
+    //             body: JSON.stringify(body),
+    //         });
  
-            if (!res.ok) {
-                throw new Error("Failed to update Candidate");
-            }
+    //         if (!res.ok) {
+    //             throw new Error("Failed to update Candidate");
+    //         }
  
-            router.refresh();
-            router.push("/dashboard/candidates");
-        } catch (error) {
-            console.log(error);
+    //         router.refresh();
+    //         router.push("/dashboard/candidates");
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const newCommentText = formData.get('comment');
+    
+      const newComment = newCommentText ? {
+        text: newCommentText,
+        date: new Date()
+      } : null;
+    
+      const body = {
+        source: "",
+        name: formData.get('name') || candidate?.name,
+        age: formData.get('age') || candidate?.age,
+        ageNum: formData.get('ageNum') || candidate?.ageNum,
+        phone: formData.get('phone') || candidate?.phone,
+        additionalPhones: additionalPhones.length ? additionalPhones.filter(phone => phone.trim() !== '') : candidate.additionalPhones,
+        professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
+        locations: combinedLocation || candidate?.locations,
+        documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
+        drivePermis: selectedDrive.map(d => d.value).join(', ') || candidate.drivePermis,
+        leaving: formData.get('leaving') || candidate?.leaving,
+        dateArrival: formData.get('dateArrival') || candidate?.dateArrival,
+        cardNumber: formData.get('cardNumber') || candidate?.cardNumber,
+        langue: {
+          name: formData.get('langue') || candidate?.langue?.name,
+          level: formData.get('langueLvl') || candidate?.langue?.Lvl
+        },
+        status: formData.get('status') || candidate?.status,
+        citizenship: formData.get('citizenship') || candidate?.citizenship,
+        statusFromPartner: {
+          status: formData.get('statusFromPartner') || candidate?.statusFromPartner?.status,
+          from: formData.get('from') || candidate?.statusFromPartner?.from,
+          to: formData.get('to') || candidate?.statusFromPartner?.to,
+          dismissalDate: formData.get('dismissalDate') || candidate?.statusFromPartner?.dismissalDate
+        },
+        partners: formData.get('partners') || candidate?.partners,
+        manager: formData.get('manager') || candidate?.manager,
+        comment: newComment ? [...candidate.comment, newComment] : candidate.comment
+      };
+    
+      try {
+        // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+                const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+    
+        if (!res.ok) {
+          throw new Error("Failed to update Candidate");
         }
+    
+        router.refresh();
+        router.push("/dashboard/candidates");
+      } catch (error) {
+        console.log(error);
+      }
     };
-
+    
     const handleDismissalClick = () => {
       setShowDismissalDate(true);
     };
@@ -531,13 +593,25 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         </label>
           </div>
         </div>
-        
-        <label htmlFor="comment">
+        <div>
+  <h3>Существующие комментарии</h3>
+  <ul >
+    {candidate?.comment?.map((c, index) => (
+      <li key={index}>{c.text} - {new Date(c.date).toLocaleString()}</li>
+    ))}
+  </ul>
+</div>
+<label htmlFor="comment">
+  <div>Комментарий</div>
+  <textarea className="textarea textarea-accent w-full"
+    id="comment" name="comment" placeholder="Комментарий" />
+</label>
+        {/* <label htmlFor="comment">
           <div>Комментарий</div>
         <textarea className="textarea textarea-accent w-full "
          id="comment" name="comment" placeholder="Комментарий" 
          defaultValue={candidate?.comment}/>
-        </label>
+        </label> */}
             <button className="btn btn-primary w-full max-w-xs">
                Обновить кандидата
             </button>
