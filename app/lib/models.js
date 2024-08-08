@@ -154,8 +154,24 @@ type: String,
 
 const candidateSchema = new mongoose.Schema({
   tasks: [{
+    stage:{
+      type: String
+    },
     text: {
       type: String
+    },
+    comment:{
+      type: String
+    },
+    partner:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Partner'
+      },
+    documents:{
+    type: String
+    },
+    status:{
+      type: Boolean
     },
     date: {
       type: Date,

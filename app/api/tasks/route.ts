@@ -1,34 +1,64 @@
-// /api/updateCandidate.js
+// import { NextResponse } from "next/server";
+// import { connectToDB } from "@/app/lib/utils";
+// import { Candidate, Partner } from "@/app/lib/models";
+
+// export const POST = async (req) => {
+//   try {
+//     const { candidateId, partnerId, comment } = await req.json();
+
+//     await connectToDB();
+
+//     const candidate = await Candidate.findById(candidateId);
+
+//     if (!candidate) {
+//       return new NextResponse(JSON.stringify({ message: 'Candidate not found' }), { status: 404 });
+//     }
+
+//     const partner = await Partner.findById(partnerId);
+
+//     if (!partner) {
+//       return new NextResponse(JSON.stringify({ message: 'Partner not found' }), { status: 404 });
+//     }
+
+//     const taskText = `Кандидат (${candidate.name}) отправлен на собеседование к (${partner.companyName}) комментарий: ${comment}`;
+
+//     candidate.tasks.push({ text: taskText });
+//     await candidate.save();
+
+//     return new NextResponse(JSON.stringify({ message: 'Task added to candidate' }), { status: 200 });
+//   } catch (error) {
+//     console.error(error);
+//     return new NextResponse(JSON.stringify({ message: 'Internal server error' }), { status: 500 });
+//   }
+// };
 
 import { NextResponse } from "next/server";
 import { connectToDB } from "@/app/lib/utils";
 import { Candidate, Partner } from "@/app/lib/models";
-export default async function handler(req, res) {
-  const { candidateId, partnerId, comment } = req.body;
 
-  await connectToDB();
-
+export const POST = async (req) => {
   try {
-    const candidate = await Candidate.findById(candidateId);
+    const { candidateId, partnerId, comment } = await req.json();
 
+    await connectToDB();
+
+    const candidate = await Candidate.findById(candidateId);
     if (!candidate) {
-      return res.status(404).json({ message: 'Candidate not found' });
+      return new NextResponse(JSON.stringify({ message: 'Candidate not found' }), { status: 404 });
     }
 
     const partner = await Partner.findById(partnerId);
-
     if (!partner) {
-      return res.status(404).json({ message: 'Partner not found' });
+      return new NextResponse(JSON.stringify({ message: 'Partner not found' }), { status: 404 });
     }
 
     const taskText = `Кандидат (${candidate.name}) отправлен на собеседование к (${partner.companyName}) комментарий: ${comment}`;
-
     candidate.tasks.push({ text: taskText });
     await candidate.save();
 
-    res.status(200).json({ message: 'Task added to candidate' });
+    return new NextResponse(JSON.stringify({ message: 'Task added to candidate', candidateId: candidate._id }), { status: 200 });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Server error:', error);
+    return new NextResponse(JSON.stringify({ message: 'Internal server error', error: error.message }), { status: 500 });
   }
-}
+};

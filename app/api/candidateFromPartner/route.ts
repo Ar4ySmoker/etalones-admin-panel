@@ -8,12 +8,19 @@ export const GET = async (request: NextRequest) => {
 
     // Получаем всех партнёров и заполняем их кандидатов
     const partners = await Partner.find({})
-      .populate({
-        path: 'candidates',
-        populate: {
-          path: 'manager', // если необходимо заполнить менеджера кандидатов
+    .populate({
+      path: 'candidates',
+      populate: [
+        {
+          path: 'partners', // Populating the 'partner' field
         },
-      }).lean();
+        {
+          path: 'manager', // Populating the 'manager' field
+        },
+       
+      ],
+    }).lean();
+  
 
     return new NextResponse(JSON.stringify({ partners }), { status: 200 });
   } catch (error) {
