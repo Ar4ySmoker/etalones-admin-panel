@@ -1,6 +1,9 @@
 'use client'
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation'; // Добавляем роутер для редиректа
+import ModalPartnerInterview from "@/app/ui/modals/tasksModals/ModalPartnerInterview";
+import ModalSentDocuments from "@/app/ui/modals/tasksModals/ModalSentDocuments";
+import ModalHaLeft from "@/app/ui/modals/tasksModals/ModalHaLeft";
 
 async function fetchPartnersAndCandidates() {
   try {
@@ -100,10 +103,32 @@ export default function Page() {
         document.getElementById('my_modal_2').close(); // Закрываем модальное окно, если чекбокс снят
       }
     };
-
+    const handleCheckboxChangeDocuments = (candidate, event) => {
+      handleCheckboxStateChange(candidate._id, event);
+    
+      if (event.target.checked) {
+        setSelectedCandidate(candidate);
+        document.getElementById('my_modal_documents').showModal();
+      } else {
+        document.getElementById('my_modal_documents').close();
+      }
+    };
+    const handleCheckboxChangeHaLeft = (candidate, event) => {
+      handleCheckboxStateChange(candidate._id, event);
+    
+      if (event.target.checked) {
+        setSelectedCandidate(candidate);
+        document.getElementById('my_modal_haLeft').showModal();
+      } else {
+        document.getElementById('my_modal_haLeft').close();
+      }
+    };
   
   const closeModal = () => {
     document.getElementById('my_modal_2').close();
+    document.getElementById('my_modal_documents').close();
+    document.getElementById('my_modal_haLeft').close();
+
   };
 
   if (loading) return <div>Загрузка...</div>;
@@ -145,43 +170,42 @@ export default function Page() {
     }
   };
   
-  // const handleSubmitStage2 = async (event) => {
-  //   event.preventDefault();
+  const handleSubmitStageDocuments = async (event) => {
+    event.preventDefault();
   
-  //   // Получаем данные формы
-  //   const formData = new FormData(event.target);
-  //   const candidateId = selectedCandidate._id;
-  //   const partnerId = formData.get('partners');
-  //   const comment = formData.get('comment');
+    const formData = new FormData(event.target);
+    const candidateId = selectedCandidate._id;
+    const partnerId = formData.get('partners');
+    const comment = formData.get('comment');
   
-  //   const body = {
-  //     candidateId,
-  //     partnerId,
-  //     comment,
-  //     stage: 'partnerInterview',
-  //     ...checkboxStates // Включаем состояния чекбоксов
-  //   };
+    const body = {
+      candidateId,
+      partnerId,
+      comment,
+      stage: 'documentCollection',
+      checkboxes: checkboxStates[candidateId],
+    };
   
-  //   try {
-  //     const response = await fetch(`/api/tasks/${candidateId}`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(body),
-  //     });
-  //     const result = await response.json();
-  //     if (response.ok) {
-  //       console.log('Task added to candidate:', result);
-  //       closeModal();
-  //       router.refresh(); // Обновляем страницу
-  //       router.push("/dashboard/tasks"); // Перенаправляем на другую страницу
-  //     } else {
-  //       console.error('Error:', result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Network error:', error);
-  //   }
-  // };
-
+    try {
+      const response = await fetch(`/api/tasks/${candidateId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log('Task added to candidate:', result);
+        closeModal();
+        router.refresh();
+        router.push("/dashboard/tasks");
+      } else {
+        console.error('Error:', result.message);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
+  
   return (
     <>
       <div className="overflow-x-auto">
@@ -256,7 +280,7 @@ export default function Page() {
                           </li>
                           <li>
                             <hr />
-                            <div className="timeline-middle tooltip" data-tip={candidate?.partner?.companyName}>
+                            <div className="timeline-middle tooltip" >
                               <input
                                 type="checkbox"
                                 name="partnerInterview"
@@ -276,8 +300,8 @@ export default function Page() {
                                name="sentDocuments"
                                className="checkbox checkbox-sm"
                                checked={checkboxStates[candidate._id]?.sentDocuments || false}
-                               onChange={(e) => handleCheckboxStateChange(candidate._id, e)}
-                              />
+                               onChange={(e) => handleCheckboxChangeDocuments(candidate, e)}
+                               />
                             </div>
                             <div className="timeline-end timeline-box">Отправил документы</div>
                             <hr />
@@ -290,7 +314,7 @@ export default function Page() {
                                name="haLeft"
                                className="checkbox checkbox-sm"
                                checked={checkboxStates[candidate._id]?.haLeft || false}
-                               onChange={(e) => handleCheckboxStateChange(candidate._id, e)}
+                               onChange={(e) => handleCheckboxChangeHaLeft(candidate._id, e)}
                               />
                             </div>
                             <div className="timeline-end timeline-box">Прошел собеседование/Выезжает</div>
@@ -333,39 +357,21 @@ export default function Page() {
           </div>
         ))}
       </div>
-
-      <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Заполните поля</h3>
-          {selectedCandidate && (
-            <p className="py-4">Выберите к кому отправляете на собеседование кандидата {selectedCandidate.name}</p>
-          )}
-          <div className="modal-action">
-            <form method="dialog" onSubmit={handleSubmitStage2}>
-              <div>
-                <label htmlFor="partners">
-                  <select className="select w-full max-w-xs select-success select-xs"
-                    id="partners" name="partners">
-                    <option disabled selected value={null}>Выберите заказчика</option>
-                    {partners.map(p => (
-                      <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
-                    ))}
-                  </select>
-                </label>
-                <label htmlFor="comment">
-                  <div>Комментарий</div>
-                  <textarea className="textarea textarea-accent w-full"
-                    id="comment" name="comment" placeholder="Комментарий" />
-                </label>
-              </div>
-              <div>
-                <button type="button" onClick={closeModal} className="btn">Закрыть</button>
-                <button type="submit" className="btn">Отправить</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </dialog>
+      <ModalPartnerInterview
+        selectedCandidate={selectedCandidate}
+        partners={partners}
+        closeModal={closeModal}
+        handleSubmitStage2={handleSubmitStage2}
+      />
+      <ModalSentDocuments
+        selectedCandidate={selectedCandidate}
+        closeModal={closeModal}
+        handleSubmitStageDocuments={handleSubmitStageDocuments}
+      />
+      <ModalHaLeft
+       selectedCandidate={selectedCandidate}
+       closeModal={closeModal}
+      />
     </>
   );
 }
