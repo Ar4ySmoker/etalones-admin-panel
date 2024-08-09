@@ -173,6 +173,24 @@ const candidateSchema = new mongoose.Schema({
     status:{
       type: Boolean
     },
+    firstInterview:{
+      type:  Boolean
+    },
+    partnerInterview:{
+      type:  Boolean
+    },
+    sentDocuments:{
+      type:  Boolean
+    },
+    haLeft:{
+      type:  Boolean
+    },
+    onObject:{
+      type:  Boolean
+    },
+    fired:{
+      type:  Boolean
+    },
     date: {
       type: Date,
       default: Date.now
