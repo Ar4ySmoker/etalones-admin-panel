@@ -151,8 +151,21 @@ type: String,
 
 },
 { timestamps: true })
-
+const imgDocSchema = new mongoose.Schema({
+  name:{
+    type: String
+  },
+  image: {
+    name: String,
+    data: Buffer,
+    contentType: String
+}
+})
 const candidateSchema = new mongoose.Schema({
+  imgDoc:[{
+type: mongoose.Schema.Types.ObjectId,
+    ref: 'ImgDoc'
+  }],
   tasks: [{
     stage:{
       type: String
@@ -267,9 +280,7 @@ required: false
   status:{
    type: String
   },
-  // comment:[{
-  //   type: String
-  // }],
+
   comment: [{
     text: {
       type: String
@@ -530,6 +541,7 @@ const newsSchema = new mongoose.Schema({
   }],
 }, { timestamps: true });
 
+export const ImgDoc = mongoose.models.ImgDoc || mongoose.model("ImgDoc", imgDocSchema)
 export const News = mongoose.models.News || mongoose.model("News", newsSchema);
 export const User =  mongoose.models.User || mongoose.model("User", userSchema);
 export const VacancyOnServer = mongoose.models.VacancyOnServer || mongoose.model("VacancyOnServer", vacancyOnServerShema);

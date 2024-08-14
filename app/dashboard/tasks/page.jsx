@@ -169,28 +169,21 @@ export default function Page() {
       console.error('Network error:', error);
     }
   };
-  
   const handleSubmitStageDocuments = async (event) => {
     event.preventDefault();
   
     const formData = new FormData(event.target);
     const candidateId = selectedCandidate._id;
-    const partnerId = formData.get('partners');
     const comment = formData.get('comment');
-  
-    const body = {
-      candidateId,
-      partnerId,
-      comment,
-      stage: 'documentCollection',
-      checkboxes: checkboxStates[candidateId],
-    };
+    
+    // Добавляем candidateId и comment в FormData
+    formData.append('candidateId', candidateId);
+    formData.append('comment', comment);
   
     try {
-      const response = await fetch(`/api/tasks/${candidateId}`, {
+      const response = await fetch('/api/imgDoc', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: formData,
       });
       const result = await response.json();
       if (response.ok) {
@@ -260,7 +253,21 @@ export default function Page() {
                       <td>{candidate.manager?.name || ''}</td>
                       <td>{candidate.status}</td>
                       <td>{candidate.updatedAt ? new Date(candidate.updatedAt).toLocaleDateString() : 'Invalid Date'}</td>
-                      <td>{candidate.name}</td>
+                      {/* <td>{candidate.name}</td> */}
+                      <td>
+            {candidate.imgDoc && candidate.imgDoc.length > 0 ? (
+              candidate.imgDoc.map((imgId) => (
+                <img
+                  key={imgId}
+                  src={`/api/imgDoc/${imgId}`} // URL для получения изображения
+                  alt="Document"
+                  style={{ width: '100px', height: 'auto' }} // Размеры можно настроить
+                />
+              ))
+            ) : (
+              <p>No images available</p>
+            )}
+          </td>
                     </tr>
                     <tr key={`${candidate._id}-timeline`}>
                       <td className="col-span-6">
