@@ -17,7 +17,9 @@ export const GET = async (request: NextRequest) => {
         {
           path: 'manager', // Populating the 'manager' field
         },
-       
+       {
+        path: 'tasks'
+       },
       ],
     }).lean();
   

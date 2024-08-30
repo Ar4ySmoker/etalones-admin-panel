@@ -1,4 +1,5 @@
 export default function ModalPartnerInterview({ selectedCandidate, partners, closeModal, handleSubmitStage2 }) {
+  console.log("TWO SELECTED CANDIDATE", selectedCandidate?.name)
     return (
       <dialog id="my_modal_2" className="modal">
         <div className="modal-box">
@@ -18,10 +19,10 @@ export default function ModalPartnerInterview({ selectedCandidate, partners, clo
                     ))}
                   </select>
                 </label>
-                <label htmlFor="comment">
+                <label htmlFor="title">
                   <div>Комментарий</div>
                   <textarea className="textarea textarea-accent w-full"
-                    id="comment" name="comment" placeholder="Комментарий" />
+                    id="title" name="title" placeholder="Комментарий" />
                 </label>
               </div>
               <div>

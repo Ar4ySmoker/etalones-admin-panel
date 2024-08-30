@@ -1,11 +1,10 @@
-
 import { NextResponse } from "next/server";
 import { connectToDB } from "@/app/lib/utils";
-import { Candidate, Partner } from "@/app/lib/models";
+import { Candidate, Partner, Task } from "@/app/lib/models";
 
 export const POST = async (req) => {
   try {
-    const { candidateId, partnerId, comment, checkboxes } = await req.json();
+    const { candidateId, partnerId, title, checkboxes } = await req.json();
 
     await connectToDB();
 
@@ -19,17 +18,24 @@ export const POST = async (req) => {
       return new NextResponse(JSON.stringify({ message: 'Partner not found' }), { status: 404 });
     }
 
-    const taskText = `Кандидат (${candidate.name}) отправлен на собеседование к (${partner.companyName})`;
+    const taskText = `Кандидат (${candidate.name}) отправлен на собеседование к (${partner.companyName})
+    Комментарий менеджера: ${title}`;
 
-    const newTask = {
-      text: taskText,
-      comment,
+    // Создаем экземпляр задачи и сохраняем его
+    const newTask = new Task({
+      
+      title: taskText,
       partner: partner._id,
       ...checkboxes // Включаем состояния чекбоксов как часть задачи
-    };
+    });
 
-    candidate.tasks.push(newTask);
+    // Сохраняем новую задачу
+    await newTask.save();
 
+    // Добавляем задачу к кандидату
+    candidate.tasks.push(newTask._id);
+
+    // Сохраняем изменения кандидата
     await candidate.save();
 
     return new NextResponse(JSON.stringify({ message: 'Task and checkbox states added to candidate', candidateId: candidate._id }), { status: 200 });

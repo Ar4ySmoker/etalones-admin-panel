@@ -283,7 +283,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                   <div>Дата рождения</div>
                   <input className="input input-bordered input-accent w-full max-w-xs" 
                   id="age" name="age" type="date"
-                  placeholder={candidate?.age} defaultValue={age}  />
+                  placeholder={candidate?.age} defaultValue={candidate?.age}  />
                 </label>
                 <label htmlFor="ageNum">
                   <div>Возраст</div>
@@ -418,13 +418,13 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                 <p>С</p>
               <input className="input input-bordered input-accent w-full max-w-xs" 
            type="date" id="from" name="from" 
-           value={candidate?.statusFromPartner?.from}/>
+           defaultValue={candidate?.statusFromPartner?.from}/>
                 </div>
                 <div className='flex gap-1 items-center justify-between'>
                 <p>До</p>
               <input className="input input-bordered input-accent w-full max-w-xs" 
             type="date"  id='to' name='to' 
-            value={candidate?.statusFromPartner?.to}/>
+            defaultValue={candidate?.statusFromPartner?.to}/>
                 </div>
             </label>
            <div>

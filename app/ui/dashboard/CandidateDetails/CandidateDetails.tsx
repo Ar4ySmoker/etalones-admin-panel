@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import React from 'react';
 
 export default function CandidateDetails({ candidate }) {
-  console.log('Candidate data:', candidate);
 
   const renderProfessions = (professions) => {
     if (!professions || professions.length === 0) {
@@ -40,10 +40,20 @@ export default function CandidateDetails({ candidate }) {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-5">
-        <div className="font-bold py-10 text-2xl text-center h1 py-0">Анкета {candidate.name}  </div>
+    <div className='flex justify-around items-center'>
+    <div className="avatar">
+  <div className="w-24 rounded">
+  {/* <Image src={} alt='defaultAvatar' width={300} height={300}/> */}
+
+    <Image src='/defaultAvatar.jpg' alt='defaultAvatar' width={300} height={300}/>
+  </div>
+</div>
+    <div className="flex flex-col justify-center items-center gap-5">
+        <div className="font-bold py-10 text-2xl text-center h1 ">Анкета {candidate.name}  </div>
         <div className='flex flex-wrap gap-3 '><strong>Профессии:</strong> {renderProfessions(candidate.professions)}</div>
       </div>
+    </div>
+     
       <div>
         <div>
           <div className='flex flex-col w-full gap-2 mt-5'>

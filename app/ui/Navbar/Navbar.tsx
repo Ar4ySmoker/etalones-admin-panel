@@ -18,9 +18,27 @@ const Navbar = () => {
 
             <div className="indicator mx-10">
   <span className="indicator-item badge badge-primary">new</span>
-  <div className="bg-base-300 rounded-md grid w-32 place-items-center"><Link  href="/dashboard/tasks">
+  {/* <div className="bg-base-300 rounded-md grid w-32 place-items-center">
+    <Link  href="/dashboard/tasks">
                     Задачи
-                </Link></div>
+                </Link>
+                </div> */}
+                <div className="dropdown dropdown-end">
+        <div tabIndex={0} role="button" className="btn btn-ghost rounded-btn">Задачи</div>
+        <ul
+          tabIndex={0}
+          className="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-52 p-2 shadow">
+          <li><a>Item 1</a></li>
+          <li><a>Item 2</a></li>
+          <li>
+            <div className="bg-base-300 rounded-md grid w-32 place-items-center">
+    <Link  href="/dashboard/tasks">
+                    Посмотреть все задачи
+                </Link>
+                </div>
+          </li>
+        </ul>
+      </div>
 </div>
                 
 

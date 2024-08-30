@@ -161,32 +161,18 @@ const imgDocSchema = new mongoose.Schema({
     contentType: String
 }
 })
-const candidateSchema = new mongoose.Schema({
-  imgDoc:[{
-type: mongoose.Schema.Types.ObjectId,
-    ref: 'ImgDoc'
-  }],
-  tasks: [{
-    stage:{
-      type: String
-    },
-    text: {
-      type: String
-    },
-    comment:{
-      type: String
-    },
-    partner:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Partner'
-      },
-    documents:{
+const taskSchema = new mongoose.Schema({
+  paid:{
+    type: Boolean
+  },
+  title:{
     type: String
-    },
-    status:{
-      type: Boolean
-    },
-    firstInterview:{
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  firstInterview:{
       type:  Boolean
     },
     partnerInterview:{
@@ -203,11 +189,57 @@ type: mongoose.Schema.Types.ObjectId,
     },
     fired:{
       type:  Boolean
-    },
-    date: {
-      type: Date,
-      default: Date.now
     }
+})
+const candidateSchema = new mongoose.Schema({
+  imgDoc:[{
+type: mongoose.Schema.Types.ObjectId,
+    ref: 'ImgDoc'
+  }],
+  tasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Task'
+    // stage:{
+    //   type: String
+    // },
+    // text: {
+    //   type: String
+    // },
+    // comment:{
+    //   type: String
+    // },
+    // partner:{
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'Partner'
+    //   },
+    // documents:{
+    // type: String
+    // },
+    // status:{
+    //   type: Boolean
+    // },
+    // firstInterview:{
+    //   type:  Boolean
+    // },
+    // partnerInterview:{
+    //   type:  Boolean
+    // },
+    // sentDocuments:{
+    //   type:  Boolean
+    // },
+    // haLeft:{
+    //   type:  Boolean
+    // },
+    // onObject:{
+    //   type:  Boolean
+    // },
+    // fired:{
+    //   type:  Boolean
+    // },
+    // date: {
+    //   type: Date,
+    //   default: Date.now
+    // }
   }],
   source:{
 type: String
@@ -333,6 +365,8 @@ required: false
 { timestamps: true }
 )
 
+
+
 candidateSchema.pre('save', async function(next) {
   if (this.isModified('partners') || this.isNew) {
     const Partner = mongoose.model('Partner');
@@ -351,7 +385,6 @@ candidateSchema.pre('save', async function(next) {
   }
   next();
 });
-
 
 
 const commentMngSchema = new mongoose.Schema({
@@ -541,6 +574,8 @@ const newsSchema = new mongoose.Schema({
   }],
 }, { timestamps: true });
 
+
+export const Task = mongoose.models.Task || mongoose.model("Task", taskSchema)
 export const ImgDoc = mongoose.models.ImgDoc || mongoose.model("ImgDoc", imgDocSchema)
 export const News = mongoose.models.News || mongoose.model("News", newsSchema);
 export const User =  mongoose.models.User || mongoose.model("User", userSchema);

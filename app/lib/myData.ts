@@ -42,7 +42,6 @@ export const fetchProfession = async (): Promise<ProfessionField[]> => {
          .sort({ name: 1 }) // Сортируем по name в алфавитном порядке
          .lean(); // Преобразуем результат в простой объект JavaScript
      
-     console.log("Professions from DB:", professions); // Выводим в консоль полученные профессии
      
      // Преобразуем список профессий в новый формат
      const formattedProfessions = professions.map(profession => ({
