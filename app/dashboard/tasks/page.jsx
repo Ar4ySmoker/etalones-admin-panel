@@ -96,9 +96,9 @@ export default function Page() {
 
   const handleCheckboxChangeStage1 = (candidate, event) => {
     handleCheckboxStateChange(candidate._id, event);
+    console.log('Selected Candidate:', candidate._id); // Проверьте, что здесь есть корректные данные
 
     if (event.target.checked) {
-      console.log('Selected Candidate:', candidate); // Проверьте, что здесь есть корректные данные
       setSelectedCandidate(candidate);
       document.getElementById('my_modal_1').showModal();
     } else {
@@ -108,6 +108,7 @@ export default function Page() {
 
   const handleCheckboxChange = (candidate, event) => {
     handleCheckboxStateChange(candidate._id, event);
+    console.log('Selected Candidate:', candidate._id); // Проверьте, что здесь есть корректные данные
 
     if (event.target.checked) {
       setSelectedCandidate(candidate);
@@ -287,10 +288,16 @@ export default function Page() {
                               <ul>
                                 {candidate?.comment?.map((c, index) => (
                                   <li key={index}>
-                                    {c.text} -
-                                    <span className="badge badge-neutral">
-                                      {new Date(c.date).toLocaleString()}
-                                    </span>
+                                   
+                                    <div className="flex justify-between w-full pt-5">
+                                        <p>
+                                          {new Date(c.date).toLocaleString().slice(0, 5)}
+                                        </p>
+                                        <span>
+                                          {new Date(c.date).toLocaleString().slice(12, 17)}
+                                        </span>
+                                      </div>
+                                      {c.text} 
                                   </li>
                                 ))}
                               </ul>
@@ -313,7 +320,7 @@ export default function Page() {
                                           {new Date(task.date).toLocaleString().slice(12, 17)}
                                         </span>
                                       </div> -
-                                      <span className="text-sm font-bold">{task.title}</span>
+                                      <span className="text-sm font-bold">{task.title} </span>
                                       <div className="divider"></div>
                                     </li>
                                   ))}
@@ -359,7 +366,9 @@ export default function Page() {
                                 name="firstInterview"
                                 className="checkbox checkbox-sm"
                                 checked={checkboxStates[candidate._id]?.firstInterview }
-                                onChange={(e) => handleCheckboxChangeStage1(candidate._id, e)}
+                                // onChange={(e) => handleCheckboxChangeStage1(candidate._id, e)}
+                                onChange={(e) => handleCheckboxChangeStage1(candidate, e)}
+
                               />
                             </div>
                             <div className="timeline-end timeline-box">Первое собеседование</div>
