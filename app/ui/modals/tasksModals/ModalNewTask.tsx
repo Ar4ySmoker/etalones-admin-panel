@@ -1,6 +1,5 @@
 
 export default function ModalNewTask({ selectedCandidate, closeModal, handleSubmitStage1 }) {
-    console.log("SELECTED CANDIDATE NAME", selectedCandidate?.name)
     return (
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box flex flex-col">

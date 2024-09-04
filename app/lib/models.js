@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { type } from "os";
+import { title } from "process";
+import { text } from "stream/consumers";
 
 
 const userSchema = new mongoose.Schema(
@@ -162,15 +164,25 @@ const imgDocSchema = new mongoose.Schema({
 }
 })
 const taskSchema = new mongoose.Schema({
+  candidate:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Candidate'
+  },
+  partner:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Partner'
+  },
   paid:{
     type: Boolean
   },
   title:{
     type: String
   },
-  date: {
+  text:{
+    type: String
+  },
+  dateOfCompletion: {
     type: Date,
-    default: Date.now
   },
   firstInterview:{
       type:  Boolean
@@ -190,7 +202,7 @@ const taskSchema = new mongoose.Schema({
     fired:{
       type:  Boolean
     }
-})
+},{ timestamps: true })
 const candidateSchema = new mongoose.Schema({
   imgDoc:[{
 type: mongoose.Schema.Types.ObjectId,
@@ -199,47 +211,7 @@ type: mongoose.Schema.Types.ObjectId,
   tasks: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Task'
-    // stage:{
-    //   type: String
-    // },
-    // text: {
-    //   type: String
-    // },
-    // comment:{
-    //   type: String
-    // },
-    // partner:{
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Partner'
-    //   },
-    // documents:{
-    // type: String
-    // },
-    // status:{
-    //   type: Boolean
-    // },
-    // firstInterview:{
-    //   type:  Boolean
-    // },
-    // partnerInterview:{
-    //   type:  Boolean
-    // },
-    // sentDocuments:{
-    //   type:  Boolean
-    // },
-    // haLeft:{
-    //   type:  Boolean
-    // },
-    // onObject:{
-    //   type:  Boolean
-    // },
-    // fired:{
-    //   type:  Boolean
-    // },
-    // date: {
-    //   type: Date,
-    //   default: Date.now
-    // }
+    
   }],
   source:{
 type: String

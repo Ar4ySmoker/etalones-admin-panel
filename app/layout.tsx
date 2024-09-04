@@ -4,6 +4,8 @@ import  Navbar from './ui/Navbar/Navbar'
 import { getServerSession } from "next-auth";
 import SessionProvider from "./utils/SessionProvider";
 import React from 'react';
+import { CandidateContextProvider } from './context/ModalContext';
+import GlobalModal from './ui/modals/globalModal/GlobalCandidateModal';
 
 
 
@@ -24,10 +26,14 @@ export default async function RootLayout({
     
     <body className={inter.className}>
         <SessionProvider session={session}>
+          <CandidateContextProvider >
           <div className="container mx-auto px-4">
             <Navbar />
             {children}
+            <GlobalModal />
+
           </div>
+          </CandidateContextProvider>
         </SessionProvider>
       </body>
  

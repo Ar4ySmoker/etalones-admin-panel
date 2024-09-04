@@ -155,12 +155,13 @@ export default function Page() {
     const formData = new FormData(event.target);
     const candidateId = selectedCandidate._id; // Убедитесь, что selectedCandidate определен
     const title = formData.get('title');
-    const date = formData.get('date'); // Получаем дату из формы
-
+    // const date = formData.get('date'); // Получаем дату из формы
+const text = `Кандидат ${selectedCandidate.name} прошел слбеседование с менеджером`
     const body = {
       candidateId,
+      text,
       title,
-      date, // Добавляем дату
+      // date, 
       checkboxes: checkboxStates[candidateId] // Включаем состояния чекбоксов только для выбранного кандидата
     };
 
@@ -192,17 +193,24 @@ export default function Page() {
     const candidateId = selectedCandidate._id;
     const partnerId = formData.get('partners');
     const title = formData.get('title');
-    console.log("THE TITLE", title)
-    const body = {
+    const dateOfCompletionStr = formData.get('dateOfCompletion');
+    const dateOfCompletion = new Date(dateOfCompletionStr);
+    const selectedPartner = partners.find(p => p._id === partnerId);
+    const partnerName = selectedPartner ? selectedPartner.companyName : 'неизвестный партнёр';
+  
+    // Формирование текста с именем партнёра
+    const text = `Кандидат ${selectedCandidate.name} отправлен на собеседование к партнёру ${partnerName}.`;
+        const body = {
       candidateId,
       partnerId,
+      dateOfCompletion,
+      text,
       title,
-      stage: 'partnerInterview',
       checkboxes: checkboxStates[candidateId] // Включаем состояния чекбоксов только для выбранного кандидата
     };
 
     try {
-      const response = await fetch(`/api/tasks/${candidateId}`, {
+      const response = await fetch(`/api/task/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -320,7 +328,7 @@ export default function Page() {
                                           {new Date(task.date).toLocaleString().slice(12, 17)}
                                         </span>
                                       </div> -
-                                      <span className="text-sm font-bold">{task.title} </span>
+                                      <span className="text-sm font-bold">{task.text} </span>
                                       <div className="divider"></div>
                                     </li>
                                   ))}

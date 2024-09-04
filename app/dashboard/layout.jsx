@@ -3,7 +3,6 @@ import Sidebar from "../ui/dashboard/sidebar/sidebar"
 import styles from "../ui/dashboard/dashboard.module.css"
 import Footer from "../ui/dashboard/footer/footer"
 import Alert from "@/app/ui/dashboard/Alert/Alert"
-
 const Layout = ({children}) => {
   
   return (

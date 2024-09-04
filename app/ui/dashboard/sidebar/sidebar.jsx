@@ -10,6 +10,7 @@ import {
   MdPeople,
   MdOutlineSettings,
   MdHelpCenter,
+  MdTimer,
 } from "react-icons/md";
 
 const menuItems = [
@@ -60,6 +61,12 @@ const menuItems = [
         title: "Люди в работе",
         path: "/dashboard/workPeople",
         icon: <MdWork />,
+        disabled: false,
+      },
+      {
+        title: "История",
+        path: "/dashboard/history",
+        icon: <MdTimer />,
         disabled: false,
       },
       {
