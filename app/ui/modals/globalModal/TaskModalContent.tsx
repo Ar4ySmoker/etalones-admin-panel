@@ -1,44 +1,72 @@
 'use client'
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowDown } from 'react-icons/fa';
 import Image from 'next/image';
 
-export default function Page() {
-  const [candidate, setCandidate] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+interface Profession {
+    name: string;
+    experience: string;
+    _id: string;
+  }
+  
+  interface Candidate {
+    _id: string;
+    name: string;
+    citizenship: string;
+    ageNum?: number;
+    phone: string;
+    additionalPhones?: string[];
+    locations: string;
+    langue?: {
+      name: string;
+      level?: string;
+    };
+    status: string;
+    statusFromPartner?: {
+      who: string;
+      status: string;
+    };
+    manager?: {
+      _id: string;
+      name: string;
+    };
+    cardNumber?: string;
+    comment?: {
+      date: string;
+      text: string;
+    }[];
+    tasks?: {
+      _id: string;
+      dateOfCompletion: string;
+      text: string;
+    }[];
+    professions?: Profession[]; // Добавляем поле профессий
+  }
+  
+
+const TaskModalContent: React.FC<{ taskId: string }> = ({ taskId }) => {
+  const [candidate, setCandidate] = useState<Candidate | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Определите ID задачи из URL
-    const url = new URL(window.location.href);
-    const taskId = url.pathname.split('/').pop(); // Получаем последний сегмент из пути URL
-
-    if (!taskId) {
-      setError('Task ID is missing');
-      setLoading(false);
-      return;
-    }
-
-    // Выполните запрос к серверу
     const fetchCandidate = async () => {
       try {
-        const response = await fetch(`/api/task/${taskId}`); // Обновите путь к API в соответствии с вашим серверным кодом
-        
+        const response = await fetch(`/api/task/${taskId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        
         const data = await response.json();
         setCandidate(data);
       } catch (error) {
-        setError(error.message);
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCandidate();
-  }, []); // Пустой массив зависимостей означает, что запрос выполнится только один раз при монтировании компонента
+  }, [taskId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -63,6 +91,21 @@ export default function Page() {
         <div className="flex flex-col justify-center items-center gap-5">
           <div className="font-bold py-10 text-2xl text-center h1 ">Анкета {candidate.name}</div>
         </div>
+         {/* Отображение профессий */}
+         <div>
+            Профессии:
+            {candidate.professions && candidate.professions.length > 0 ? (
+              <ul>
+                {candidate.professions.map((profession) => (
+                  <li key={profession._id}>
+                    {profession.name} (Опыт: {profession.experience})
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              ' нет профессий'
+            )}
+          </div>
       </div>
       
       <div>
@@ -92,8 +135,9 @@ export default function Page() {
               <span className="badge badge-error">{candidate.statusFromPartner?.status}</span>
             </div>
           </div>
-          <div>Менеджер: {candidate.manager?.name}</div>
+          <div>Менеджер: {candidate.manager?.name ? candidate.manager.name : 'не указан'}</div>
           <div>Номер счёта: {candidate.cardNumber ? candidate.cardNumber : "нет номера счёта"}</div>
+          
           
           {/* Отображение комментариев */}
           <div tabIndex={0} className="collapse bg-base-200">
@@ -136,4 +180,6 @@ export default function Page() {
       </div>
     </>
   );
-}
+};
+
+export default TaskModalContent;

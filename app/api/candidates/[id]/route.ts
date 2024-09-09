@@ -71,7 +71,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
   // Находим кандидата и связанные с ним данные
   const candidate = await Candidate.findById(id)
-    .populate(['comment', 'manager', 'professions', 'langue', 'partners'])
+    .populate(['comment', 'manager', 'professions', 'langue', 'partners', 'tasks'])
     .lean(); // Используем .lean() для возвращения чистого объекта
 
   return NextResponse.json({ candidate }, { status: 200 });

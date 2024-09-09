@@ -338,8 +338,8 @@ function VacancyCard() {
 
     const fetchVacancies = async (page: number) => {
         try {
-            const response = await fetch(`https://www.candidat.store/api/vacancy?page=${page}&limit=5`);
-            // const response = await fetch(`http://localhost:3000/api/vacancy?page=${page}&limit=5`);
+            // const response = await fetch(`https://www.candidat.store/api/vacancy?page=${page}&limit=5`);
+            const response = await fetch(`http://localhost:3000/api/vacancy?page=${page}&limit=5`);
 
             const data = await response.json();
             setVacancies(data.vacancies);

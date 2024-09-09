@@ -1,64 +1,61 @@
-'use client';
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+'use client'
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-// Интерфейс для данных кандидатов
-interface Candidate {
-  _id: string;
-  name: string;
-  // Добавьте остальные поля по мере необходимости
+// Определяем типы для контекста
+interface ModalContextType {
+  isOpen: boolean;
+  openModal: (content: ReactNode) => void;
+  closeModal: () => void;
+  modalContent: ReactNode | null;
 }
 
-// Интерфейс для контекста кандидатов
-interface CandidateContextType {
-  candidates: Candidate[];
-  loading: boolean;
-  fetchCandidates: () => void;
-}
+// Создаем начальное состояние контекста
+const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-// Создаем контекст
-const CandidateContext = createContext<CandidateContextType | undefined>(undefined);
+// Провайдер для контекста
+export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [modalContent, setModalContent] = useState<ReactNode | null>(null);
 
-// Интерфейс для детей провайдера
-interface Props {
-  children: ReactNode;
-}
-
-// Компонент провайдера контекста
-export const CandidateContextProvider = ({ children }: Props) => {
-  // Состояние для хранения данных о кандидатах
-  const [candidates, setCandidates] = useState<Candidate[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // Функция для загрузки кандидатов с сервера
-  const fetchCandidates = async () => {
-    try {
-      const response = await fetch(`/api/candidate`);
-      const data = await response.json();
-      setCandidates(data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Ошибка при загрузке кандидатов:", error);
-      setLoading(false);
-    }
+  const openModal = (content: ReactNode) => {
+    setModalContent(content);
+    setIsOpen(true);
   };
 
-  // useEffect для загрузки данных при монтировании компонента
-  useEffect(() => {
-    fetchCandidates();
-  }, []);
+  const closeModal = () => {
+    setIsOpen(false);
+    setModalContent(null);
+  };
 
   return (
-    <CandidateContext.Provider value={{ candidates, loading, fetchCandidates }}>
+    <ModalContext.Provider value={{ isOpen, openModal, closeModal, modalContent }}>
       {children}
-    </CandidateContext.Provider>
+      {isOpen && <Modal />}
+    </ModalContext.Provider>
   );
 };
 
-// Хук для использования контекста в других компонентах
-export const useCandidateContext = () => {
-  const context = useContext(CandidateContext);
+// Хук для использования контекста
+export const useModal = (): ModalContextType => {
+  const context = useContext(ModalContext);
   if (context === undefined) {
-    throw new Error('useCandidateContext must be used within a CandidateContextProvider');
+    throw new Error('useModal must be used within a ModalProvider');
   }
   return context;
+};
+
+// Модальное окно
+const Modal: React.FC = () => {
+  const { closeModal, modalContent } = useModal();
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-4 rounded shadow-lg max-w-lg w-full relative">
+        <button onClick={closeModal} className="absolute top-2 right-2 text-red-500">
+          &times;
+        </button>
+        <div>{modalContent}</div>
+      </div>
+    </div>
+  );
 };

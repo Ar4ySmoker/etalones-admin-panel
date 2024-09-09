@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
 import PaginationC from '@/app/ui/dashboard/Pagination/PaginationC';
+import Modal from '@/app/ui/modals/globalModal/GlobalCandidateModal';
+import CandidateDetails from '@/app/ui/dashboard/CandidateDetails/CandidateDetails';
+
 
 // async function deleteCandidate(candidateId: string): Promise<Response> {
 //   const response = await fetch(`/api/deleteCandidate/route?candidateId=${candidateId}`, {
@@ -21,6 +24,8 @@ function CandidatesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const candidatesPerPage = 5;
 
@@ -92,6 +97,17 @@ function CandidatesPage() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  const handleOpenModal = (candidate) => {
+    setSelectedCandidate(candidate);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedCandidate(null);
+  };
+
 
   const renderDocuments = (documents) => {
     if (!documents || documents.length === 0) {
@@ -211,11 +227,17 @@ function CandidatesPage() {
                           Редактировать
                         </button>
                       </Link>
-                      <Link href={`/dashboard/candidates/${candidate._id}`}>
+                      {/* <Link href={`/dashboard/candidates/${candidate._id}`}>
                         <button className="btn btn-sm btn-success w-full">
                           Подробнее
                         </button>
-                      </Link>
+                      </Link> */}
+                      <button
+                        className="btn btn-sm btn-success w-full"
+                        onClick={() => handleOpenModal(candidate)}
+                      >
+                        Подробнее
+                      </button>
                       {/* <div className={styles.buttons}>
                         <button
                           className={`${styles.button} ${styles.view}`}
@@ -254,6 +276,9 @@ function CandidatesPage() {
       <PaginationC currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={handlePageChange}/>
+       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {selectedCandidate && <CandidateDetails candidate={selectedCandidate} />}
+      </Modal>
     </div>
   );
 }

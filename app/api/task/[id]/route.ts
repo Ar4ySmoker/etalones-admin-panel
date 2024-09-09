@@ -7,17 +7,30 @@ export const GET = async (req) => {
   try {
     await connectToDB();
 
-    // Получение query параметра для фильтрации
+    // Получение ID задачи из URL
     const url = new URL(req.url, `http://${req.headers.host}`);
-    const candidateId = url.searchParams.get('id');
-    
-    if (!candidateId) {
-      return new NextResponse(JSON.stringify({ message: 'Candidate ID is required' }), { status: 400 });
+    const taskId = url.pathname.split('/').pop(); // Получаем последний сегмент из пути URL
+
+    if (!taskId) {
+      return new NextResponse(JSON.stringify({ message: 'Task ID is required' }), { status: 400 });
     }
+
+    // Находим задачу по её ID
+    const task = await Task.findById(taskId);
     
-    // Находим одного кандидата по его ID
-    const candidate = await Candidate.findById(candidateId);
-    
+    if (!task) {
+      return new NextResponse(JSON.stringify({ message: 'Task not found' }), { status: 404 });
+    }
+
+    // Находим кандидата по ID, который связан с задачей
+    const candidate = await Candidate.findById(task.candidate) .populate({
+      path: 'tasks',
+      populate: {
+        path: 'manager',
+        select: 'name', 
+      },
+    });
+
     if (!candidate) {
       return new NextResponse(JSON.stringify({ message: 'Candidate not found' }), { status: 404 });
     }
@@ -44,6 +57,8 @@ export const POST = async (req: Request) => {
 
     // Создать новую задачу
     const newTask = new Task({
+      
+      //пробую расширить
       title: title,
       date: date,
       firstInterview: false,

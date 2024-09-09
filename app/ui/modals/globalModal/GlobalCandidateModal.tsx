@@ -1,18 +1,40 @@
-import React from 'react';
-import CandidateDetails from '@/app/ui/dashboard/CandidateDetails/CandidateDetails';
+// Modal.tsx
+import React, { ReactNode, useEffect } from 'react';
 
-const GlobalModal = () => {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
 
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  useEffect(() => {
+    if (isOpen) {
+      // Отключить прокрутку страницы при открытии модального окна
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Включить прокрутку страницы при закрытии модального окна
+      document.body.style.overflow = 'auto';
+    }
+
+    // Очистка стиля при размонтировании компонента
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl">
-        <button  className="absolute top-2 right-2 text-xl font-bold">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-4 rounded shadow-lg max-w-4xl w-full max-h-full relative overflow-auto">
+        <button onClick={onClose} className="absolute top-2 right-2 text-red-500 text-2xl">
           &times;
         </button>
+        {children}
       </div>
     </div>
   );
 };
 
-export default GlobalModal;
+export default Modal;

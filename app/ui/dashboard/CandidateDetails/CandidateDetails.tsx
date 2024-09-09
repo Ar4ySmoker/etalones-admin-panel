@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
+import { FaArrowDown } from 'react-icons/fa';
 
 export default function CandidateDetails({ candidate }) {
 
@@ -20,7 +21,7 @@ export default function CandidateDetails({ candidate }) {
     }
     return documents.map((doc, index) => (
       <div key={index} className='w-max'>
-        <p>{doc.docType}: <span className="badge badge-neutral">{doc.dateExp ? doc.dateExp: "дата не указана"}</span> <p className="badge badge-neutral">{doc.numberDoc ? doc.numberDoc: 'Номер не указан'}</p></p>
+        <p>{doc.docType}: <span className="badge badge-neutral">{doc.dateExp ? doc.dateExp: "дата не указана"}</span> <span className="badge badge-neutral">{doc.numberDoc ? doc.numberDoc: 'Номер не указан'}</span></p>
         
       </div>
     ));
@@ -82,13 +83,24 @@ export default function CandidateDetails({ candidate }) {
             <div>Номер счёта: {candidate.cardNumber ? candidate.cardNumber : "нет номера счёта"}</div>
             <div>Документы: {renderDocuments(candidate.documents)}</div>
             {/* <div>Старый Комментарий: {candidate?.comment}</div> */}
-            <h3>Существующие комментарии</h3>
             {/* {renderComments(candidate.comment)} */}
-            <ul className=" overflow-y-auto">
-        {candidate?.comment.map((c, index) => (
-          <li key={index}>{c.text} - {new Date(c.date).toLocaleString()}</li>
+            <div tabIndex={0} className="collapse bg-base-200">
+            <h3 className="collapse-title text-xl font-medium flex items-center justify-between ">Существующие комментарии <span><FaArrowDown /></span>
+            </h3>
+            <ul className=" overflow-y-auto collapse-content">
+        {candidate?.comment?.map((c, index) => (
+          <li key={index}><span className='badge badge-accent'>{new Date(c.date).toLocaleString().slice(0, 10)}</span> - {c.text}</li>
         ))}
       </ul>
+      </div>
+      <div tabIndex={0} className="collapse bg-base-200">
+      <h3 className="collapse-title text-xl font-medium flex items-center justify-between ">Задачи: <span><FaArrowDown /></span></h3>
+      <ul className=" overflow-y-auto collapse-content">
+        {candidate?.tasks?.map((task, index) => (
+          <li key={index}><span className='badge badge-accent'>{new Date(task.dateOfCompletion).toLocaleString().slice(0, 10)}</span> - {task.text}</li>
+        ))}
+      </ul>
+      </div>
           </div>
         </div>
       </div>

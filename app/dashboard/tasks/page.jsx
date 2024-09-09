@@ -5,6 +5,7 @@ import ModalPartnerInterview from "@/app/ui/modals/tasksModals/ModalPartnerInter
 import ModalSentDocuments from "@/app/ui/modals/tasksModals/ModalSentDocuments";
 import ModalHaLeft from "@/app/ui/modals/tasksModals/ModalHaLeft";
 import ModalNewTask from "@/app/ui/modals/tasksModals/ModalNewTask";
+import Image from "next/image";
 
 async function fetchPartnersAndCandidates() {
   try {
@@ -197,7 +198,7 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
     const dateOfCompletion = new Date(dateOfCompletionStr);
     const selectedPartner = partners.find(p => p._id === partnerId);
     const partnerName = selectedPartner ? selectedPartner.companyName : 'неизвестный партнёр';
-  
+    
     // Формирование текста с именем партнёра
     const text = `Кандидат ${selectedCandidate.name} отправлен на собеседование к партнёру ${partnerName}.`;
         const body = {
@@ -258,7 +259,55 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
     }
   };
 
+  const handleSubmitStage4 = async (event) => {
+    event.preventDefault();
+
+    // Получаем данные формы
+    const formData = new FormData(event.target);
+    const candidateId = selectedCandidate._id; // Убедитесь, что selectedCandidate определен
+    const dateLeave = formData.get('dateLeave'); // Получаем дату в формате YYYY-MM-DD
+    const title = formData.get('title');
+    const dateOfCompletion = formData.get('dateLeave');
+    const formattedDateLeave = new Date(dateLeave).toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+    // const date = formData.get('date'); // Получаем дату из формы
+const text = `Кандидата ${selectedCandidate.name} прошел слбеседование с ${selectedCandidate?.partners?.companyName} его ждут на объекте ${formattedDateLeave}` 
+    const body = {
+      candidateId,
+      text,
+      title,
+      dateLeave,
+      dateOfCompletion,
+      // date, 
+      checkboxes: checkboxStates[candidateId] // Включаем состояния чекбоксов только для выбранного кандидата
+    };
+
+    try {
+      const response = await fetch(`/api/task`, { // Обратите внимание, что мы используем /api/task для создания задачи
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log('Task added to candidate:', result);
+        closeModal();
+        router.refresh(); // Обновляем страницу
+        router.push("/dashboard/tasks"); // Перенаправляем на другую страницу
+      } else {
+        console.error('Error:', result.message);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
+  
+
   return (
+    
     <>
       <div className="overflow-x-auto">
         {partners.map(partner => (
@@ -285,14 +334,16 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
               <tbody>
                 {partner.candidates.map(candidate => (
                   <>
+                  
                     <tr className="bg-slate-200" key={candidate._id}>
                       <td className="w-max">
-                        <span className="p-1">{candidate.name}</span>
-                        <div className="flex gap-2">
-                          <div className="collapse bg-base-200">
+                        <span className="p-1 font-bold text-xl">{candidate.name}</span>
+                        <div className="flex gap-2 mt-2">
+                          <div className="collapse bg-base-200 ">
                             <input type="checkbox" />
-                            <div className="collapse-title text-xs font-medium">Посмотреть комментарии</div>
+                            <div className="collapse-title font-medium text-center py-auto my-auto text-lg">Посмотреть комментарии</div>
                             <div className="collapse-content">
+                              <div className="overflow-auto h-80">
                               <ul>
                                 {candidate?.comment?.map((c, index) => (
                                   <li key={index}>
@@ -309,29 +360,34 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
                                   </li>
                                 ))}
                               </ul>
+                              </div>
                             </div>
 
                           </div>
                           <div className="collapse bg-base-200">
                             <input type="checkbox" />
-                            <div className="collapse-title text-xs font-medium">Посмотреть Задачи</div>
+                            <div className="collapse-title text-lg hover:underline hover:text-blue-600 font-medium"><p>Посмотреть Задачи</p></div>
                             <div className="collapse-content">
-                              <div className="overflow-auto h-60"> {/* Контейнер с фиксированной высотой и прокруткой */}
-                                <ul className="flex w-full flex-col gap-2">
-                                  {candidate?.tasks?.map((task, index) => (
-                                    <li key={index} className="card bg-base-300 grid h-max place-items-center p-4">
-                                      <div className="flex justify-between w-full">
-                                        <p>
-                                          {new Date(task.date).toLocaleString().slice(0, 5)}
-                                        </p>
-                                        <span>
-                                          {new Date(task.date).toLocaleString().slice(12, 17)}
-                                        </span>
-                                      </div> -
-                                      <span className="text-sm font-bold">{task.text} </span>
-                                      <div className="divider"></div>
-                                    </li>
-                                  ))}
+                              <div className="overflow-auto h-80"> {/* Контейнер с фиксированной высотой и прокруткой */}
+                                <ul className="flex w-full  flex-col gap-2">
+                                {candidate?.tasks?.slice().reverse().map((task, index) => {
+                      const dateOfCompletion = new Date(task.createdAt).toLocaleString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      });
+                      return (
+                        <li key={index} className="card bg-base-300 grid h-max place-items-center p-4">
+                          <div className="flex flex-col w-full">
+                            <p>{dateOfCompletion}</p>
+                            <span className="text-sm font-bold">{task.text}</span>
+                          </div>
+                          <div className="divider"></div>
+                        </li>
+                      );
+                    })}
                                 </ul>
                               </div>
                             </div>
@@ -350,19 +406,22 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
                       <td>{candidate.updatedAt ? new Date(candidate.updatedAt).toLocaleDateString() : 'Invalid Date'}</td>
                       {/* <td>{candidate.name}</td> */}
                       <td>
-                        {candidate.imgDoc && candidate.imgDoc.length > 0 ? (
-                          candidate.imgDoc.map((imgId) => (
-                            <img
-                              key={imgId}
-                              src={`/api/imgDoc/${imgId}`} // URL для получения изображения
-                              alt="Document"
-                              style={{ width: '100px', height: 'auto' }} // Размеры можно настроить
-                            />
-                          ))
-                        ) : (
-                          <p>No images available</p>
-                        )}
-                      </td>
+      {candidate.imgDoc && candidate.imgDoc.length > 0 ? (
+        candidate.imgDoc.map((imgId) => (
+          <div key={imgId} style={{ margin: '10px 0' }}>
+            <Image
+              src={`/api/imgDoc/${imgId}`}
+              alt="Document"
+              width={100} // Ширина изображения
+              height={100} // Высота изображения
+              style={{ objectFit: 'contain' }} // Подгонка изображения
+            />
+          </div>
+        ))
+      ) : (
+        <p>No images available</p>
+      )}
+    </td>
                     </tr>
                     <tr key={`${candidate._id}-timeline`}>
                       <td className="col-span-6">
@@ -407,9 +466,7 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
                                 onChange={(e) => handleCheckboxChangeDocuments(candidate, e)}
                               />
                             </div>
-                            <div className="timeline-end timeline-box"
-                            >
-                              Отправил документы</div>
+                            <div className="timeline-end timeline-box">Отправил документы</div>
                             <hr />
                           </li>
                           <li>
@@ -420,7 +477,7 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
                                 name="haLeft"
                                 className="checkbox checkbox-sm"
                                 checked={checkboxStates[candidate._id]?.haLeft || false}
-                                onChange={(e) => handleCheckboxChangeHaLeft(candidate._id, e)}
+                                onChange={(e) => handleCheckboxChangeHaLeft(candidate, e)}
                               />
                             </div>
                             <div className="timeline-end timeline-box">Прошел собеседование/Выезжает</div>
@@ -482,6 +539,8 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
       <ModalHaLeft
         selectedCandidate={selectedCandidate}
         closeModal={closeModal}
+        handleSubmitStage4={handleSubmitStage4}
+
       />
     </>
   );

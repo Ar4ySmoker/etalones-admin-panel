@@ -1,10 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import Axios from "axios";
 import { MultiSelect } from "react-multi-select-component";
 import TextInput from "../../inputs/TextInput/TextInput";
-
+import { IoIosMan } from "react-icons/io";
+import { MdAllInbox, MdConnectWithoutContact } from "react-icons/md";
+import { FaTools } from "react-icons/fa";
+import { IoDocuments } from "react-icons/io5";
+import NotificationContext from "@/app/context/NotificationContext";
 const drivePermis = [
   { label: "В", value: "B" },
   { label: "C", value: "C" },
@@ -33,7 +37,10 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     const [showAdditionalPhone, setAdditionalPhone] = useState(true);
     const [additionalPhones, setAdditionalPhones] = useState(candidate.additionalPhones || [""]);
     const [age, setAge] = useState('');
-
+    const [activeSection, setActiveSection] = useState('personal'); // 'all', 'personal', 'professions', 'partner', 'documents'
+    const handleMenuClick = (section) => {
+      setActiveSection(section);
+    };
     useEffect(() => {
       if (candidate?.age) {
         const birthDate = new Date(candidate.age);
@@ -235,10 +242,25 @@ export default function EditCandidateForm({ id, candidate, managers, professions
         if (!res.ok) {
           throw new Error("Failed to update Candidate");
         }
-    
-        router.refresh();
-        router.push("/dashboard/candidates");
+        if (res.ok) {
+          addNotification({
+            title: "Обновлено",
+            content: "Кандидат успешно обновлен",
+            type: "success",
+            id: ""
+          });
+          router.refresh();
+          // router.push("/dashboard/candidates");
+        }
+        // router.refresh();
+        // router.push("/dashboard/candidates");
       } catch (error) {
+        addNotification({
+          title: "Ошибка",
+          content: "Кандидат не обновлен, чтото пошло не так",
+          type: "error",
+          id: ""
+        });
         console.log(error);
       }
     };
@@ -263,7 +285,10 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       const phones = additionalPhones.filter((_, i) => i !== index);
       setAdditionalPhones(phones);
     };
+    const addNotification = useContext(NotificationContext);
+
     return (
+      
       <>
         <div className="">
           <h1 className="font-bold py-10 text-2xl">Обновить кандидата {candidate.name}</h1>
@@ -587,12 +612,22 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               <label htmlFor="comment">
             <div>Комментарий</div>
             <div>
-              {candidate?.comment.map((c, index) => (
-                <ul key={index}>
-                  {/* <p>{c.date.split('T')[0]}</p> */}
-                  <li>{c}</li>
-                </ul>
-              ))}
+            <ul>
+                                {candidate?.comment?.map((c, index) => (
+                                  <li key={index}>
+                                   
+                                    <div className="flex justify-between w-full pt-5">
+                                        <p>
+                                          {new Date(c.date).toLocaleString().slice(0, 5)}
+                                        </p>
+                                        <span>
+                                          {new Date(c.date).toLocaleString().slice(12, 17)}
+                                        </span>
+                                      </div>
+                                      {c.text} 
+                                  </li>
+                                ))}
+                              </ul>
             </div>
             <textarea className="textarea textarea-accent w-[300px] "
               id="comment" name="comment" placeholder="Оставьте свой омментарий"
@@ -607,7 +642,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
        
           </div>
          
-          <button className="btn btn-primary w-full max-w-xs">
+          <button  className="btn btn-primary w-full max-w-xs">
             Обновить кандидата
           </button>
         </form>

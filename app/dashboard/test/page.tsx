@@ -1,17 +1,42 @@
 'use client'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaArrowDown } from 'react-icons/fa';
 import Image from 'next/image';
+import { useModal } from '@/app/context/ModalContext'; // Путь к вашему контексту
+
+interface Candidate {
+  name: string;
+  citizenship: string;
+  ageNum?: number;
+  phone: string;
+  additionalPhones?: string[];
+  locations: string;
+  langue?: {
+    name: string;
+    level?: string;
+  };
+  status: string;
+  statusFromPartner?: {
+    who: string;
+    status: string;
+  };
+  manager?: {
+    name: string;
+  };
+  cardNumber?: string;
+  comment?: { date: string; text: string }[];
+  tasks?: { dateOfCompletion: string; text: string }[];
+}
 
 export default function Page() {
-  const [candidate, setCandidate] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [candidate, setCandidate] = useState<Candidate | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { openModal } = useModal(); // Доступ к функции для открытия модального окна
 
   useEffect(() => {
-    // Определите ID задачи из URL
     const url = new URL(window.location.href);
-    const taskId = url.pathname.split('/').pop(); // Получаем последний сегмент из пути URL
+    const taskId = url.pathname.split('/').pop();
 
     if (!taskId) {
       setError('Task ID is missing');
@@ -19,10 +44,9 @@ export default function Page() {
       return;
     }
 
-    // Выполните запрос к серверу
     const fetchCandidate = async () => {
       try {
-        const response = await fetch(`/api/task/${taskId}`); // Обновите путь к API в соответствии с вашим серверным кодом
+        const response = await fetch(`/api/task/${taskId}`);
         
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -30,7 +54,7 @@ export default function Page() {
         
         const data = await response.json();
         setCandidate(data);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       } finally {
         setLoading(false);
@@ -38,7 +62,7 @@ export default function Page() {
     };
 
     fetchCandidate();
-  }, []); // Пустой массив зависимостей означает, что запрос выполнится только один раз при монтировании компонента
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -52,7 +76,8 @@ export default function Page() {
     return <div>No candidate found.</div>;
   }
 
-  return (
+  // Генерируем содержимое модального окна
+  const modalContent = (
     <>
       <div className='flex justify-around items-center'>
         <div className="avatar">
@@ -95,7 +120,6 @@ export default function Page() {
           <div>Менеджер: {candidate.manager?.name}</div>
           <div>Номер счёта: {candidate.cardNumber ? candidate.cardNumber : "нет номера счёта"}</div>
           
-          {/* Отображение комментариев */}
           <div tabIndex={0} className="collapse bg-base-200">
             <h3 className="collapse-title text-xl font-medium flex items-center justify-between">
               Существующие комментарии <span><FaArrowDown /></span>
@@ -113,7 +137,6 @@ export default function Page() {
             </ul>
           </div>
           
-          {/* Отображение задач */}
           <div tabIndex={0} className="collapse bg-base-200">
             <h3 className="collapse-title text-xl font-medium flex items-center justify-between">
               Задачи: <span><FaArrowDown /></span>
@@ -135,5 +158,18 @@ export default function Page() {
         </div>
       </div>
     </>
+  );
+
+  // Пример вызова модального окна
+  const handleOpenModal = () => {
+    openModal(modalContent);
+  };
+
+  return (
+    <div>
+      <button onClick={handleOpenModal} className="btn btn-primary">
+        Показать информацию о кандидате
+      </button>
+    </div>
   );
 }

@@ -52,30 +52,36 @@ export const GET = async (request) => {
       return NextResponse.json({ success: false, message: 'Image data is missing' }, { status: 500 });
     }
 
-    // Проверка типа данных
+    // Проверка типа данных и декодирование изображения
     let imageData;
     if (typeof imgDoc.image.data === 'string') {
       try {
-        // Если это строка Base64, декодируем ее в Buffer
-        imageData = Buffer.from(imgDoc.image.data, 'base64');
+        // Проверка и декодирование строки Base64
+        if (imgDoc.image.data.startsWith('data:')) {
+          const base64Data = imgDoc.image.data.split(',')[1]; // Удаляем префикс data URL
+          imageData = Buffer.from(base64Data, 'base64');
+        } else {
+          imageData = Buffer.from(imgDoc.image.data, 'base64');
+        }
       } catch (error) {
         console.error(`Error converting Base64 to Buffer: ${error.message}`);
         return NextResponse.json({ success: false, message: 'Invalid image data' }, { status: 500 });
       }
     } else if (Buffer.isBuffer(imgDoc.image.data)) {
-      // Если это уже Buffer, используем его напрямую
       imageData = imgDoc.image.data;
     } else {
-      // Если данные имеют неподдерживаемый формат
       console.error(`Unsupported image data format for ID: ${imgDocId}`);
       return NextResponse.json({ success: false, message: 'Unsupported image data format' }, { status: 500 });
     }
 
+    // Убедитесь, что Content-Type устанавливается правильно
+    const contentType = imgDoc.image.contentType || 'application/octet-stream';
+    
     return new NextResponse(imageData, {
       status: 200,
       headers: {
-        'Content-Type': imgDoc.image.contentType,
-        'Content-Disposition': `inline; filename=${imgDoc.image.name}`, // Используйте 'inline' для отображения в браузере
+        'Content-Type': contentType,
+        'Content-Disposition': `inline; filename="${imgDoc.image.name || 'image'}"`, // Используйте 'inline' для отображения в браузере
       },
     });
   } catch (error) {

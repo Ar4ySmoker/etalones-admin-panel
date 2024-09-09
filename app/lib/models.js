@@ -164,6 +164,10 @@ const imgDocSchema = new mongoose.Schema({
 }
 })
 const taskSchema = new mongoose.Schema({
+  manager:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Manager'
+  },
   candidate:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Candidate'
