@@ -3,7 +3,7 @@
 import Sidebar from "../ui/dashboard/sidebar/sidebar"
 import styles from "../ui/dashboard/dashboard.module.css"
 import Footer from "../ui/dashboard/footer/footer"
-import { CandidateProvider } from "../context/CandidateContext"
+// import { CandidateProvider } from "../context/CandidateContext"
 import { SessionProvider } from "next-auth/react"
 import { ModalProvider } from "../context/ModalContext"
 const Layout = ({children}) => {

@@ -111,6 +111,7 @@ interface Candidate {
   status?: string;
   locations?: string;
   citizenship?: string;
+  tasks?: { dateOfCompletion: string; text: string }[];
 }
 
 interface CandidateContextType {

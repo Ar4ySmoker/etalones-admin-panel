@@ -1,8 +1,4 @@
 import mongoose from "mongoose";
-import { type } from "os";
-import { title } from "process";
-import { text } from "stream/consumers";
-
 
 const userSchema = new mongoose.Schema(
   {

@@ -36,7 +36,9 @@ import {connectToDB} from "@/app/lib/utils";
         }),
     ],
     callbacks: {
-        async signIn({ user, account }: { user: AuthUser; account: Account }) {
+        async signIn({ 
+            // user,
+             account }: { user: AuthUser; account: Account }) {
             if (account?.provider == "credentials") {
                 return true;
             }

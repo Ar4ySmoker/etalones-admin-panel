@@ -162,6 +162,7 @@ interface Task {
   createdAt: string;
   dateOfCompletion: string;
   text: string;
+  title: string;
   candidate?: { name: string };
   partner?: { companyName: string };
 }
@@ -270,8 +271,8 @@ const Navbar: React.FC = () => {
                       <Link href={`/dashboard/candidates/${candidate?._id}`}>
                         <div className="flex flex-col items-start cursor-pointer">
                           <span>Создано: {task.createdAt ? task.createdAt.slice(0, 10) : 'Дата не указана'}</span>
-                          {`Кандидат ${task.candidate?.name} - отправлен на собеседование к ${task.partner?.companyName}`}
-                          <span>Комментарий: {task.text}</span>
+                          {task.text}
+                          <span>Комментарий: {task.title}</span>
                         </div>
                       </Link>
                     </div>

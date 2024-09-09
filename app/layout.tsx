@@ -5,7 +5,7 @@ import  Navbar from './ui/Navbar/Navbar'
 import { getServerSession } from "next-auth";
 import SessionProvider from "./utils/SessionProvider";
 import React from 'react';
-import GlobalModal from './ui/modals/globalModal/GlobalCandidateModal';
+// import GlobalModal from './ui/modals/globalModal/GlobalCandidateModal';
 import NotificationManager from './ui/notification/NotificationManager';
 import { CandidateProvider } from './context/CandidateContext';
 

@@ -157,12 +157,13 @@ export default function Page() {
     const candidateId = selectedCandidate._id; // Убедитесь, что selectedCandidate определен
     const title = formData.get('title');
     // const date = formData.get('date'); // Получаем дату из формы
+    
 const text = `Кандидат ${selectedCandidate.name} прошел слбеседование с менеджером`
     const body = {
       candidateId,
       text,
       title,
-      // date, 
+      date, 
       checkboxes: checkboxStates[candidateId] // Включаем состояния чекбоксов только для выбранного кандидата
     };
 

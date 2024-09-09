@@ -4,7 +4,7 @@ export default function ModalHaLeft({ selectedCandidate, closeModal, handleSubmi
         <div className="modal-box">
           <h3 className="font-bold text-lg">Заполните поля</h3>
           {selectedCandidate && (
-            <p className="py-4">Выберите дату когда готовы принять кандидата "{selectedCandidate.name}" на объекте {selectedCandidate?.partners?.companyName}</p>
+            <p className="py-4">Выберите дату когда готовы принять кандидата <span className="font-bold">{selectedCandidate.name}</span> на объекте <span className="font-bold">{selectedCandidate?.partners?.companyName}</span></p>
           )}
           <div className="modal-action">
             <form method="dialog" onSubmit={handleSubmitStage4}>

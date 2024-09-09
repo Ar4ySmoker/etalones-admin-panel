@@ -23,13 +23,7 @@ export const GET = async (req) => {
     }
 
     // Находим кандидата по ID, который связан с задачей
-    const candidate = await Candidate.findById(task.candidate) .populate({
-      path: 'tasks',
-      populate: {
-        path: 'manager',
-        select: 'name', 
-      },
-    });
+    const candidate = await Candidate.findById(task.candidate).populate(['tasks', 'manager']); // Убедитесь, что 'tasks' populated, если это необходимо
 
     if (!candidate) {
       return new NextResponse(JSON.stringify({ message: 'Candidate not found' }), { status: 404 });
@@ -57,8 +51,6 @@ export const POST = async (req: Request) => {
 
     // Создать новую задачу
     const newTask = new Task({
-      
-      //пробую расширить
       title: title,
       date: date,
       firstInterview: false,
