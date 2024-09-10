@@ -109,7 +109,7 @@ const Navbar: React.FC = () => {
         <Link href="/dashboard">Главная</Link>
         <div className="px-4">
         <div className="dropdown">
-        <div tabIndex={0} role="button" className="btn m-1">Click</div>
+        <div tabIndex={0} role="button" className="btn m-1">Задачи на неделю</div>
         <div tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-max p-2 shadow">
               <div className="flex justify-between gap-2 w-max">
                 {weekDates.map((day) => (

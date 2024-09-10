@@ -60,7 +60,7 @@ export default function SingleTaskModal({id, candidate, onClose }) {
                 id="title" name="title" placeholder="Комментарий" /> 
 <TextInput id='dateOfCompletion' title='Дата выполнения' type="date" placeholder='Дата выполнения' />
                 <button  className="btn btn-primary w-full max-w-xs">
-            Отправить комментарий
+            Поставить задачу
           </button>
                 </form>   
         </div>

@@ -36,6 +36,7 @@ interface Profession {
       text: string;
     }[];
     tasks?: {
+      createdAt: string | number | Date;
       _id: string;
       dateOfCompletion: string;
       text: string;
@@ -168,7 +169,9 @@ const TaskModalContent: React.FC<{ taskId: string }> = ({ taskId }) => {
                 candidate.tasks.map((task, index) => (
                   <li key={index}>
                     <span className='badge badge-accent'>
-                      {new Date(task.dateOfCompletion).toLocaleString().slice(0, 10)}
+                      Создана:{new Date(task.createdAt).toLocaleString().slice(0, 10)}
+                    </span> - <span className='badge badge-accent'>
+                      Выполнить до:{new Date(task.dateOfCompletion).toLocaleString().slice(0, 10)}
                     </span> - {task.text}
                     <p><span className='font-semibold'>Комментарий менеджера: </span>{task.title}</p>
 
