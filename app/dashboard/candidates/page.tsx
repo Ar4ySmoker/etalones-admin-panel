@@ -291,8 +291,9 @@ import PaginationC from '@/app/ui/dashboard/Pagination/PaginationC';
 import Modal from '@/app/ui/modals/globalModal/GlobalCandidateModal';
 import CandidateDetails from '@/app/ui/dashboard/CandidateDetails/CandidateDetails';
 import { FaCircleInfo } from "react-icons/fa6";
-import { MdOutlineMessage } from "react-icons/md";
+import { MdAddTask, MdOutlineMessage } from "react-icons/md";
 import CommentModal from '@/app/ui/modals/globalModal/CommentModal';
+import SingleTaskModal from '@/app/ui/modals/globalModal/SingleTaskModal';
 
 // Определите тип для кандидата
 interface Candidate {
@@ -320,7 +321,10 @@ const CandidatesPage: React.FC = () => {
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenComment, setIsModalOpenComment] = useState(false);
+  const [isModalOpenTask, setIsModalOpenTask] = useState(false);
 
+
+  
   const candidatesPerPage = 5;
 
   // Функция для форматирования времени
@@ -396,6 +400,11 @@ const CandidatesPage: React.FC = () => {
     setIsModalOpenComment(true);
   };
 
+  const handleOpenModalTask = (candidate: Candidate) => {
+    setSelectedCandidate(candidate);
+    setIsModalOpenTask(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedCandidate(null);
@@ -405,7 +414,10 @@ const CandidatesPage: React.FC = () => {
     setIsModalOpenComment(false);
     setSelectedCandidate(null);
   };
-
+  const handleCloseModalTask = () => {
+    setIsModalOpenTask(false);
+    setSelectedCandidate(null);
+  };
   const renderDocuments = (documents?: Array<{ docType: string }>) => {
     if (!documents || documents.length === 0) {
       return "нет документов";
@@ -528,18 +540,35 @@ const CandidatesPage: React.FC = () => {
                           Редактировать
                         </button>
                       </Link>
+                      <div className="tooltip" data-tip="Информация о кандидате">
+
                       <button
                         className="btn btn-sm btn-outline btn-info w-full"
                         onClick={() => handleOpenModal(candidate)}
                       >
                         <FaCircleInfo />
                       </button>
+                      </div>
+                      <div className='flex justify-between '>
+                      <div className="tooltip" data-tip="Добавить комментарий">
+
                       <button
-                        className="btn btn-sm btn-outline btn-success w-full"
+                        className="btn btn-sm btn-outline btn-success"
                         onClick={() => handleOpenModalComment(candidate)}
                       >
                         <MdOutlineMessage />
+                      </button> 
+                      </div>
+                      <div className="tooltip" data-tip="Поставить задачу">
+                      <button
+                        className="btn btn-sm btn-outline btn-primary"
+                        onClick={() => handleOpenModalTask(candidate)}
+                        >
+                        <MdAddTask />
                       </button>
+                        </div>
+                      </div>
+                     
                     </div>
                   </td>
                 </tr>
@@ -565,7 +594,12 @@ const CandidatesPage: React.FC = () => {
 
       {isModalOpenComment && selectedCandidate && (
         <Modal isOpen={isModalOpenComment} onClose={handleCloseModalComment}>
-          <CommentModal candidate={selectedCandidate} />
+          <CommentModal candidate={selectedCandidate} id={selectedCandidate._id} onClose={handleCloseModalComment} />
+        </Modal>
+      )}
+      {isModalOpenTask && selectedCandidate && (
+        <Modal isOpen={isModalOpenTask} onClose={handleCloseModalTask}>
+          <SingleTaskModal candidate={selectedCandidate} id={selectedCandidate._id} onClose={handleCloseModalTask} />
         </Modal>
       )}
     </div>

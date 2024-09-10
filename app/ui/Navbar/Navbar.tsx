@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
-import { useCandidate } from '@/app/context/CandidateContext'; // Обновите путь к файлу
 import Modal from '@/app/ui/modals/globalModal/GlobalCandidateModal'; // Убедитесь, что путь к компоненту правильный
 import TaskModalContent from '@/app/ui/modals/globalModal/TaskModalContent'; // Убедитесь, что путь к компоненту правильный
 
