@@ -35,17 +35,52 @@ interface CandidateDoc {
 }
 
 // PUT-запрос для обновления кандидата
+// export async function PUT(request: Request, { params }: { params: { id: string } }) {
+//   const { id } = params;
+//   const body: CandidateUpdate = await request.json();
+
+//   await connectToDB();
+
+//   // Получаем старого кандидата
+//   const oldCandidate = await Candidate.findById(id).lean() as CandidateDoc;
+
+//   // Обновляем информацию о кандидате
+//   await Candidate.findByIdAndUpdate(id, body);
+
+//   // Если партнёр изменился, обновляем массив candidates у старого и нового партнёров
+//   if (oldCandidate && body.partners && oldCandidate.partners !== body.partners) {
+//     // Удаляем кандидата из старого партнёра
+//     if (oldCandidate.partners) {
+//       await Partner.findByIdAndUpdate(oldCandidate.partners, { $pull: { candidates: id } });
+//     }
+
+//     // Добавляем кандидата в новый партнёр
+//     await Partner.findByIdAndUpdate(body.partners, { $addToSet: { candidates: id } });
+//   } else if (body.partners) {
+//     // Если партнёр не изменился, но он установлен, добавляем кандидата в массив candidates
+//     await Partner.findByIdAndUpdate(body.partners, { $addToSet: { candidates: id } });
+//   }
+
+//   return NextResponse.json({ message: "Candidate updated" }, { status: 200 });
+// }
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const { id } = params;
   const body: CandidateUpdate = await request.json();
+
+  console.log('Updating candidate with ID:', id);
+  console.log('Request body:', body);
 
   await connectToDB();
 
   // Получаем старого кандидата
   const oldCandidate = await Candidate.findById(id).lean() as CandidateDoc;
 
+  console.log('Old candidate:', oldCandidate);
+
   // Обновляем информацию о кандидате
-  await Candidate.findByIdAndUpdate(id, body);
+  const updatedCandidate = await Candidate.findByIdAndUpdate(id, body, { new: true }).lean();
+  
+  console.log('Updated candidate:', updatedCandidate);
 
   // Если партнёр изменился, обновляем массив candidates у старого и нового партнёров
   if (oldCandidate && body.partners && oldCandidate.partners !== body.partners) {

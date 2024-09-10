@@ -39,6 +39,7 @@ interface Profession {
       _id: string;
       dateOfCompletion: string;
       text: string;
+      title: string;
     }[];
     professions?: Profession[]; // Добавляем поле профессий
   }
@@ -169,6 +170,8 @@ const TaskModalContent: React.FC<{ taskId: string }> = ({ taskId }) => {
                     <span className='badge badge-accent'>
                       {new Date(task.dateOfCompletion).toLocaleString().slice(0, 10)}
                     </span> - {task.text}
+                    <p><span className='font-semibold'>Комментарий менеджера: </span>{task.title}</p>
+
                   </li>
                 ))
               ) : (

@@ -47,7 +47,11 @@ export default function CandidateDetails({ candidate }) {
     return tasks.map((task, index) => (
       <div key={index} className='flex items-center gap-2'>
         <span className='badge badge-info'>{new Date(task.dateOfCompletion).toLocaleString().slice(0, 10)}</span>
+       <div>
         <p>{task.text}</p>
+
+        <p><span className='font-semibold'>Комментарий менеджера: </span>{task.title}</p>
+       </div>
       </div>
     ));
   };
