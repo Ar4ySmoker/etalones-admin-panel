@@ -2,15 +2,7 @@ import {NextRequest, NextResponse } from 'next/server';
 import { connectToDB } from '@/app/lib/utils';
 import { VacancyOnServer } from '@/app/lib/models';
 
-// export const GET = async () => {
-//     try {
-//         await connectToDB();
-//         const vacancies = await VacancyOnServer.find().populate('manager');
-//         return new NextResponse(JSON.stringify(vacancies), { status: 200 });
-//     } catch (error) {
-//         return new NextResponse("error in fetching " + error, { status: 500 });
-//     }
-// };
+
 interface IVacancy {
     _id: string;
     title: string;
@@ -22,27 +14,6 @@ interface IVacancy {
         email: string;
     };
 }
-// export const GET = async (req: NextRequest): Promise<NextResponse> => {
-//     try {
-//         await connectToDB();
-//         console.log('mongo is connected');
-
-//         // Получаем параметры запроса
-//         const url = new URL(req.url);
-//         const page = parseInt(url.searchParams.get('page') || '1', 10);
-//         const limit = parseInt(url.searchParams.get('limit') || '3', 10); // Количество вакансий для загрузки за один раз
-
-//         const vacancies: IVacancy[] = await VacancyOnServer.find({ published: true })
-//             .populate('manager')
-//             // .sort({ createdAt: -1 }) 
-//             .skip((page - 1) * limit) // Пропускаем предыдущие вакансии
-//             .limit(limit); // Ограничиваем количество загружаемых вакансий
-
-//         return new NextResponse(JSON.stringify(vacancies), { status: 200 });
-//     } catch (error) {
-//         return new NextResponse(`error in fetching: ${error}`, { status: 500 });
-//     }
-// };
 
 
 export const GET = async (req: NextRequest): Promise<NextResponse> => {
@@ -52,21 +23,49 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
 
         const url = new URL(req.url);
         const page = parseInt(url.searchParams.get('page') || '1', 10);
-        const limit = parseInt(url.searchParams.get('limit') || '5', 10); // Количество вакансий для загрузки за один раз
+        const limit = parseInt(url.searchParams.get('limit') || '5', 10);
 
-        const vacancies: IVacancy[] = await VacancyOnServer.find({ published: true })
+        const totalVacancies = await VacancyOnServer.countDocuments();
+        // const totalVacancies = await VacancyOnServer.countDocuments({ published: true });
+        console.log('Total Vacancies:', totalVacancies); // Логируем общее количество вакансий
+        const vacancies = await VacancyOnServer.find()
             .populate('manager')
-            .skip((page - 1) * limit) // Пропускаем предыдущие вакансии
-            .limit(limit); // Ограничиваем количество загружаемых вакансий
+            .skip((page - 1) * limit)
+            .limit(limit);
 
-        const totalVacancies = await VacancyOnServer.countDocuments({ published: true });
+        // console.log('Vacancies:', vacancies);
+
         const totalPages = Math.ceil(totalVacancies / limit);
+        console.log('Total Pages:', totalPages);
 
         return new NextResponse(JSON.stringify({ vacancies, totalPages }), { status: 200 });
     } catch (error) {
         return new NextResponse(`error in fetching: ${error}`, { status: 500 });
     }
 };
+
+// export const GET = async (req: NextRequest): Promise<NextResponse> => {
+//     try {
+//         await connectToDB();
+//         console.log('mongo is connected');
+
+//         const url = new URL(req.url);
+//         const page = parseInt(url.searchParams.get('page') || '1', 10);
+//         const limit = parseInt(url.searchParams.get('limit') || '5', 10); // Количество вакансий для загрузки за один раз
+
+//         const vacancies: IVacancy[] = await VacancyOnServer.find({ published: true })
+//             .populate('manager')
+//             .skip((page - 1) * limit) // Пропускаем предыдущие вакансии
+//             .limit(limit); // Ограничиваем количество загружаемых вакансий
+
+//         const totalVacancies = await VacancyOnServer.countDocuments({ published: true });
+//         const totalPages = Math.ceil(totalVacancies / limit);
+
+//         return new NextResponse(JSON.stringify({ vacancies, totalPages }), { status: 200 });
+//     } catch (error) {
+//         return new NextResponse(`error in fetching: ${error}`, { status: 500 });
+//     }
+// };
 export const POST = async (request) => {
     try {
         await connectToDB();
