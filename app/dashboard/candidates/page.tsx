@@ -6,6 +6,9 @@ import Link from "next/link";
 import PaginationC from '@/app/ui/dashboard/Pagination/PaginationC';
 import Modal from '@/app/ui/modals/globalModal/GlobalCandidateModal';
 import CandidateDetails from '@/app/ui/dashboard/CandidateDetails/CandidateDetails';
+import { FaCircleInfo } from "react-icons/fa6";
+import { MdOutlineMessage } from "react-icons/md";
+import CommentModal from '@/app/ui/modals/globalModal/CommentModal';
 
 
 // async function deleteCandidate(candidateId: string): Promise<Response> {
@@ -26,6 +29,7 @@ function CandidatesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenComment, setIsModalOpenComment] = useState(false);
 
   const candidatesPerPage = 5;
 
@@ -102,13 +106,20 @@ function CandidatesPage() {
     setSelectedCandidate(candidate);
     setIsModalOpen(true);
   };
+  const handleOpenModalComment = (candidate) => {
+    setSelectedCandidate(candidate);
+    setIsModalOpenComment(true);
+  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedCandidate(null);
   };
 
-
+  const handleCloseModalComment = () => {
+    setIsModalOpen(false);
+    setSelectedCandidate(null);
+  };
   const renderDocuments = (documents) => {
     if (!documents || documents.length === 0) {
       return "нет документов";
@@ -221,31 +232,34 @@ function CandidatesPage() {
                       </div>
                       </td>
                   <td>
-                    <div className={styles.buttons}>
+                    <div className='flex flex-col gap-1 w-full'>
                       <Link href={`/dashboard/candidates/edit/${candidate._id}`}>
                         <button className="btn btn-sm btn-outline btn-error w-full">
                           Редактировать
                         </button>
                       </Link>
-                      {/* <Link href={`/dashboard/candidates/${candidate._id}`}>
-                        <button className="btn btn-sm btn-success w-full">
-                          Подробнее
-                        </button>
-                      </Link> */}
-                      <button
-                        className="btn btn-sm btn-success w-full"
+                 <div className='flex justify-between w-full ' >
+                  <div data-tip="Информация о кандидате" className='tooltip'>
+                  <button
+                        className="btn btn-sm btn-success bg-green-200 px-5 w-max"
                         onClick={() => handleOpenModal(candidate)}
                       >
-                        Подробнее
+                        <FaCircleInfo />
+
                       </button>
-                      {/* <div className={styles.buttons}>
-                        <button
-                          className={`${styles.button} ${styles.view}`}
-                          onClick={() => handleOpenModal(candidate)}
-                        >
-                          Подробнее
-                        </button>
-                      </div> */}
+                  </div>
+                <div data-tip="Комментарий" className='tooltip '>
+                <button
+                        className="btn btn-sm btn-primary bg-blue-400 px-5 w-max"
+                        // onClick={() => handleOpenModalComment(candidate)}
+                      >
+                        <MdOutlineMessage />
+                      </button>
+                </div>
+                      
+                 </div>
+                     
+                    
                     </div>
                   </td>
                 </tr>
@@ -278,6 +292,9 @@ function CandidatesPage() {
       onPageChange={handlePageChange}/>
        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         {selectedCandidate && <CandidateDetails candidate={selectedCandidate} />}
+      </Modal>
+      <Modal isOpen={isModalOpenComment} onClose={handleCloseModalComment}>
+      {selectedCandidate && <CommentModal candidate={selectedCandidate} />}      
       </Modal>
     </div>
   );

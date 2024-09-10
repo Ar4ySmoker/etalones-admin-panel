@@ -163,7 +163,7 @@ const text = `Кандидат ${selectedCandidate.name} прошел слбес
       candidateId,
       text,
       title,
-      date, 
+      // date, 
       checkboxes: checkboxStates[candidateId] // Включаем состояния чекбоксов только для выбранного кандидата
     };
 

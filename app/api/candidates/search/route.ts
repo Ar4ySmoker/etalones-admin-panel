@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
       .sort({"updatedAt" : -1})
       .skip(offset)
       .limit(limit)
-      .populate('manager');
+      .populate(['manager','tasks']);
 
     const totalCandidates = await Candidate.countDocuments(searchQuery);
     const totalPages = Math.ceil(totalCandidates / limit);

@@ -26,6 +26,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
+    <div className='modal-overlay fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[100]'>
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-4 rounded shadow-lg max-w-4xl w-full max-h-full relative overflow-auto">
         <button onClick={onClose} className="absolute top-2 right-2 text-red-500 text-2xl">
@@ -33,6 +34,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         </button>
         {children}
       </div>
+    </div>
     </div>
   );
 };
