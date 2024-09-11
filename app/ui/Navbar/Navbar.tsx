@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import Modal from '@/app/ui/modals/globalModal/GlobalCandidateModal'; // Убедитесь, что путь к компоненту правильный
 import TaskModalContent from '@/app/ui/modals/globalModal/TaskModalContent'; // Убедитесь, что путь к компоненту правильный
+import { Checkbox } from 'react-daisyui';
 
 interface Task {
   _id: string;
@@ -121,8 +122,8 @@ const Navbar: React.FC = () => {
                       onClick={() => handleDateClick(day.formattedDate)}
                       className="text-sm font-medium flex flex-col items-center"
                     >
-                      <span className="px-3">{day.dayName}</span>
-                      <span className="text-xs w-max">{day.formattedDate}</span>
+                      <span className="px-3 text-md font-bold">{day.dayName}</span>
+                      <span className="text-sms w-max ">{day.formattedDate}</span>
                     </div>
                   </div>
                 ))}
@@ -130,14 +131,21 @@ const Navbar: React.FC = () => {
               <div className="mt-2">
                 {filteredTasks.length > 0 ? (
                   filteredTasks.map(task => (
-                    <div key={task._id} className="rounded bg-slate-200 my-4"             onClick={() => handleOpenModal(task._id)}
->
-                        <div className="flex flex-col items-start cursor-pointer">
-                          <span>Создано: {task.createdAt ? task.createdAt.slice(0, 10) : 'Дата не указана'}</span>
-                          {task.text}
-                          <span>Комментарий: {task.title}</span>
-                        </div>
+                    <><div key={task._id} className="rounded bg-slate-200 my-4 flex gap-3 p-3" onClick={() => handleOpenModal(task._id)}
+                    >
+                      <div className="flex flex-col items-start cursor-pointer">
+                        <span>Создано: {task.createdAt ? task.createdAt.slice(0, 10) : 'Дата не указана'}</span>
+                        {task.text}
+                        <span>Комментарий: {task.title}</span>
+                      </div>
+
                     </div>
+                      <div>
+                        <form >
+                        <p>Выполнено</p>
+                        <Checkbox />
+                        </form>
+                      </div></>
                   ))
                 ) : (
                   <div>Нет задач на выбранную дату</div>

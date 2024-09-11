@@ -199,7 +199,7 @@ export default function HistoryPage() {
               <div>Нужно выполнить до - {task.dateOfCompletion ? new Date(task.dateOfCompletion).toLocaleDateString() : 'Дата не указана'}</div>
             </div>
             <div className="flex flex-col items-start">
-              <span>{task.text || 'Untitled Task'}</span>
+              <span>{task.text || 'Задача без заголовка'}</span>
               <span>Комментарий: {task.title}</span>
             </div>
           </li>
