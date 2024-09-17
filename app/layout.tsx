@@ -1,13 +1,14 @@
 // 'use client'
 import { Inter } from 'next/font/google'
 import './ui/globals.css'
-// import  Navbar from './ui/Navbar/Navbar'
+import  Navbar from '@/app/ui/Navbar/Navbar'
 // import { getServerSession } from "next-auth";
 // import SessionProvider from "./utils/SessionProvider";
 import React from 'react';
 // import GlobalModal from './ui/modals/globalModal/GlobalCandidateModal';
 import NotificationManager from './ui/notification/NotificationManager';
 import { CandidateProvider } from './context/CandidateContext';
+import { Provider } from "./Provider";
 
 
 
@@ -27,11 +28,12 @@ export default async function RootLayout({
     <html lang="ru">
     
     <body className={inter.className}>
+      <Provider>
         {/* <SessionProvider session={session}> */}
           <CandidateProvider>
           <NotificationManager>
           <div className="container mx-auto px-4">
-            {/* <Navbar /> */}
+            <Navbar />
             {children}
             {/* <GlobalModal /> */}
 
@@ -39,6 +41,7 @@ export default async function RootLayout({
           </NotificationManager>
           </CandidateProvider>
         {/* </SessionProvider> */}
+        </Provider>
       </body>
  
     </html>

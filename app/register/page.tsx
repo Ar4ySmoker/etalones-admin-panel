@@ -1,164 +1,131 @@
-'use client'
+"use client";
 
-// app/register/page.tsx
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import { FormEvent, useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { BiLogoGoogle } from 'react-icons/bi';
+import { BiSolidShow } from 'react-icons/bi';
+import { BiSolidHide } from 'react-icons/bi';
 
-const Register = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [username, setUsername] = useState(""); // Добавлено поле для username
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const router = useRouter();
-    const { status: sessionStatus } = useSession();
+const Signup = () => {
+  const [error, setError] = useState();
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const { data: session } = useSession();
 
-    useEffect(() => {
-        if (sessionStatus === "authenticated") {
-            router.replace("/dashboard");
-        }
-    }, [sessionStatus, router]);
+  const labelStyles = "w-full text-sm";
 
-    const isValidEmail = (email: string) => {
-        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-        return emailRegex.test(email);
-    };
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError("");
-        if (!isValidEmail(email)) {
-            setError("Email is invalid");
-            return;
-        }
-
-        if (!password || password.length < 8) {
-            setError("Password is invalid");
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            const res = await fetch("/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password,
-                    username, // Включаем поле username в запрос
-                }),
-            });
-
-            if (res.status === 400) {
-                const { error } = await res.json();
-                setError(error);
-                setLoading(false);
-                return;
-            }
-
-            if (res.status === 200) {
-                router.push("/login");
-            }
-        } catch (error) {
-            setError("Error, try again");
-            console.error("Registration error:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (sessionStatus === "loading") {
-        return <h1>Loading...</h1>;
+  useEffect(() => {
+    if (session) {
+      router.push("/");
     }
+  }, [session, router]);
 
-    return (
-        sessionStatus !== "authenticated" && (
-            <div className="justify-center mt-16">
-                <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-lg">
-                    <h1 className="text-3xl font-semibold text-center text-purple-700">Register</h1>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label htmlFor="name" className="label">
-                                <span className="text-base label-text">Name</span>
-                            </label>
-                            <input
-                                id="name"
-                                type="text"
-                                placeholder="Name"
-                                required
-                                className="w-full input input-bordered input-primary"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="email" className="label">
-                                <span className="text-base label-text">Email</span>
-                            </label>
-                            <input
-                                id="email"
-                                type="email"
-                                placeholder="Email Address"
-                                required
-                                className="w-full input input-bordered input-primary"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="label">
-                                <span className="text-base label-text">Password</span>
-                            </label>
-                            <input
-                                id="password"
-                                type="password"
-                                placeholder="Enter Password"
-                                required
-                                className="w-full input input-bordered input-primary"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="username" className="label">
-                                <span className="text-base label-text">Username</span>
-                            </label>
-                            <input
-                                id="username"
-                                type="text"
-                                placeholder="Username"
-                                required
-                                className="w-full input input-bordered input-primary"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                            disabled={loading}
-                        >
-                            {loading ? "Registering..." : "Register"}
-                        </button>
-                        {error && <p className="text-red-600 text-[16px] mb-4">{error}</p>}
-                    </form>
-                    <div className="text-center text-gray-500 mt-4">- OR -</div>
-                    <Link href="/login">
-                        <p className="block text-center text-blue-500 hover:underline mt-2">
-                            Login with an existing account
-                        </p>
-                    </Link>
-                </div>
-            </div>
-        )
-    );
-};
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const formData = new FormData(event.currentTarget);
+      const signupResponse = await axios.post(`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/signup`, {
+        email: formData.get("email"),
+        password: formData.get("password"),
+        name: formData.get("name"),
+        phone: formData.get("phone"),
+      });
 
-export default Register;
+      const res = await signIn("credentials", {
+        email: signupResponse.data.email,
+        password: formData.get("password"),
+        redirect: false,
+      });
+
+      if (res?.ok) return router.push("/");
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        const errorMessage = error.response?.data.message;
+        setError(errorMessage);
+      }
+    }
+  };
+
+  return (
+    <section className="w-full h-screen flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="p-6 xs:p-10	w-full max-w-[350px] flex flex-col justify-between items-center gap-2.5	
+        border border-solid border-[#242424] bg-[#74c381] rounded"
+      >
+        {error && <div className="">{error}</div>}
+        <h1 className="mb-5 w-full text-2xl	font-bold">Signup</h1>
+
+        <label className={labelStyles}>Fullname:</label>
+        <input
+          type="text"
+          placeholder="Fullname"
+          className="w-full h-8 border border-solid border-[#242424] py-1 px-2.5 rounded bg-white text-[13px]"
+          name="name"
+        />
+
+        <label className={labelStyles}>Email:</label>
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full h-8 border border-solid border-[#242424] py-1 px-2.5 rounded bg-white text-[13px]"
+          name="email"
+        />
+
+        <label className={labelStyles}>Password:</label>
+        <div className="flex w-full">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="w-full h-8 border border-solid border-[#242424] py-1 px-2.5 rounded-l bg-white text-[13px]"
+            name="password"
+          />
+          <button
+            className="w-2/12	border-y border-r border-solid border-[#242424] bg-white rounded-r 
+            flex items-center justify-center transition duration-150 ease hover:bg-[#1A1A1A]"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowPassword(!showPassword)
+            }}
+          >
+            {showPassword ? <BiSolidHide /> : <BiSolidShow />}
+          </button>
+        </div>
+
+        <label className={labelStyles}>Phone:</label>
+        <input
+          type="text"
+          placeholder="Phone (not required)"
+          className="w-full h-8 border border-solid border-[#242424] py-1 px-2.5 rounded bg-white text-[13px]"
+          name="phone"
+        />
+
+        <button className="w-full bg-white border border-solid border-[#242424] py-1.5 mt-2.5 rounded
+        transition duration-150 ease hover:bg-[#1A1A1A] text-[13px]">
+          Signup
+        </button>
+
+        <div className="w-full h-10	relative flex items-center justify-center">
+          <div className="absolute h-px w-full top-2/4 bg-[#242424]"></div>
+          <p className="w-8	h-6 bg-[#74c381] z-10 flex items-center justify-center">or</p>
+        </div>
+
+        <button
+          className="flex py-2 px-4 text-sm	align-middle items-center rounded text-999 bg-white 
+          border border-solid border-[#242424] transition duration-150 ease hover:bg-[#1A1A1A] gap-3"
+          onClick={() => signIn("google")}>
+          <BiLogoGoogle className="text-2xl" /> Sign in with Google
+        </button>
+        <Link href="/login" className="text-sm	text-[#888] transition duration-150 ease hover:text-white">
+          Already have an account?
+          </Link>
+      </form>
+    </section>
+  );
+}
+
+export default Signup;
