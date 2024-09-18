@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const userSchema = new mongoose.Schema(
   {
@@ -21,6 +22,10 @@ const userSchema = new mongoose.Schema(
 );
 
 const managerShema = new mongoose.Schema({
+  email:{
+    type: String,
+    unique: true,
+  },
   image: {
     name: String,
     data: Buffer,

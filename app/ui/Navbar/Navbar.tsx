@@ -211,11 +211,14 @@ const Navbar: React.FC = () => {
               </div>
               <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li>
-                  <a className="justify-between">Профиль<span className="badge">New</span></a>
+                    <Link href="/account">Профиль</Link>
+                  {/* <a className="justify-between">Профиль<span className="badge">New</span></a> */}
                 </li>
-                <li><a>Настройки</a></li>
                 <li>
-                  <button onClick={() => signOut()}>Выйти</button>
+                    <Link href="/setting">Настройки</Link>
+                </li>
+                <li>
+                <button onClick={() => signOut({ callbackUrl: '/' })}>Выйти</button>
                 </li>
               </ul>
             </div>
