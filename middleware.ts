@@ -72,6 +72,7 @@
 //     matcher: [...PROTECTED_ROUTES], // Используем защищенные маршруты для мидлвара
 // };
 
+
 import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { PUBLIC_ROUTES, PROTECTED_ROUTES, DEFAULT_REDIRECT } from '@/lib/routes';
