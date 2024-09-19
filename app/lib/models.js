@@ -63,6 +63,10 @@ type:String
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Candidate'
   }],
+  partners:[{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Partner'
+  }]
 })
 
 const partnerShema = new mongoose.Schema({
