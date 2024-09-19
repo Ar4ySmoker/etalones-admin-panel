@@ -6,7 +6,11 @@ import { useRouter } from "next/navigation";
 import TextInput from "../../inputs/TextInput/TextInput";
 
 
-export default function SingleTaskModal({id, candidate, onClose }) {
+export default function SingleTaskModal({
+  // id, 
+  candidate, 
+  onClose }) {
+  
     const router = useRouter();
 
     const handleSubmit = async (event) => {

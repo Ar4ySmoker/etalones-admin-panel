@@ -18,7 +18,6 @@ function ManagerCard() {
 
             const data = await response.json();
             
-            console.log("Fetched managers:", data);
 
             // Извлекаем массив managers из полученного объекта
             const extractedManagers = data.managers;

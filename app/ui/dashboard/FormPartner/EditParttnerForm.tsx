@@ -22,9 +22,9 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
   let [combinedLocation, setCombinedLocation] = useState("");  
   let [langue, setLangue] = useState({ name: "Не знает языков", level: "" });
   const [selectedDrive, setSelectedDrive] = useState([]);
-  const [contract, setContract] = useState({ typeC: "", sum: ""});
+  // const [contract, setContract] = useState({ typeC: "", sum: ""});
   const [fileContract, setFileContract] = useState(null);
-  const [fileFirma, setFileFirma] = useState(null);
+  // const [fileFirma, setFileFirma] = useState(null);
 
 
   const handleLangueChange = (field, value) => {
@@ -110,9 +110,9 @@ export default function EditPartnerForm({ id, professions, partner, managers}) {
             if (fileContract) {
               formData.append("fileContract", fileContract);
           }
-          if (fileFirma) {
-              formData.append("fileFirma", fileFirma);
-          }
+          // if (fileFirma) {
+          //     formData.append("fileFirma", fileFirma);
+          // }
             const body = {
                 name: formData.get('name') || partner.name,
                 phone: formData.get('phone') || partner.phone,

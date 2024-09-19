@@ -6,14 +6,15 @@ const connection = {};
 export const connectToDB = async () => {
   try {
     if (connection.isConnected) return;
-    const db = await mongoose.connect("mongodb+srv://12345678:ar4ycool@cluster0.p9tgbuq.mongodb.net/");
+    const db = await mongoose.connect(process.env.DATABASE_URL);
     connection.isConnected = db.connections[0].readyState;
+    
   } catch (error) {
     console.log(error)
     throw new Error(error);
   }
 };
-
+console.log("CONNECT  1", connectToDB)
 
 
 

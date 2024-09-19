@@ -5,7 +5,7 @@ import Axios from "axios";
 import { MultiSelect } from "react-multi-select-component";
 import TextInput from "../../inputs/TextInput/TextInput";
 import { IoIosMan } from "react-icons/io";
-import { MdAllInbox, MdConnectWithoutContact } from "react-icons/md";
+import {  MdConnectWithoutContact } from "react-icons/md";
 import { FaTools } from "react-icons/fa";
 import { IoDocuments } from "react-icons/io5";
 import NotificationContext from "@/app/context/NotificationContext";
@@ -85,17 +85,17 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     }
   }, [singleCountry, singleCity]);
   
-  const renderProfessions = (professions) => {
-    if (!professions || professions.length === 0) {
-      return "нет профессий";
-    }
-    return professions.map((prof, index) => (
-      <p key={index} className='flex flex-col'>
-        <p>{prof.name}</p>
-        <small>{prof.experience}</small>
-      </p>
-    ));
-  };
+  // const renderProfessions = (professions) => {
+  //   if (!professions || professions.length === 0) {
+  //     return "нет профессий";
+  //   }
+  //   return professions.map((prof, index) => (
+  //     <p key={index} className='flex flex-col'>
+  //       <p>{prof.name}</p>
+  //       <small>{prof.experience}</small>
+  //     </p>
+  //   ));
+  // };
  
     const router = useRouter();
     const [professionEntries, setProfessionEntries] = useState(candidate?.professions || []);
@@ -132,61 +132,6 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     setDocumentEntries(newEntries);
   };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //         const formData = new FormData(e.target);
-
-    //     const body = {
-    //       source:"",
-    //       name: formData.get('name') || candidate?.name, // Добавляем проверку на пустое значение
-    //       age: formData.get('age') || candidate?.age,
-    //       ageNum: formData.get('ageNum') || candidate?.ageNum,
-    //       phone: formData.get('phone') || candidate?.phone,
-    //       additionalPhones: additionalPhones.length ? additionalPhones.filter(phone => phone.trim() !== '') : candidate.additionalPhones,
-    //       professions: professionEntries.length ? professionEntries.filter(profession => profession.name.trim() !== '' || profession.experience.trim() !== '') : candidate.professions,
-    //       locations: combinedLocation || candidate?.locatons,
-    //       documents: documentEntries.length ? documentEntries.filter(document => document.docType.trim() !== '' || document.dateExp.trim() !== '' || document.dateOfIssue.trim() !== '' || document.numberDoc.trim() !== '') : candidate.documents,
-    //       drivePermis: selectedDrive.map(d => d.value).join(', ') || candidate.drivePermis,
-    //       leaving: formData.get('leaving') || candidate?.leaving,
-    //       dateArrival: formData.get('dateArrival') || candidate?.dateArrival,
-    //       cardNumber: formData.get('cardNumber') || candidate?.cardNumber,
-    //       // workHours: formData.get('workHours') || candidate.workHours,
-    //       langue: {
-    //         name: formData.get('langue') || candidate?.langue?.name,
-    //         level: formData.get('langueLvl') || candidate?.langue?.Lvl },
-    //       status: formData.get('status') || candidate?.status,
-    //       citizenship: formData.get('citizenship') || candidate?.citizenship,
-    //       statusFromPartner:{
-    //         status: formData.get('statusFromPartner') || candidate?.statusFromPartner?.status,
-    //         from: formData.get('from') || candidate?.statusFromPartner?.from,
-    //         to:formData.get('to') || candidate?.statusFromPartner?.to,
-    //         dismissalDate: formData.get('dismissalDate') || candidate?.statusFromPartner?.dismissalDate
-    //       },
-    //       partners: formData.get('partners') || candidate?.partners,
-    //       manager: formData.get('manager') || candidate?.manager,
-    //       comment: formData.get('comment') || candidate?.comment }
-        
-    //       try {
-    //         // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
-    //           const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
-
-    //         method: "PUT",
-    //             headers: {
-    //                 "Content-type": "application/json",
-    //             },
-    //             body: JSON.stringify(body),
-    //         });
- 
-    //         if (!res.ok) {
-    //             throw new Error("Failed to update Candidate");
-    //         }
- 
-    //         router.refresh();
-    //         router.push("/dashboard/candidates");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
     const handleSubmit = async (e) => {
       e.preventDefault();
       const formData = new FormData(e.target);
@@ -229,8 +174,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       };
     
       try {
-        const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
-                // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+        // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+                const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
 
           method: "PUT",
           headers: {
@@ -268,9 +213,9 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     const handleDismissalClick = () => {
       setShowDismissalDate(true);
     };
-    const handleAdditionalPhone = () => {
-      setAdditionalPhone(true);
-    };
+    // const handleAdditionalPhone = () => {
+    //   setAdditionalPhone(true);
+    // };
     const addAdditionalPhone = () => {
       setAdditionalPhones([...additionalPhones, ""]);
     };

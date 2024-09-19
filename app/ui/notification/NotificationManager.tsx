@@ -1,5 +1,5 @@
 'use client'
-import React, { ReactNode, useState, useEffect } from "react";
+import React, { ReactNode, useState } from "react";
 import BaseNotification from "./BaseNotification";
 import NotificationContext from "@/app/context/NotificationContext";
 

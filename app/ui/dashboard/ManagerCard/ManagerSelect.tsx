@@ -12,10 +12,11 @@ export default function ManagerSelect() {
 
     const fetchManagers = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/manager');
+            const response = await fetch('https://www.candidat.store/api/manager');
+
+            // const response = await fetch('http://localhost:3000/api/manager');
             const data = await response.json();
 
-            console.log("Fetched managers:", data);
 
             const extractedManagers = data.managers;
 

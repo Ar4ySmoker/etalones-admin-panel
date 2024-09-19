@@ -1,12 +1,12 @@
-import { connectDB } from "@/app/libs/mongodb";
-import User from "@/app/models/User";
+import { connectToDB } from "@/app/lib/utils";
+import {User} from "@/app/lib/models";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 
 export async function POST(request: Request) {
   try {
-    await connectDB();
+    await connectToDB();
 
     const { name, email, password, phone } = await request.json();
 
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    await connectDB();
+    await connectToDB();
 
     const { userId, name, email, password, phone, address } = await request.json();
 
@@ -134,7 +134,7 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    await connectDB();
+    await connectToDB();
 
     const { userId } = await request.json();
 

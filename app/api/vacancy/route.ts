@@ -3,17 +3,17 @@ import { connectToDB } from '@/app/lib/utils';
 import { VacancyOnServer } from '@/app/lib/models';
 
 
-interface IVacancy {
-    _id: string;
-    title: string;
-    description: string;
-    published: boolean;
-    createdAt: Date;
-    manager: {
-        name: string;
-        email: string;
-    };
-}
+// interface IVacancy {
+//     _id: string;
+//     title: string;
+//     description: string;
+//     published: boolean;
+//     createdAt: Date;
+//     manager: {
+//         name: string;
+//         email: string;
+//     };
+// }
 
 
 export const GET = async (req: NextRequest): Promise<NextResponse> => {

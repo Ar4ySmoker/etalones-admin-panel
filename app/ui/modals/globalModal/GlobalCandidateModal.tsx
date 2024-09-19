@@ -1,3 +1,4 @@
+'use client';
 // Modal.tsx
 import React, { ReactNode, useEffect } from 'react';
 

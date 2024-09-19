@@ -12,7 +12,7 @@ export const POST = async (request) => {
     // Получаем данные из запроса
     const formData = await request.formData();
     const candidateId = formData.get('candidateId');
-    const comment = formData.get('comment');
+    // const comment = formData.get('comment');
 
     if (!candidateId) {
       return NextResponse.json({ success: false, message: 'Candidate ID is required' }, { status: 400 });

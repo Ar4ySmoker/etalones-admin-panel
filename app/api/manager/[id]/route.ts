@@ -58,19 +58,32 @@ export const PUT = async (request, { params }) => {
 };
 
 export async function GET(request, { params }) {
-    const { id } = params;
-
+    const { managerId } = params;
+    await connectToDB();
+  
     try {
-        await connectToDB();
-        const manager = await Manager.findOne({ _id: id });
-
-        if (!manager) {
-            return new NextResponse(JSON.stringify({ success: false, message: "Manager not found" }), { status: 404 });
-        }
-
-        return new NextResponse(JSON.stringify({ success: true, manager }), { status: 200 });
+      const manager = await Manager.findOne(managerId).populate('candidates');
+      return NextResponse.json({ candidates: manager.candidates }, { status: 200 });
     } catch (error) {
-        console.error("Error fetching manager:", error);
-        return new NextResponse(JSON.stringify({ success: false, message: "Error fetching manager", error }), { status: 500 });
+      console.error("Error fetching candidates:", error);
+      return NextResponse.json({ error: "Failed to fetch candidates" }, { status: 500 });
     }
-}
+  }
+
+// export async function GET(request, { params }) {
+//     const { id } = params;
+
+//     try {
+//         await connectToDB();
+//         const manager = await Manager.findOne({ _id: id }).populate('candidates');
+
+//         if (!manager) {
+//             return new NextResponse(JSON.stringify({ success: false, message: "Manager not found" }), { status: 404 });
+//         }
+
+//         return new NextResponse(JSON.stringify({ success: true, manager }), { status: 200 });
+//     } catch (error) {
+//         console.error("Error fetching manager:", error);
+//         return new NextResponse(JSON.stringify({ success: false, message: "Error fetching manager", error }), { status: 500 });
+//     }
+// }

@@ -9,7 +9,6 @@ export const GET = async (request: NextRequest) => {
     const managers = await Manager.find({})
       .sort({ createdAt: -1 });
 
-    console.log("Fetched managers:", managers);
 
     const response = {
       managers,

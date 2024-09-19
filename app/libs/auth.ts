@@ -1,5 +1,5 @@
-import { connectDB } from "@/app/libs/mongodb";
-import User from "@/app/models/User";
+import { connectToDB } from "@/app/lib/utils";
+import {User} from "@/app/lib/models";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions  = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await connectDB();
+        await connectToDB();
         const userFound = await User.findOne({
           email: credentials?.email,
         }).select("+password");

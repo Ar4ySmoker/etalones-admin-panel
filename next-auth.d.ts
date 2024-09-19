@@ -1,8 +1,8 @@
-// next-auth.d.ts
-import NextAuth from "next-auth";
+// // next-auth.d.ts
+// import NextAuth from "next-auth";
 
-declare module "next-auth" {
-  interface Session {
-    id: string; // Добавьте здесь свойство id
-  }
-}
+// declare module "next-auth" {
+//   interface Session {
+//     id: string; // Добавьте здесь свойство id
+//   }
+// }

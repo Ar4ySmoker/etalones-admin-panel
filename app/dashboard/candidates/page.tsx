@@ -599,7 +599,7 @@ const CandidatesPage: React.FC = () => {
       )}
       {isModalOpenTask && selectedCandidate && (
         <Modal isOpen={isModalOpenTask} onClose={handleCloseModalTask}>
-          <SingleTaskModal candidate={selectedCandidate} id={selectedCandidate._id} onClose={handleCloseModalTask} />
+          <SingleTaskModal candidate={selectedCandidate} onClose={handleCloseModalTask} />
         </Modal>
       )}
     </div>
