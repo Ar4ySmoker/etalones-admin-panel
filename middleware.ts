@@ -78,6 +78,7 @@ import { getToken } from 'next-auth/jwt';
 import { PUBLIC_ROUTES, PROTECTED_ROUTES, DEFAULT_REDIRECT } from '@/lib/routes';
 
 async function isUserManager(userEmail) {
+    
     try {
         // const res = await fetch('http://localhost:3000/api/manager');
         const res = await fetch('https://www.candidat.store/api/manager');
