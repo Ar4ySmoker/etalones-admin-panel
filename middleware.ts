@@ -45,7 +45,9 @@ export async function middleware(req) {
         const userEmail = token.email;
 
         try {
-            const res = await fetch('http://localhost:3000/api/manager');
+            // const res = await fetch('http://localhost:3000/api/manager');
+            const res = await fetch('https://www.candidat.store/api/manager');
+
             const data = await res.json();
 
             if (!res.ok) {
