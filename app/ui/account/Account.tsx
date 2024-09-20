@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import ManagerSelect from '@/app/ui/dashboard/ManagerCard/ManagerSelect';
 import TextInput from '../inputs/TextInput/TextInput';
 
 export default function Account() {
@@ -24,8 +23,8 @@ export default function Account() {
   const fetchCandidatesForManager = async (candidateIds: string[]) => {
     try {
       const candidatePromises = candidateIds.map(async (id) => {
-        // const response = await fetch(`http://localhost:3000/api/candidates/${id}`);
-        const response = await fetch(`https://www.candidat.store/api/candidates/${id}`);
+        const response = await fetch(`http://localhost:3000/api/candidates/${id}`);
+        // const response = await fetch(`https://www.candidat.store/api/candidates/${id}`);
 
         const data = await response.json();
         return data.candidate;
@@ -41,8 +40,8 @@ export default function Account() {
   const fetchPartnersForManager = async (partnerIds: string[]) => {
     try {
       const partnerPromises = partnerIds.map(async (id) => {
-        // const response = await fetch(`http://localhost:3000/api/partners/${id}`);
-        const response = await fetch(`https://www.candidat.store/api/partners/${id}`);
+        const response = await fetch(`http://localhost:3000/api/partners/${id}`);
+        // const response = await fetch(`https://www.candidat.store/api/partners/${id}`);
 
         const data = await response.json();
         return data.partner;
@@ -58,8 +57,8 @@ export default function Account() {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        // const response = await fetch('http://localhost:3000/api/manager');
-        const response = await fetch('https://www.candidat.store/api/manager');
+        const response = await fetch('http://localhost:3000/api/manager');
+        // const response = await fetch('https://www.candidat.store/api/manager');
 
         const data = await response.json();
 
