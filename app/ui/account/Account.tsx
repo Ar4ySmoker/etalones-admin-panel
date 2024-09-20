@@ -57,8 +57,8 @@ export default function Account() {
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/manager');
-        // const response = await fetch('https://www.candidat.store/api/manager');
+        // const response = await fetch('http://localhost:3000/api/manager');
+        const response = await fetch('https://www.candidat.store/api/manager');
 
         const data = await response.json();
 
