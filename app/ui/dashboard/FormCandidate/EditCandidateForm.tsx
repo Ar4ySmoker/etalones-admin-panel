@@ -174,8 +174,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       };
     
       try {
-        const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
-                // const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+        // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+                const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
 
           method: "PUT",
           headers: {
