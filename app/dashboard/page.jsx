@@ -11,15 +11,15 @@ import {
 import styles from '@/app/dashboard/page.module.css';
 
 // Функция для получения данных кандидатов
-// const fetchCandidates = async (source) => {
-//   const url = source ? `/api/filtredCandidates?source=${source}` : '/api/candidates';
-//   const response = await fetch(url);
-//   if (!response.ok) {
-//     throw new Error('Failed to fetch candidates');
-//   }
-//   const data = await response.json();
-//   return data.candidates;
-// };
+const fetchCandidates = async (source) => {
+  const url = source ? `/api/filtredCandidates?source=${source}` : '/api/candidates';
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Failed to fetch candidates');
+  }
+  const data = await response.json();
+  return data.candidates;
+};
 
 const Dashboard = () => {
   const [siteCandidates, setSiteCandidates] = useState([]);
