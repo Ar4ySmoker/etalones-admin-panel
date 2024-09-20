@@ -31,8 +31,8 @@ function VacancyCard() {
 
     const fetchVacancies = async (page: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/vacancy?page=${page}&limit=5`);
-            // const response = await fetch(`https://www.candidat.store/api/vacancy?page=${page}&limit=5`);
+            // const response = await fetch(`http://localhost:3000/api/vacancy?page=${page}&limit=5`);
+            const response = await fetch(`https://www.candidat.store/api/vacancy?page=${page}&limit=5`);
 
             const data = await response.json();
             setVacancies(data.vacancies);
@@ -50,8 +50,8 @@ function VacancyCard() {
 
     const handleCheckboxChange = async (vacancy: IVacancy, field: keyof IVacancy, value: boolean) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/checkboxVacancy/${vacancy._id}`, {
-                // const response = await fetch(`https://www.candidat.store/api/checkboxVacancy/${vacancy._id}`, {
+            // const response = await fetch(`http://localhost:3000/api/checkboxVacancy/${vacancy._id}`, {
+                const response = await fetch(`https://www.candidat.store/api/checkboxVacancy/${vacancy._id}`, {
 
                 method: 'PUT',
                 headers: {
