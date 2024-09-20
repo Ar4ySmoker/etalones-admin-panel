@@ -120,3 +120,23 @@ export const POST = async (req) => {
     );
   }
 };
+
+
+export const GET = async (req) => {
+  try {
+    await connectToDB();
+
+    // Получение query параметра для фильтрации
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const paidFilter = url.searchParams.get('paid');
+    
+    // Формируем фильтр
+    const filter = paidFilter ? { paid: paidFilter === 'true' } : {};
+    
+    const tasks = await Task.find(filter).populate('candidate').populate('partner');
+    return new NextResponse(JSON.stringify(tasks), { status: 200 });
+  } catch (error) {
+    console.error('Server error:', error);
+    return new NextResponse(JSON.stringify({ message: 'Internal server error', error: error.message }), { status: 500 });
+  }
+};

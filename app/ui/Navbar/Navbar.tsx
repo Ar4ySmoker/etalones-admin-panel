@@ -107,8 +107,8 @@ const Navbar: React.FC = () => {
     
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <Link href="/dashboard" className="btn btn-ghost text-xl">Etalones S&B</Link>
-        <Link href="/dashboard">Главная</Link>
+        <Link href="/" className="btn btn-ghost text-xl">Etalones S&B</Link>
+        <Link href="/dashboard">Админпанель</Link>
         <div className="px-4">
         <div className="dropdown">
         <div tabIndex={0} role="button" className="btn m-1">Задачи на неделю</div>
