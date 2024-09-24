@@ -80,7 +80,10 @@ import { getToken } from 'next-auth/jwt';
 
 export async function middleware(req) {
     const token = await getToken({ req });
-    const protectedRoutes = ['/dashboard']; // Укажите ваши защищенные маршруты
+    const protectedRoutes = [
+        '/'
+        // '/dashboard'
+    ]; // Укажите ваши защищенные маршруты
 
     if (protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))) {
         if (!token) {
@@ -92,5 +95,8 @@ export async function middleware(req) {
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*'], // Укажите здесь все маршруты, требующие проверки
+    matcher: [
+        // '/dashboard/:path*'
+    '/'
+    ], // Укажите здесь все маршруты, требующие проверки
 };
