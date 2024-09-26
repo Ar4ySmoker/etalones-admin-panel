@@ -96,7 +96,8 @@ type: String
   },
   companyName:{
 type: String,
-unique: true
+unique: true,
+sparse: true,
   },
   rentPrice:{
 type: String
