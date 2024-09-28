@@ -228,6 +228,11 @@ const taskSchema = new mongoose.Schema({
     }
 },{ timestamps: true })
 const candidateSchema = new mongoose.Schema({
+  avatar:{
+    name: String,
+    data: Buffer,
+    contentType: String
+},
   imgDoc:[{
 type: mongoose.Schema.Types.ObjectId,
     ref: 'ImgDoc'
