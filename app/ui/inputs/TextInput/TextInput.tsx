@@ -11,10 +11,10 @@ interface TextInputProps {
 
 const TextInput: React.FC<TextInputProps> = ({ id, title, placeholder, ...rest }) => {
   return (
-    <label htmlFor={id}>
+    <label htmlFor={id} className='flex w-[400px] justify-between gap-2 items-center'>
       {title && <div>{title}</div>}
       <input 
-       className='input input-bordered input-success input-xs w-full max-w-xs my-1'
+       className='input input-bordered input-success input-xs w-[200px]'
        type="text" id={id} name={id}
        placeholder={placeholder}
        {...rest}/>

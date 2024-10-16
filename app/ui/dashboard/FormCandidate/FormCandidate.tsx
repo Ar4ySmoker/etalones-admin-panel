@@ -1,9 +1,16 @@
 'use client'
-import React, {useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { MultiSelect } from "react-multi-select-component";
 import Axios from "axios";
 import TextInput from '../../inputs/TextInput/TextInput';
+import { IoIosMan } from 'react-icons/io';
+import { FaTools } from 'react-icons/fa';
+import { IoDocuments } from 'react-icons/io5';
+import { MdConnectWithoutContact } from 'react-icons/md';
+import CMultiSelect from '../../Multiselect/Multiselect';
+import NotificationContext from "@/app/context/NotificationContext";
+
 
 const drivePermis = [
   { label: "В", value: "B" },
@@ -36,7 +43,11 @@ export default function Form({ professions,  manager, partners }) {
   const [showAdditionalPhone, setAdditionalPhone] = useState(false);
   const [additionalPhones, setAdditionalPhones] = useState([""]);
   const [ageNum, setAgeNum] = useState('');
+  const [activeSection, setActiveSection] = useState('personal'); // 'all', 'personal', 'professions', 'partner', 'documents'
 
+  const handleMenuClick = (section) => {
+    setActiveSection(section);
+  };
   const calculateAge = (birthDate) => {
     const today = new Date();
     const birthDateObj = new Date(birthDate);
@@ -220,6 +231,12 @@ export default function Form({ professions,  manager, partners }) {
       });
       const result = await response.json();
       if (response.ok) {
+        addNotification({
+          title: "Обновлено",
+          content: "Кандидат успешно обновлен",
+          type: "success",
+          id: ""
+        });
         console.log('Candidate created:', result);
         router.refresh();
         router.push("/dashboard/candidates");
@@ -227,6 +244,12 @@ export default function Form({ professions,  manager, partners }) {
         // setErrorMessage(result.message); // Устанавливаем сообщение об ошибке
       }
     } catch (error) {
+      addNotification({
+        title: "Ошибка",
+        content: "Кандидат не обновлен, чтото пошло не так",
+        type: "error",
+        id: ""
+      });
       console.error('Network error:', error);
     }
   };
@@ -250,360 +273,715 @@ export default function Form({ professions,  manager, partners }) {
     const phones = additionalPhones.filter((_, i) => i !== index);
     setAdditionalPhones(phones);
   };
+  const addNotification = useContext(NotificationContext);
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}  >
-        <div className='grid grid-cols-3'>
-        <div className='grid justify-start items-stretch content-space-evenly '>
-        <TextInput id='name' title='Имя'/>
-        <label htmlFor="age">
-        <div>Возраст</div>
-        <div className="flex gap-1">
-          <label htmlFor="age">
-            <div>Дата рождения</div>
-            <input
-              className="input input-bordered input-success input-xs w-full max-w-xs"
-              id="age"
-              name="age"
-              type="date"
-              onChange={handleBirthDateChange}
-            />
+    <>
+    <div className="">
+      <h1 className="font-bold py-10 text-2xl">Создать кандидата</h1>
+    </div>
+    <ul className="menu bg-base-200 lg:menu-horizontal rounded-box">
+<li>
+  <a onClick={() => handleMenuClick('personal')}>
+  <IoIosMan />
+    Личные данные
+  </a>
+</li>
+<li>
+  <a onClick={() => handleMenuClick('professions')}>
+  <FaTools />
+  Профессии
+  </a>
+</li>
+<li>
+  <a onClick={() => handleMenuClick('parnter')}>
+  <MdConnectWithoutContact />
+    Партнер
+  </a>
+</li>
+<li>
+  <a onClick={() => handleMenuClick('document')}>
+  <IoDocuments />
+  Документы
+  </a>
+</li>
+<li>
+  <a onClick={() => handleMenuClick('other')}>
+  <IoDocuments />
+  Другое
+  </a>
+</li>
+</ul>
+    <form onSubmit={handleSubmit} >
+      <div > 
+
+
+        {activeSection === 'personal' && (
+          <>
+          <div className='w-full flex gap-4'> 
+          <div>
+          <TextInput id="name" title="Имя" type="text"  placeholder='Имя'  />
+          <div>
+            <TextInput id="phone" title="Телефон" type="text" placeholder="+373696855446"  />
+            <button type="button" className="btn btn-accent btn-xs" onClick={addAdditionalPhone}><strong>+</strong></button>
+            {showAdditionalPhone && (
+              <>
+                {additionalPhones.map((phone, index) => (
+                  <div key={index}>
+                    <label htmlFor={`additionalPhone${index}`}>
+                      <div>Доп. Телефон {index + 1}</div>
+                      <input
+                        className="input input-bordered input-success input-xs w-full max-w-xs"
+                        id={`additionalPhone${index}`}
+                        name={`additionalPhone${index}`}
+                        type="phone"
+                        placeholder={phone}
+                        value={phone}
+                        onChange={(e) => handleAdditionalPhoneChange(index, e.target.value)}
+                        required
+                      />
+                    </label>
+                    <button type="button" className="btn btn-error btn-xs" onClick={() => removeAdditionalPhone(index)}>Удалить</button>
+                  </div>
+                ))}
+                <button type="button" onClick={addAdditionalPhone}>Добавить ещё один доп. телефон</button>
+              </>
+            )}
+          </div>
+          </div>
+          
+          <div>
+          <TextInput id="age" title="Дата рождения" type="date" placeholder="30 лет" />
+          <TextInput id="ageNum" title="Возраст" type="text"  />
+          </div>
+         <div>
+          <label htmlFor="status">
+            <div>Статус</div>
+            <select className="select w-full max-w-xs select-success select-xs" id="status" name="status"
+             >
+              <option disabled selected value={null}>Выберите Статус</option>
+              <option>Не обработан</option>
+              <option>Нет месседжеров</option>
+              <option>Не подходят документы</option>
+              <option>Документы не готовы</option>
+              <option>Не подошла вакансия</option>
+              <option>Нашел другую работу</option>
+              <option>Ждёт работу</option>
+              <option>На собеседовании</option>
+              <option>На объекте</option>
+              <option>В ЧС</option>
+            </select>
           </label>
-          <label htmlFor="ageNum">
-            <div>Возраст</div>
-            <input
-              className="input input-bordered input-success input-xs w-full max-w-xs"
-              id="ageNum"
-              name="ageNum"
-              type="text"
-              value={ageNum}
-              readOnly
-            />
+          <TextInput id='cardNumber' title='Номер счёта' type="text"  />
+          </div>
+          </div>
+          </>
+        )}
+        {activeSection === 'professions' && (
+          <>
+            <div className='grid justify-start items-stretch content-space-evenly '>
+          <label htmlFor="professions">
+            <div>
+              <h3>Профессии</h3>
+              <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
+            </div>
+            {professionEntries.map((prof, index) => (
+              <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
+                <label htmlFor="profession">
+                  <select className="select w-full max-w-xs select-success select-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
+                    <option value={null} disabled selected>Выберите профессию</option>
+                    <option>Нет профессии</option>
+                    {professions.map(profession => (
+                      <option key={profession._id} value={profession.name}>{profession.name}</option>
+                    ))}
+                  </select>
+                </label>
+                <label htmlFor="experience">
+                  <div>Опыт работы</div>
+                  <select className="select w-full max-w-xs select-success select-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
+                    <option disabled selected value={null}>Опыт работы</option>
+                    <option >Без опыта</option>
+                    <option >Меньше года</option>
+                    <option >Более года</option>
+                    <option >От 2-х лет</option>
+                    <option >Более 10-ти лет</option>
+                  </select>
+                </label>
+                <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeProfessionEntry(index)}>Удалить профессию</button>
+              </div>
+            ))}
           </label>
         </div>
-      </label>
-        {/* <label htmlFor="age">
-              <div>Возраст</div>
-              <div className='flex gap-1'>
-                <label htmlFor="age">
-                  <div>Дата рождения</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs" 
-                  id="age" name="age" type="date"   />
-                </label>
-                <label htmlFor="ageNum">
-                  <div>Возраст</div>
-                  <input className="input input-bordered input-accent w-full max-w-xs" id="ageNum" name="ageNum" type="text"   />
-                </label>
-              </div>
-            </label> */}
-        <label htmlFor="phone">
-  <div>Телефон</div>
-<input className="input input-bordered input-xs input-success w-full max-w-xs"
-         id="phone" name="phone" type="text"  onChange={(e) => setPhone(e.target.value)} 
-         onBlur={handlePhoneBlur} 
-         placeholder="Phone" required />
-                <button type="button" className="btn btn-accent" onClick={handleAdditionalPhone}><strong>+</strong></button>
-         {phoneError && <div role="alert" className="alert alert-error">
-  {/* <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    className="h-6 w-6 shrink-0 stroke-current">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-  </svg> */}
-  <span>{phoneError}</span>
-</div>}
-        </label>
-        {showAdditionalPhone && (
-                  <div>
-        <button className='btn btn-accent' type="button" onClick={addAdditionalPhone}><strong>+</strong></button>
-
-        {additionalPhones.map((phone, index) => (
-          <div key={index}>
-            <TextInput
-             id='additionalPhone'
-             name='additionalPhone'
-             title='Дополнительный номер'
-              type="text"
-              onChange={(e) => handleAdditionalPhoneChange(index, e.target.value)}
-              placeholder="Дополнительный телефон"
-            />
-            <button type="button" onClick={() => removeAdditionalPhone(index)}>Удалить</button>
-          </div>
-        ))}
-      </div>    
+          </>
         )}
-
-        <label htmlFor="locations">
-  <div>Местоположение - {combinedLocation}</div>
-         <div>
-          <div className='flex gap-1'>
-          {countries && (
-        <select className="select w-full max-w-xs select-success select-xs" onChange={(e) => fetchCities(e.target.value)} >
-          <option selected hidden disabled>
-            Выберите страну
-          </option>
-          {countries.map((country) => (
-            <option key={country.country} value={country.country}>
-              {country.country}
-            </option>
-          ))}
-        </select>
-      )}
-
-      {Cities.length > 0 && (
-        <select className="select w-full max-w-xs select-success select-xs" onChange={handleCityChange} value={singleCity}>
-          <option selected hidden disabled>
-            Выберите город
-          </option>
-          {Cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-      )}
-          </div>
-    </div>
-    <input type="hidden" name="locations" id='locations' value={combinedLocation} />
-
-        </label>
-        <label className='flex gap-1 items-end' htmlFor="langue">
-          <div className='flex flex-col justify-between h-full'>
-          <div>Знание языка</div>
-          
-          <select className="select w-full max-w-xs select-success select-xs" id="langue" name="langue" >
-          <option disabled selected value={null}>Знание языка</option>
-        <option>Не знает языков</option>
-        <option >Английский</option>
-        <option >Немецкий</option>
-        <option >Польский</option>
-
-        </select>
-          </div>
-          <div className='flex flex-col justify-between  h-full'>
-          <div>Уровень</div>
-          <select className="select w-full max-w-xs select-success select-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
-          <option disabled selected value={null}>Уровень знание языка</option>
-        <option >Уровень А1</option>
-        <option >Уровень А2</option>
-        <option >Уровень B1</option>
-        <option >Уровень B2</option>
-        </select>
-          </div>
-        </label>
-        <label htmlFor="status">
-            <div>Статус работника на момент диалога</div>
-          <select className="select w-full select-success select-xs" id="status" name="status" >
-          <option disabled selected value={null}>Выберите Статус</option>
-          <option>Не обработан</option>
-          <option>Не подходят документы</option>
-          <option>Документы не готовы</option>
-          <option>Не подошла вакансия</option>
-          <option>Нашел другую работу</option>
-          <option>Ждёт работу</option>
-          <option>На собеседовании</option>
-          <option>На объекте</option>
-          <option>В ЧС</option>
-        </select>
-        </label>
-        <label htmlFor="statusFromPartner">
-              <div>Статус от партнера</div>
-              <label htmlFor="partners">
-              <select className="select w-full max-w-xs select-success select-xs"  
-          id="partners" name="partners" >
-         <option disabled selected value={null}>Выберите заказчика</option>
-          {partners.map(p => (
-            <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
-          ))}
-              </select>
-              </label>
-              
-              <select className="select w-full select-success select-xs" id="statusFromPartner" name="statusFromPartner" >
-                {statuses.map(status => (
-                  <option key={status.value} value={status.value}>{status.label}</option>
+        {activeSection === 'parnter' && (
+          <>
+          <label htmlFor="statusFromPartner">
+            <div>Статус от партнера</div>
+            <label htmlFor="partners">
+              <select className="select w-full max-w-xs select-success select-xs"
+                
+                id="partners" name="partners" >
+                <option disabled value={null}>Выберите заказчика</option>
+                {partners.map(p => (
+                  <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
                 ))}
               </select>
-              <div className='flex gap-1 items-center justify-between'>
-               
-                <TextInput id='from' title='С' type="date"/>
-                <TextInput id='to' title='До' type="date"/>
-                </div>
-                
             </label>
-           <div>
-             
-              </div>
-              <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>Добавить дату увольнения</button>
-        
-        {/* Показывать поле для даты увольнения, если showDismissalDate === true */}
-        {showDismissalDate && (
-          <div>
-            <label htmlFor="dismissalDate">
-              <div>Дата увольнения</div>
-              <input
-                className="input input-bordered input-accent w-full max-w-xs"
-                id="dismissalDate"
-                name="dismissalDate"
-                type="date"
-                // onChange={(e) => handleStatusFromPartnerChange('dismissalDate', e.target.value)}
-              />
-            </label>
-          </div>
-        )}
-        <label htmlFor="drivePermis">
-        <div>
-      <h3>Категории В/У</h3>
-      <MultiSelect
-        options={drivePermis}
-        value={selectedDrive}
-        onChange={setSelectedDrive}
-        labelledBy="drivePermis"
-      />
-    </div>
-        </label>
-     
-          <TextInput id='leaving' title='Готов выехать' type="date"/>
-          <TextInput id='dateArrival' title='Приехал на объект' type="date"/>
-       
-       
-            {/* <label htmlFor="workHours">
-              <div>Желаемые часы отработки</div>
-            <input className="accent w-full max-w-xs" type="number"  id='workHours' name='workHours' />
-            </label>     */}
-        <label htmlFor="manager">
-          <div>Менеджер</div>
-        <select className="select w-full select-success select-xs max-w-xs" id="manager" name="manager">
-         <option disabled selected value={null}>Выберите менеджера</option>
-          {manager.map(m => (
-            <option key={m._id} value={m._id}>{m.name}</option>
-          ))}
-        </select>
-        </label>
-        <TextInput id='cardNumber' title='Номер счёта'/>
-        
-        </div>
-        <div className='grid justify-center items-stretch content-space-evenly '>
-        <label htmlFor="professions">
-        <div>
-        <h3>Профессии</h3>
-      <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
-
-      </div>
-        {professionEntries.map((prof, index) => (
-  <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
-    <label htmlFor="profession">
-      <select className="select w-full max-w-xs select-success select-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
-      <option value={null} disabled selected>Выберите профессию</option>
-      <option>Нет профессии</option>
-        {professions.map(profession => (
-          <option key={profession._id} value={profession.name}>{profession.name}</option>
-        ))}
-      </select>
-    </label>
-    <label htmlFor="experience">
-      <div>Опыт работы</div>
-      <select className="select w-full max-w-xs select-success select-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
-        <option value={null} disabled selected >Опыт работы</option>
-        <option >Без опыта</option>
-        <option >Меньше года</option>
-        <option >От 2-х лет</option>
-        <option >Более 10-ти лет</option>
-      </select>
-    </label>
-    <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeProfessionEntry(index)}>Удалить профессию</button>
-  </div>
-))}
-        </label>
-        </div>
-        <div className='grid justify-center items-stretch content-space-evenly '>
-        <label htmlFor="documents" className='flex flex-col '>
-        <div>
-          <label htmlFor="citizenship">
-            <div>Гражданство</div>
-          <select className="select w-full max-w-xs select-success select-xs" id="citizenship" name="citizenship" >
-          <option disabled selected value={null}>Укажите гражданство</option>
-          <option>Евросоюза</option>
-          <option>Молдовы</option>
-          <option>Украины</option>
-          <option>Беларусь</option>
-          <option>Узбекистана</option>
-          <option>Таджикистана</option>
-          <option>Киргизии</option>
-          <option>Армении</option>
-          <option>Грузии</option>
-          <option>Казахстан</option>
-          <option>Другое</option>
-        </select>
-        </label>
-        <div>Документы</div>
-        <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
-
-        </div>
-        {documentEntries.map((doc, index) => (
-          <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
-            <label htmlFor="nameDocument">
-              <div>Название документа</div>
-            <select  className="select w-full max-w-xs select-success select-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
-             <option  value={null}>Выберите документ</option>
-              <option value="Виза">Виза</option>
-              <option value="Песель">Песель</option>
-              <option value="Паспорт">Паспорт</option>
-              <option value="Паспорт ЕС">Паспорт ЕС</option>
-              <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
-              <option value="Параграф 24">Параграф 24</option>
-              <option value="Карта побыту">Карта побыту</option>
-              <option value="Геверба">Геверба</option>
-              <option value="Карта сталого побыта">Карта сталого побыта</option>
-              <option value="Приглашение">Приглашение</option>
+            <select className="select w-full max-w-xs select-success select-xs" id="statusFromPartner" name="statusFromPartner"
+             >
+              {statuses.map(status => (
+                <option key={status.value} value={status.value}>{status.label}</option>
+              ))}
             </select>
-            </label>
-          
-          
-            <div className='flex gap-1'>
-            <label htmlFor="dateOfIssue">
-              <div>Дата выдачи</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
-            type="date" value={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
-            </label>
-            <label htmlFor="documDate">
-              <div>До какого числа</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" 
-            type="date" value={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
-            </label>
-            </div>
-            
-            
-            <label htmlFor="nunberDoc">
-              <div>Номер документа</div>
-            <input className="input input-bordered input-accent w-full max-w-xs" type="text" 
-            value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
-            </label>
-            <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
-          </div>
-        ))}
-        </label>
-        </div>
-        
-        </div>
-        <label htmlFor="comment">
-          <div>Комментарий</div>
-        <textarea className="textarea textarea-accent w-full "
-         id="comment" name="comment" placeholder="Комментарий" />
-        </label>
-        
-        {/* {errorMessage && <div className="alert alert-error mt-2">{errorMessage}</div>}
-        {statusFromPartner.status === "В ЧС" && <div className="alert alert-blacklist mt-2">Кандидат находится в чёрном списке</div>} */}
+            <div className='flex gap-1 items-center  w-full'>
+              <TextInput id='from' title='С' type="date"  />
 
-<button className="btn btn-accent w-full mt-4" type="submit">Создать кандидата</button>
+              <TextInput id='to' title='До' type="date"  />
+            </div>
+          </label>
+          <button type="button" className="btn btn-xs btn-accent" onClick={handleDismissalClick}>Добавить дату Уволенения
+          </button>
+
+          {showDismissalDate && (
+            <div>
+              <TextInput id='dismissalDate' title='Дата увольнения' type="date"  />
+
+            </div>
+          )}
+                        <TextInput id='leaving' title='Готов выехать' type="date"  />
+                        <TextInput id='dateArrival' title='Приехал на объект' type="date"  />
+          </>
+        )}
+        {activeSection === 'document' && (
+          <>
+          <div className='grid justify-start items-stretch content-space-evenly '>
+          <label htmlFor="documents" className='flex flex-col '>
+            <div>
+              <label htmlFor="citizenship">
+                <div>Гражданство</div>
+                <select className="select w-full max-w-xs select-success select-xs"
+                  id="citizenship" name="citizenship"
+                   >
+                  <option disabled selected value={null}>Укажите гражданство</option>
+                  <option>Не известно</option>
+                  <option>Евросоюза</option>
+                  <option>Молдовы</option>
+                  <option>Украины</option>
+                  <option>Беларусь</option>
+                  <option>Узбекистана</option>
+                  <option>Таджикистана</option>
+                  <option>Киргизии</option>
+                  <option>Армении</option>
+                  <option>Грузии</option>
+                  <option>Казахстан</option>
+                  <option>Другое</option>
+                </select>
+              </label>
+              <h3>Документы</h3>
+              <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
+            </div>
+            {documentEntries.map((doc, index) => (
+              <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
+                <label htmlFor="nameDocument">
+                  <div>Название документа</div>
+                  <select className="select w-full max-w-xs select-success select-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
+                    <option value={null}>Выберите документ</option>
+                    <option value="Виза">Виза</option>
+                    <option value="Песель">Песель</option>
+                    <option value="Паспорт">Паспорт</option>
+                    <option value="Паспорт ЕС">Паспорт ЕС</option>
+                    <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
+                    <option value="Параграф 24">Параграф 24</option>
+                    <option value="Карта побыту">Карта побыту</option>
+                    <option value="Геверба">Геверба</option>
+                    <option value="Карта сталого побыта">Карта сталого побыта</option>
+                    <option value="Приглашение">Приглашение</option>
+                  </select>
+                </label>
+                <div className='flex gap-1'>
+                  <TextInput id='dateOfIssue' title='Дата выдачи' type="date" defaultValue={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
+                  <TextInput id='documDate' title='До какого числа' type="date" defaultValue={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
+                </div>
+                <TextInput id='nunberDoc' title='Номер документа' type="text" defaultValue={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
+                <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
+              </div>
+            ))}
+          </label>
+        </div>
+          </>
+        )}
+        {activeSection === 'other' && (
+          <>
+      <label htmlFor="manager">
+      <div>Менеджер</div>
+      <select className="select w-full max-w-xs select-success select-xs"
         
-      </form>
-    </div>
+        name="manager" id="manager">
+        <option disabled selected value={null}>Выберите менеджера</option>
+        {manager .map(m => (
+          <option key={m._id} value={m._id}>{m?.name}</option>
+        ))}
+      </select>
+    </label>
+          <label htmlFor="locations">
+            <div>Местоположение кандидата</div>
+            <div>
+              <div className='flex gap-1'>
+                {countries && (
+                  <select className="select w-full max-w-xs select-success select-xs"  >
+                    <option selected hidden disabled>
+                      Выберите страну
+                    </option>
+                    {countries.map((country) => (
+                      <option key={country.country} value={country.country}>
+                        {country.country}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                {Cities.length > 0 && (
+                  <select className="select w-full max-w-xs select-success select-xs" onChange={handleCityChange} value={singleCity}>
+                    <option selected hidden disabled>
+                      Выберите город
+                    </option>
+                    {Cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+            <input type="hidden" name="locations" id='locations' value={combinedLocation}  />
+          </label>
+          <label className='flex gap-1 items-end' htmlFor="langue">
+            <div className='flex flex-col justify-between h-full'>
+              <div>Знание языка</div>
+              <select className="select w-full max-w-xs select-success select-xs" id="langue" name="langue" >
+                <option disabled selected value={null}>Знание языка</option>
+                <option>Не знает языков</option>
+                <option >Английский</option>
+                <option >Немецкий</option>
+                <option >Польский</option>
+              </select>
+            </div>
+            <div className='flex flex-col justify-between  h-full'>
+              <div>Уровень</div>
+              <select className="select w-full max-w-xs select-success select-xs" id="langueLvl" name="langueLvl" >
+                <option disabled selected value={null}>Уровень знание языка</option>
+                <option >Уровень А1</option>
+                <option >Уровень А2</option>
+              </select>
+            </div>
+          </label>
+          <div>
+            <label htmlFor="drivePermis">
+              <div>
+                <h3>Категории В/У </h3>
+                <CMultiSelect options={drivePermis} placeholder="Категории В/У" className="w-full my-1 text-sm"     onChange={(selected: string[]) => setSelectedDrive(selected.map(value => ({ label: value, value })))}/>
+                {/* <MultiSelect
+                  className="w-[300px]"
+                  options={drivePermis}
+                  value={selectedDrive}
+                  onChange={setSelectedDrive}
+                  labelledBy="drivePermis"
+                /> */}
+              </div>
+            </label>
+
+          </div>
+          <label htmlFor="comment">
+        <div>Комментарий</div>
+        <div>
+        {/* <ul>
+                            {candidate?.comment?.map((c, index) => (
+                              <li key={index}>
+                               
+                                <div className="flex justify-between w-full pt-5">
+                                    <p>
+                                      {new Date(c.date).toLocaleString().slice(0, 5)}
+                                    </p>
+                                    <span>
+                                      {new Date(c.date).toLocaleString().slice(12, 17)}
+                                    </span>
+                                  </div>
+                                  {c.text} 
+                              </li>
+                            ))}
+                          </ul> */}
+        </div>
+        <textarea className="textarea textarea-accent w-[300px] "
+          id="comment" name="comment" placeholder="Оставьте свой омментарий"
+           />
+      </label>
+          </>
+        )}
+        <div className='grid justify-start items-stretch content-space-evenly '>
+         
+        </div>
+      
+   
+      </div>
+     
+      <button  className="btn btn-primary w-full max-w-xs">
+        Обновить кандидата
+      </button>
+    </form>
+  </>
+//     <div>
+//       <form onSubmit={handleSubmit}  >
+//         <div className='grid grid-cols-3'>
+//         <div className='grid justify-start items-stretch content-space-evenly '>
+//         <TextInput id='name' title='Имя'/>
+//         <label htmlFor="age">
+//         <div>Возраст</div>
+//         <div className="flex gap-1">
+//           <label htmlFor="age">
+//             <div>Дата рождения</div>
+//             <input
+//               className="input input-bordered input-success input-xs w-full max-w-xs"
+//               id="age"
+//               name="age"
+//               type="date"
+//               onChange={handleBirthDateChange}
+//             />
+//           </label>
+//           <label htmlFor="ageNum">
+//             <div>Возраст</div>
+//             <input
+//               className="input input-bordered input-success input-xs w-full max-w-xs"
+//               id="ageNum"
+//               name="ageNum"
+//               type="text"
+//               value={ageNum}
+//               readOnly
+//             />
+//           </label>
+//         </div>
+//       </label>
+//         {/* <label htmlFor="age">
+//               <div>Возраст</div>
+//               <div className='flex gap-1'>
+//                 <label htmlFor="age">
+//                   <div>Дата рождения</div>
+//                   <input className="input input-bordered input-accent w-full max-w-xs" 
+//                   id="age" name="age" type="date"   />
+//                 </label>
+//                 <label htmlFor="ageNum">
+//                   <div>Возраст</div>
+//                   <input className="input input-bordered input-accent w-full max-w-xs" id="ageNum" name="ageNum" type="text"   />
+//                 </label>
+//               </div>
+//             </label> */}
+//         <label htmlFor="phone">
+//   <div>Телефон</div>
+// <input className="input input-bordered input-xs input-success w-full max-w-xs"
+//          id="phone" name="phone" type="text"  onChange={(e) => setPhone(e.target.value)} 
+//          onBlur={handlePhoneBlur} 
+//          placeholder="Phone" required />
+//                 <button type="button" className="btn btn-accent" onClick={handleAdditionalPhone}><strong>+</strong></button>
+//          {phoneError && <div role="alert" className="alert alert-error">
+//   {/* <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     fill="none"
+//     viewBox="0 0 24 24"
+//     className="h-6 w-6 shrink-0 stroke-current">
+//     <path
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//       strokeWidth="2"
+//       d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+//   </svg> */}
+//   <span>{phoneError}</span>
+// </div>}
+//         </label>
+//         {showAdditionalPhone && (
+//                   <div>
+//         <button className='btn btn-accent' type="button" onClick={addAdditionalPhone}><strong>+</strong></button>
+
+//         {additionalPhones.map((phone, index) => (
+//           <div key={index}>
+//             <TextInput
+//              id='additionalPhone'
+//              name='additionalPhone'
+//              title='Дополнительный номер'
+//               type="text"
+//               onChange={(e) => handleAdditionalPhoneChange(index, e.target.value)}
+//               placeholder="Дополнительный телефон"
+//             />
+//             <button type="button" onClick={() => removeAdditionalPhone(index)}>Удалить</button>
+//           </div>
+//         ))}
+//       </div>    
+//         )}
+
+//         <label htmlFor="locations">
+//   <div>Местоположение - {combinedLocation}</div>
+//          <div>
+//           <div className='flex gap-1'>
+//           {countries && (
+//         <select className="select w-full max-w-xs select-success select-xs" onChange={(e) => fetchCities(e.target.value)} >
+//           <option selected hidden disabled>
+//             Выберите страну
+//           </option>
+//           {countries.map((country) => (
+//             <option key={country.country} value={country.country}>
+//               {country.country}
+//             </option>
+//           ))}
+//         </select>
+//       )}
+
+//       {Cities.length > 0 && (
+//         <select className="select w-full max-w-xs select-success select-xs" onChange={handleCityChange} value={singleCity}>
+//           <option selected hidden disabled>
+//             Выберите город
+//           </option>
+//           {Cities.map((city) => (
+//             <option key={city} value={city}>
+//               {city}
+//             </option>
+//           ))}
+//         </select>
+//       )}
+//           </div>
+//     </div>
+//     <input type="hidden" name="locations" id='locations' value={combinedLocation} />
+
+//         </label>
+//         <label className='flex gap-1 items-end' htmlFor="langue">
+//           <div className='flex flex-col justify-between h-full'>
+//           <div>Знание языка</div>
+          
+//           <select className="select w-full max-w-xs select-success select-xs" id="langue" name="langue" >
+//           <option disabled selected value={null}>Знание языка</option>
+//         <option>Не знает языков</option>
+//         <option >Английский</option>
+//         <option >Немецкий</option>
+//         <option >Польский</option>
+
+//         </select>
+//           </div>
+//           <div className='flex flex-col justify-between  h-full'>
+//           <div>Уровень</div>
+//           <select className="select w-full max-w-xs select-success select-xs" id="langueLvl" name="langueLvl" value={langue.level || ''} onChange={(e) => handleLangueChange('level', e.target.value || '')}>
+//           <option disabled selected value={null}>Уровень знание языка</option>
+//         <option >Уровень А1</option>
+//         <option >Уровень А2</option>
+//         <option >Уровень B1</option>
+//         <option >Уровень B2</option>
+//         </select>
+//           </div>
+//         </label>
+//         <label htmlFor="status">
+//             <div>Статус работника на момент диалога</div>
+//           <select className="select w-full select-success select-xs" id="status" name="status" >
+//           <option disabled selected value={null}>Выберите Статус</option>
+//           <option>Не обработан</option>
+//           <option>Не подходят документы</option>
+//           <option>Документы не готовы</option>
+//           <option>Не подошла вакансия</option>
+//           <option>Нашел другую работу</option>
+//           <option>Ждёт работу</option>
+//           <option>На собеседовании</option>
+//           <option>На объекте</option>
+//           <option>В ЧС</option>
+//         </select>
+//         </label>
+//         <label htmlFor="statusFromPartner">
+//               <div>Статус от партнера</div>
+//               <label htmlFor="partners">
+//               <select className="select w-full max-w-xs select-success select-xs"  
+//           id="partners" name="partners" >
+//          <option disabled selected value={null}>Выберите заказчика</option>
+//           {partners.map(p => (
+//             <option key={p._id} value={p._id}>{p.name} - {p.companyName}</option>
+//           ))}
+//               </select>
+//               </label>
+              
+//               <select className="select w-full select-success select-xs" id="statusFromPartner" name="statusFromPartner" >
+//                 {statuses.map(status => (
+//                   <option key={status.value} value={status.value}>{status.label}</option>
+//                 ))}
+//               </select>
+//               <div className='flex gap-1 items-center justify-between'>
+               
+//                 <TextInput id='from' title='С' type="date"/>
+//                 <TextInput id='to' title='До' type="date"/>
+//                 </div>
+                
+//             </label>
+//            <div>
+             
+//               </div>
+//               <button type="button" className="btn btn-accent" onClick={handleDismissalClick}>Добавить дату увольнения</button>
+        
+//         {/* Показывать поле для даты увольнения, если showDismissalDate === true */}
+//         {showDismissalDate && (
+//           <div>
+//             <label htmlFor="dismissalDate">
+//               <div>Дата увольнения</div>
+//               <input
+//                 className="input input-bordered input-accent w-full max-w-xs"
+//                 id="dismissalDate"
+//                 name="dismissalDate"
+//                 type="date"
+//                 // onChange={(e) => handleStatusFromPartnerChange('dismissalDate', e.target.value)}
+//               />
+//             </label>
+//           </div>
+//         )}
+//         <label htmlFor="drivePermis">
+//         <div>
+//       <h3>Категории В/У</h3>
+//       <MultiSelect
+//         options={drivePermis}
+//         value={selectedDrive}
+//         onChange={setSelectedDrive}
+//         labelledBy="drivePermis"
+//       />
+//     </div>
+//         </label>
+     
+//           <TextInput id='leaving' title='Готов выехать' type="date"/>
+//           <TextInput id='dateArrival' title='Приехал на объект' type="date"/>
+       
+       
+//             {/* <label htmlFor="workHours">
+//               <div>Желаемые часы отработки</div>
+//             <input className="accent w-full max-w-xs" type="number"  id='workHours' name='workHours' />
+//             </label>     */}
+//         <label htmlFor="manager">
+//           <div>Менеджер</div>
+//         <select className="select w-full select-success select-xs max-w-xs" id="manager" name="manager">
+//          <option disabled selected value={null}>Выберите менеджера</option>
+//           {manager.map(m => (
+//             <option key={m._id} value={m._id}>{m.name}</option>
+//           ))}
+//         </select>
+//         </label>
+//         <TextInput id='cardNumber' title='Номер счёта'/>
+        
+//         </div>
+//         <div className='grid justify-center items-stretch content-space-evenly '>
+//         <label htmlFor="professions">
+//         <div>
+//         <h3>Профессии</h3>
+//       <button className="btn btn-outline btn-success mt-3 btn-xs w-full" type="button" onClick={addProfessionEntry}>Добавить профессию</button>
+
+//       </div>
+//         {professionEntries.map((prof, index) => (
+//   <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
+//     <label htmlFor="profession">
+//       <select className="select w-full max-w-xs select-success select-xs" value={prof.name || ''} onChange={e => handleProfessionChange(index, 'name', e.target.value || '')}>
+//       <option value={null} disabled selected>Выберите профессию</option>
+//       <option>Нет профессии</option>
+//         {professions.map(profession => (
+//           <option key={profession._id} value={profession.name}>{profession.name}</option>
+//         ))}
+//       </select>
+//     </label>
+//     <label htmlFor="experience">
+//       <div>Опыт работы</div>
+//       <select className="select w-full max-w-xs select-success select-xs" value={prof.experience || ''} onChange={e => handleProfessionChange(index, 'experience', e.target.value || '')}>
+//         <option value={null} disabled selected >Опыт работы</option>
+//         <option >Без опыта</option>
+//         <option >Меньше года</option>
+//         <option >От 2-х лет</option>
+//         <option >Более 10-ти лет</option>
+//       </select>
+//     </label>
+//     <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeProfessionEntry(index)}>Удалить профессию</button>
+//   </div>
+// ))}
+//         </label>
+//         </div>
+//         <div className='grid justify-center items-stretch content-space-evenly '>
+//         <label htmlFor="documents" className='flex flex-col '>
+//         <div>
+//           <label htmlFor="citizenship">
+//             <div>Гражданство</div>
+//           <select className="select w-full max-w-xs select-success select-xs" id="citizenship" name="citizenship" >
+//           <option disabled selected value={null}>Укажите гражданство</option>
+//           <option>Евросоюза</option>
+//           <option>Молдовы</option>
+//           <option>Украины</option>
+//           <option>Беларусь</option>
+//           <option>Узбекистана</option>
+//           <option>Таджикистана</option>
+//           <option>Киргизии</option>
+//           <option>Армении</option>
+//           <option>Грузии</option>
+//           <option>Казахстан</option>
+//           <option>Другое</option>
+//         </select>
+//         </label>
+//         <div>Документы</div>
+//         <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
+
+//         </div>
+//         {documentEntries.map((doc, index) => (
+//           <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
+//             <label htmlFor="nameDocument">
+//               <div>Название документа</div>
+//             <select  className="select w-full max-w-xs select-success select-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
+//              <option  value={null}>Выберите документ</option>
+//               <option value="Виза">Виза</option>
+//               <option value="Песель">Песель</option>
+//               <option value="Паспорт">Паспорт</option>
+//               <option value="Паспорт ЕС">Паспорт ЕС</option>
+//               <option value="Паспорт Биометрия Украины">Паспорт Биометрия Украины</option>
+//               <option value="Параграф 24">Параграф 24</option>
+//               <option value="Карта побыту">Карта побыту</option>
+//               <option value="Геверба">Геверба</option>
+//               <option value="Карта сталого побыта">Карта сталого побыта</option>
+//               <option value="Приглашение">Приглашение</option>
+//             </select>
+//             </label>
+          
+          
+//             <div className='flex gap-1'>
+//             <label htmlFor="dateOfIssue">
+//               <div>Дата выдачи</div>
+//             <input className="input input-bordered input-accent w-full max-w-xs" 
+//             type="date" value={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
+//             </label>
+//             <label htmlFor="documDate">
+//               <div>До какого числа</div>
+//             <input className="input input-bordered input-accent w-full max-w-xs" 
+//             type="date" value={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
+//             </label>
+//             </div>
+            
+            
+//             <label htmlFor="nunberDoc">
+//               <div>Номер документа</div>
+//             <input className="input input-bordered input-accent w-full max-w-xs" type="text" 
+//             value={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
+//             </label>
+//             <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
+//           </div>
+//         ))}
+//         </label>
+//         </div>
+        
+//         </div>
+//         <label htmlFor="comment">
+//           <div>Комментарий</div>
+//         <textarea className="textarea textarea-accent w-full "
+//          id="comment" name="comment" placeholder="Комментарий" />
+//         </label>
+        
+//         {/* {errorMessage && <div className="alert alert-error mt-2">{errorMessage}</div>}
+//         {statusFromPartner.status === "В ЧС" && <div className="alert alert-blacklist mt-2">Кандидат находится в чёрном списке</div>} */}
+
+// <button className="btn btn-accent w-full mt-4" type="submit">Создать кандидата</button>
+        
+//       </form>
+//     </div>
     
   );
 }

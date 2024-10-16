@@ -278,9 +278,9 @@ type: String,
   dateArrival:{
     type: Date,
   },
-  drivePermis:{
-type: String,
-  },
+  drivePermis:[{
+    type: String,
+  }],
   cardNumber:{
 type: String,
   },
