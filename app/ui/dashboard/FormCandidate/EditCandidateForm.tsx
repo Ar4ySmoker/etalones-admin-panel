@@ -166,8 +166,8 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       };
     
       try {
-        // const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
-     const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
+        const res = await fetch(`https://www.candidat.store/api/candidates/${id}`, {
+    //  const res = await fetch(`http://localhost:3000/api/candidates/${id}`, {
 
           method: "PUT",
           headers: {
@@ -225,7 +225,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
     const addNotification = useContext(NotificationContext);
 
     return (  
-      <>
+      <div className="w-[800px]">
         <div className="">
           <h1 className="font-bold py-10 text-2xl">Обновить кандидата {candidate.name}</h1>
         </div>
@@ -261,25 +261,22 @@ export default function EditCandidateForm({ id, candidate, managers, professions
       </a>
     </li>
         </ul>
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-5">
           <div> 
             {activeSection === 'personal' && (
               <>
-              <div > 
-              <div className='flex-col flex gap-4'>
-              <TextInput id="name" title="Имя" type="text" placeholder={candidate?.name} defaultValue={candidate?.name} />
-              <div>
+              <div className='flex-col flex justify-center items-start mx-auto w-max gap-4 mt-3'>    
+              <TextInput id="name" title="ФИО" type="text" placeholder={candidate?.name} defaultValue={candidate?.name} />
                 <div className="flex gap-2 items-center">
                 <TextInput id="phone" title="Телефон" type="text" placeholder="+373696855446" defaultValue={candidate?.phone} />
                 <button type="button" className="btn-xs text-green-500 hover:text-green-700 transition duration-300 ease-in-out" onClick={addAdditionalPhone}><CirclePlus /></button>
                 </div>
-                
                 {showAdditionalPhone && (
                   <>
                     {additionalPhones.map((phone, index) => (
-                      <div key={index} className="flex gap-2 my-1 items-center">
+                      <div key={index} className="flex gap-2 items-center">
                         <TextInput 
-                        title={index + 1}
+                        title={`${index + 1} телефон`}
                         id={`additionalPhone${index}`}
                         name={`additionalPhone${index}`}
                         type="phone"
@@ -293,16 +290,11 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                     <button type="button" onClick={addAdditionalPhone}></button>
                   </>
                 )}
-              </div>
-              </div>
-              <div>
               <TextInput  id="age" title="Дата рождения" type="date" placeholder={candidate?.age} defaultValue={candidate?.age ? candidate.age.split('T')[0] : ''}/>
               <TextInput id="ageNum" title="Возраст" type="text" placeholder={candidate?.ageNum} defaultValue={candidate?.ageNum} />
-              </div>
-             <div>
-              <label htmlFor="status" className="flex ">
+              <label htmlFor="status" className="flex justify-between w-[400px]">
                 <div>Статус</div>
-                <select className="select w-[400px] max-w-xs select-success select-xs" id="status" name="status"
+                <select className="select input input-bordered input-success input-xs w-[200px] select-success select-xs" id="status" name="status"
                   defaultValue={candidate?.status}>
                   <option disabled selected value={null}>Выберите Статус</option>
                   <option>Не обработан</option>
@@ -318,24 +310,22 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                 </select>
               </label>
               <TextInput id='cardNumber' title='Номер счёта' type="text" defaultValue={candidate?.cardNumber} />
-              </div>
-              </div>
+              </div>              
               </>
             )}
             {activeSection === 'professions' && (
               <>
-                <div className='grid justify-start items-stretch content-space-evenly '>
+                <div className='flex-col flex justify-center items-start mx-auto w-max gap-4 mt-3'>
               <label htmlFor="professions">
-                <div className="flex gap-2 items-center m-2">
+                <div className="flex justify-between items-center m-2">
                   <h3 className="font-bold text-xl">Профессии</h3>
                   <button
-  className="btn-xs text-gray-500 hover:text-gray-700 transition duration-300 ease-in-out"
+  className="btn-xs text-green-500 hover:text-green-700 transition duration-300 ease-in-out"
   type="button"
   onClick={addProfessionEntry}
 >
   <CirclePlus />
 </button>
-
                 </div>
                 {professionEntries.map((prof, index) => (
                   <div key={index} className='flex w-full gap-1 m-2'>
@@ -368,10 +358,11 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               </>
             )}
             {activeSection === 'parnter' && (
-              <>
-              <label htmlFor="statusFromPartner">
+              <div className="flex flex-col items-center gap-2">
+              <label htmlFor="statusFromPartner" className="flex flex-col gap-2">
                 <div>Статус от партнера</div>
                 <label htmlFor="partners">
+                  <p>Заказчик</p>
                   <select className="select w-full max-w-xs select-success select-xs"
                     defaultValue={candidate?.partners?._id}
                     id="partners" name="partners" >
@@ -381,16 +372,19 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                     ))}
                   </select>
                 </label>
+                <label htmlFor="" className="flex flex-col">
+<p>Статус трудоустройства</p>
                 <select className="select w-full max-w-xs select-success select-xs" id="statusFromPartner" name="statusFromPartner"
                   defaultValue={candidate?.statusFromPartner?.status}>
                   {statuses.map(status => (
                     <option key={status.value} value={status.value}>{status.label}</option>
                   ))}
                 </select>
-                <div className='flex gap-1 items-center  w-full'>
-                  <TextInput id='from' title='С' type="date" defaultValue={candidate?.statusFromPartner?.from} />
-  
-                  <TextInput id='to' title='До' type="date" defaultValue={candidate?.statusFromPartner?.to} />
+                </label>
+                <div className='flex items-center w-[300px]'>
+                  <TextInput id='from' className="w-[150px] input input-bordered input-success input-xs"  type="date" defaultValue={candidate?.statusFromPartner?.from} />
+  <span>-</span>
+                  <TextInput id='to' className="w-[150px] input input-bordered input-success input-xs" type="date" defaultValue={candidate?.statusFromPartner?.to} />
                 </div>
               </label>
               <div>
@@ -407,16 +401,15 @@ export default function EditCandidateForm({ id, candidate, managers, professions
               )}
                             <TextInput id='leaving' title='Готов выехать' type="date" defaultValue={candidate?.leaving ? candidate.leaving.split('T')[0] : ''} />
                             <TextInput id='dateArrival' title='Приехал на объект' type="date" defaultValue={candidate?.dateArrival ? candidate.dateArrival.split('T')[0] : ''} />
-              </>
+              </div>
             )}
             {activeSection === 'document' && (
               <>
-              <div className='grid justify-start items-stretch content-space-evenly '>
-              <label htmlFor="documents" className='flex flex-col '>
-                <div>
-                  <label htmlFor="citizenship">
+              <div className='flex-col flex justify-center items-center  mt-3 '>
+              <label htmlFor="documents" className='flex flex-col'>
+              <label htmlFor="citizenship">
                     <div>Гражданство</div>
-                    <select className="select w-full max-w-xs select-success select-xs"
+                    <select className="select w-[200px] m-2 max-w-xs select-success select-xs"
                       id="citizenship" name="citizenship"
                       defaultValue={candidate?.citizenship} >
                       <option disabled selected value={null}>Укажите гражданство</option>
@@ -434,14 +427,18 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                       <option>Другое</option>
                     </select>
                   </label>
-                  <h3>Документы</h3>
-                  <button className="btn btn-outline btn-success mt-3 btn-xs" type="button" onClick={addDocumentEntry}>Добавить документ</button>
+                <div className='flex justify-center items-center'>
+                  <h3 className="my-3 text-md font-bold">Документы</h3>
+                  <button className="btn-xs text-green-500 hover:text-green-700 transition duration-300 ease-in-out" type="button" onClick={addDocumentEntry}>
+                    <CirclePlus />
+                  </button>
                 </div>
+                <div className='flex flex-col gap-2 w-full'>
                 {documentEntries.map((doc, index) => (
-                  <div key={index} className='flex flex-col w-full max-w-xs gap-1'>
-                    <label htmlFor="nameDocument">
-                      <div>Название документа</div>
-                      <select className="select w-full max-w-xs select-success select-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
+                  <div key={index} className=" flex">
+                    <p className="w-5">{`${index + 1}.`}</p>&nbsp;
+                    <label htmlFor="nameDocument" className="flex items-center gap-2 w-[1000px]">
+                      <select className="select  w-[400px] select-success select-xs" value={doc.docType || ''} onChange={e => handleDocumentChange(index, 'docType', e.target.value || '')}>
                         <option value={null}>Выберите документ</option>
                         <option value="Виза">Виза</option>
                         <option value="Песель">Песель</option>
@@ -454,15 +451,15 @@ export default function EditCandidateForm({ id, candidate, managers, professions
                         <option value="Карта сталого побыта">Карта сталого побыта</option>
                         <option value="Приглашение">Приглашение</option>
                       </select>
+                    <TextInput id='nunberDoc' title='#:' type="text" defaultValue={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
+                      <TextInput id='dateOfIssue' title='Выдан' type="date" defaultValue={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
+                      <TextInput id='documDate' title='До' type="date" defaultValue={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
+                    <button className="btn-xs text-red-500 hover:text-red-700 transition duration-300 ease-in-out self-end flex"
+                     type="button" onClick={() => removeDocumentEntry(index)}><CircleX /></button>
                     </label>
-                    <div className='flex gap-1'>
-                      <TextInput id='dateOfIssue' title='Дата выдачи' type="date" defaultValue={doc.dateOfIssue} onChange={e => handleDocumentChange(index, 'dateOfIssue', e.target.value)} />
-                      <TextInput id='documDate' title='До какого числа' type="date" defaultValue={doc.dateExp} onChange={e => handleDocumentChange(index, 'dateExp', e.target.value)} />
-                    </div>
-                    <TextInput id='nunberDoc' title='Номер документа' type="text" defaultValue={doc.numberDoc} onChange={e => handleDocumentChange(index, 'numberDoc', e.target.value)} />
-                    <button className="btn btn-outline btn-error btn-xs" type="button" onClick={() => removeDocumentEntry(index)}>Удалить документ</button>
                   </div>
                 ))}
+                </div>
               </label>
             </div>
               </>
@@ -585,7 +582,7 @@ export default function EditCandidateForm({ id, candidate, managers, professions
             Обновить кандидата
           </button>
         </form>
-      </>
+      </div>
     );
 
 }
